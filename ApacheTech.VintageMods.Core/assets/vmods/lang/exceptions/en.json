@@ -1,0 +1,3 @@
+{
+  "exceptions.file-not-registered-or-missing": "File `{0}` either does not exist, or has not yet been registered with the FileSystem Service."
+}

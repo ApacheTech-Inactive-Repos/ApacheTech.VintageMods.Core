@@ -2,10 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<Authors>ApacheTech Solutions</Authors>
 		<Company>ApacheTech Solutions</Company>
+		<Version>2.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -15,13 +16,10 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="JetBrains.Annotations" Version="2021.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
 		<PackageReference Include="RedGate.SmartAssembly.Attributes" Version="8.0.4.4860" />
-		<PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+		<PackageReference Include="System.ComponentModel.Composition" Version="6.0.0-preview.7.21377.19" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -29,13 +27,21 @@
 		  <HintPath>D:\Games\Vintage Story\Lib\0Harmony.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
+		<Reference Include="AnimatedGif">
+		  <HintPath>D:\Games\Vintage Story\Lib\AnimatedGif.dll</HintPath>
+		  <Private>false</Private>
+		</Reference>
 		<Reference Include="cairo-sharp">
-			<HintPath>D:\Games\Vintage Story\Lib\cairo-sharp.dll</HintPath>
-			<Private>false</Private>
+		  <HintPath>D:\Games\Vintage Story\Lib\cairo-sharp.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>D:\Games\Vintage Story\Lib\Newtonsoft.Json.dll</HintPath>
 			<Private>false</Private>
+		</Reference>
+		<Reference Include="OpenTK">
+		  <HintPath>D:\Games\Vintage Story\Lib\OpenTK.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 		<Reference Include="protobuf-net">
 			<HintPath>D:\Games\Vintage Story\Lib\protobuf-net.dll</HintPath>
@@ -46,8 +52,12 @@
 		  <Private>false</Private>
 		</Reference>
 		<Reference Include="Tavis.JsonPatch">
-			<HintPath>D:\Games\Vintage Story\Lib\Tavis.JsonPatch.dll</HintPath>
-			<Private>false</Private>
+		  <HintPath>D:\Games\Vintage Story\Lib\Tavis.JsonPatch.dll</HintPath>
+		  <Private>false</Private>
+		</Reference>
+		<Reference Include="Vintagestory">
+		  <HintPath>D:\Games\Vintage Story\Vintagestory.exe</HintPath>
+		  <Private>false</Private>
 		</Reference>
 		<Reference Include="VintagestoryAPI">
 			<HintPath>D:\Games\Vintage Story\VintagestoryAPI.dll</HintPath>
@@ -58,28 +68,24 @@
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSCreativeMod">
-			<HintPath>D:\Games\Vintage Story\Mods\VSCreativeMod.dll</HintPath>
-			<Private>false</Private>
+		  <HintPath>D:\Games\Vintage Story\Mods\VSCreativeMod.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 		<Reference Include="VSEssentials">
-			<HintPath>D:\Games\Vintage Story\Mods\VSEssentials.dll</HintPath>
-			<Private>false</Private>
+		  <HintPath>D:\Games\Vintage Story\Mods\VSEssentials.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 		<Reference Include="VSSurvivalMod">
-			<HintPath>D:\Games\Vintage Story\Mods\VSSurvivalMod.dll</HintPath>
-			<Private>false</Private>
+		  <HintPath>D:\Games\Vintage Story\Mods\VSSurvivalMod.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Abstractions\Exceptions\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="assets\vmods\lang\en.json">
+	  <None Update="_Includes\assets\vmods\lang\en.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="assets\vmods\lang\exceptions\en.json">
+	  <None Update="_Includes\assets\vmods\lang\exceptions\en.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

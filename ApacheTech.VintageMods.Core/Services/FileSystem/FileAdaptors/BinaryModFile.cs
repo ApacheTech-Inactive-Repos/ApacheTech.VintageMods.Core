@@ -1,41 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Extensions;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
-using Vintagestory.API.Datastructures;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem.Files
+namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
 {
     /// <summary>
-    ///     Represents a JSON file, used by the mod. This class cannot be inherited.
+    ///     Represents a binary file, used by the mod. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="ModFile" />
+    /// <seealso cref="IBinaryModFile" />
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public sealed class JsonModFile : ModFile, IJsonModFile
+    public sealed class BinaryModFile : ModFile, IBinaryModFile
     {
         /// <summary>
-        /// 	Initialises a new instance of the <see cref="JsonModFile"/> class.
+        /// 	Initialises a new instance of the <see cref="BinaryModFile"/> class.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        public JsonModFile(string filePath) : base(filePath)
+        public BinaryModFile(string filePath) : base(filePath)
         {
         }
 
         /// <summary>
-        /// 	Initialises a new instance of the <see cref="JsonModFile"/> class.
+        /// 	Initialises a new instance of the <see cref="BinaryModFile"/> class.
         /// </summary>
         /// <param name="fileInfo">The file information.</param>
-        public JsonModFile(FileInfo fileInfo) : base(fileInfo)
+        public BinaryModFile(FileInfo fileInfo) : base(fileInfo)
         {
         }
 
         /// <summary>
-        ///     Gets the type of the file, be it JSON, or Binary.
+        ///     Gets the type of the file.
         /// </summary>
         /// <value>The type of the file.</value>
-        internal override FileType FileType => FileType.Json;
+        public override FileType FileType => FileType.Binary;
 
         /// <summary>
         ///     Deserialises the specified file as a strongly-typed object.
@@ -43,10 +45,10 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Files
         /// </summary>
         /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
         /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override TModel ParseAs<TModel>()
         {
-            return JsonConvert.DeserializeObject<TModel>(File.ReadAllText(ModFileInfo.FullName));
+            var bytes = File.ReadAllBytes(ModFileInfo.FullName);
+            return ProtoBufEx.Deserialise<TModel>(bytes);
         }
 
         /// <summary>
@@ -55,10 +57,10 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Files
         /// </summary>
         /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
         /// <returns>An instance of type <see cref="IEnumerable{TModel}" />, populated with data from this file.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override IEnumerable<TModel> ParseAsMany<TModel>()
         {
-            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName));
+            var bytes = File.ReadAllBytes(ModFileInfo.FullName);
+            return ProtoBufEx.Deserialise<IEnumerable<TModel>>(bytes);
         }
 
         /// <summary>
@@ -66,11 +68,9 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Files
         /// </summary>
         /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
         /// <param name="instance">The instance of the object to serialise.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override void SaveFrom<TModel>(TModel instance)
         {
-            var json = JsonConvert.SerializeObject(instance, Formatting.Indented);
-            File.WriteAllText(ModFileInfo.FullName, json);
+            File.WriteAllBytes(ModFileInfo.FullName, ProtoBufEx.Serialise(instance).ToArray());
         }
 
         /// <summary>
@@ -78,33 +78,27 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Files
         /// </summary>
         /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
         /// <param name="collection">The collection of the objects to save to a single file.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         public override void SaveFrom<TModel>(IEnumerable<TModel> collection)
         {
-            SaveFrom(collection, Formatting.Indented);
+            File.WriteAllBytes(ModFileInfo.FullName, ProtoBufEx.Serialise(collection).ToArray());
         }
 
         /// <summary>
-        ///     Serialises the specified collection of objects, and saves the resulting data to file.
+        ///     Parses the file into a primitive byte array.
         /// </summary>
-        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
-        /// <param name="collection">The collection of the objects to save to a single file.</param>
-        /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public void SaveFrom<TModel>(IEnumerable<TModel> collection, Formatting formatting)
+        /// <returns>An array of type <see cref="byte" />, populated with data from this file.</returns>
+        public byte[] ParseAsByteArray()
         {
-            var json = JsonConvert.SerializeObject(collection, formatting);
-            File.WriteAllText(ModFileInfo.FullName, json);
+            return File.ReadAllBytes(ModFileInfo.FullName);
         }
 
         /// <summary>
-        ///     Parses the file into Vintage Story's bespoke JsonObject wrapper.
+        /// Parses the file into a memory stream.
         /// </summary>
-        /// <returns>An instance of type <see cref="JsonObject" />, populated with data from this file.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public JsonObject ParseAsJsonObject()
-        { 
-            return JsonObject.FromJson(File.ReadAllText(ModFileInfo.FullName));
+        /// <returns>An instance of type <see cref="MemoryStream" />, populated with data from this file.</returns>
+        public MemoryStream ParseAsMemoryStream()
+        {
+            return new MemoryStream(ParseAsByteArray());
         }
     }
 }

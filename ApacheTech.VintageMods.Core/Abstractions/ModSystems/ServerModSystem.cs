@@ -1,8 +1,13 @@
-﻿using Vintagestory.API.Common;
+﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic;
+using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
 {
+    /// <summary>
+    ///     Acts as a base class for Server-Side Only ModSystems. Derived classes will only be loaded on the Server.
+    /// </summary>
+    /// <seealso cref="ModSystemBase{ICoreAPI}" />
     public abstract class ServerModSystem : ModSystemBase<ICoreServerAPI>
     {
         /// <summary>

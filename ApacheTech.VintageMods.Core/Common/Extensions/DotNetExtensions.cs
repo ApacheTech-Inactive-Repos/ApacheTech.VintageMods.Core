@@ -203,7 +203,6 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions
             return !contains;
         }
 
-
         #endregion
 
         #region Assemblies

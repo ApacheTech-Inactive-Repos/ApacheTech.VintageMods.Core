@@ -15,6 +15,11 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Enums
         /// <summary>
         ///     Denotes that a file is created for each world a player enters.
         /// </summary>
-        [Description("Per World File")] World
+        [Description("Per World File")] World,
+
+        /// <summary>
+        ///     Denotes that a file is local to the mod, and not copied to the host filesystem.
+        /// </summary>
+        [Description("Local  File")] Local
     }
 }

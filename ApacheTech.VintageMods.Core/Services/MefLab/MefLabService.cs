@@ -3,28 +3,30 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Reflection;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 
 namespace ApacheTech.VintageMods.Core.Services.MefLab
 {
-    internal class MefLabService : IMefLabService
+    /// <summary>
+    ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
+    /// </summary>
+    public class MefLabService : IMefLabService
     {
-        private readonly AggregateCatalog _catalogue = new();
-
-        private readonly CompositionContainer _container;
+        private readonly AggregateCatalog _catalogue;
 
         /// <summary>
         ///     Initialises a new instance of the <see cref="MefLabService" /> class.
         /// </summary>
         public MefLabService()
         {
-            _container = new CompositionContainer(_catalogue);
+            _catalogue = new AggregateCatalog();
+            AddAssembly(AssemblyEx.GetModAssembly());
         }
 
         /// <summary>
         ///     Adds a directory to the aggregate Catalogue.
         /// </summary>
         /// <param name="path">The absolute path to the directory to add.</param>
-        /// <returns>The <see cref="DirectoryCatalog" /> instance that was added to the aggregate, so that it can be removed later.</returns>
         public DirectoryCatalog AddDirectory(string path)
         {
             var catalogue = _catalogue.Catalogs
@@ -52,7 +54,6 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
         ///     Adds an assembly to the aggregate Catalogue.
         /// </summary>
         /// <param name="assembly">The assembly to add.</param>
-        /// <returns>The <see cref="AssemblyCatalog" /> instance that was added to the aggregate, so that it can be removed later.</returns>
         public AssemblyCatalog AddAssembly(Assembly assembly)
         {
             var catalogue = _catalogue.Catalogs
@@ -92,7 +93,8 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
         /// <param name="attributedParts">An array of attributed parts to compose.</param>
         public void ComposeParts(params object[] attributedParts)
         {
-            _container.ComposeParts(attributedParts);
+            var container = new CompositionContainer(_catalogue);
+            container.ComposeParts(attributedParts);
         }
     }
 }

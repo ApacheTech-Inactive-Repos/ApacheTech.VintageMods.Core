@@ -1,7 +1,12 @@
-﻿using Vintagestory.API.Common;
+﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic;
+using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
 {
+    /// <summary>
+    ///     Acts as a base class for Universal Mod Systems, that work on both the Client, and Server.
+    /// </summary>
+    /// <seealso cref="ModSystemBase{ICoreAPI}" />
     public abstract class UniversalModSystem : ModSystemBase<ICoreAPI>
     {
         /// <summary>

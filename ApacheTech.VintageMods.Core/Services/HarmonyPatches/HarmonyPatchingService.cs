@@ -4,8 +4,12 @@ using HarmonyLib;
 namespace ApacheTech.VintageMods.Core.Services.HarmonyPatches
 {
     /// <summary>
-    ///     A service that provides methods of applying Harmony patches to the game. 
+    ///     Provides methods of applying Harmony patches to the game.
     /// </summary>
+    /// <remarks>
+    ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    ///     be processed at launch. Manual patches can be processed later on at runtime.
+    /// </remarks>
     internal class HarmonyPatchingService : IHarmonyPatchingService
     {
         private readonly Dictionary<string, Harmony> _instances = new();

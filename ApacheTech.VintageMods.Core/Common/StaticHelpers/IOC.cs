@@ -1,4 +1,5 @@
 ﻿using System;
+using ApacheTech.VintageMods.Core.Common.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -6,7 +7,7 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
-namespace ApacheTech.VintageMods.Core.Common.Singletons
+namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     /// <summary>
     ///     Dependency Injection Services.
@@ -23,7 +24,16 @@ namespace ApacheTech.VintageMods.Core.Common.Singletons
         ///     Gets the service provider, used to resolve instances of services within the DI Container.
         /// </summary>
         /// <value>The <see cref="IServiceProvider" /> service. provider.</value>
-        public static IServiceProvider Provider { get; private set; }
+        internal static IServiceProvider Provider { get; private set; }
+
+        public static TService Resolve<TService>()
+        {
+            return Provider.GetRequiredService<TService>();
+        }
+        public static TService Resolve<TService>(params object[] args) where TService : class
+        {
+            return Provider.CreateInstance<TService>(args);
+        }
 
         internal static IServiceCollection Configure(this IServiceCollection services,
             System.Action<IServiceCollection> callback)
@@ -52,6 +62,9 @@ namespace ApacheTech.VintageMods.Core.Common.Singletons
         /// </exception>
         internal static IServiceCollection RegisterAPI(this IServiceCollection services, ICoreAPI api)
         {
+            ApiEx.Universal = api;
+            services.AddSingleton((ICoreAPICommon)api);
+            services.AddSingleton(ApiEx.Universal);
             switch (api.Side)
             {
                 case EnumAppSide.Server:
@@ -69,15 +82,11 @@ namespace ApacheTech.VintageMods.Core.Common.Singletons
                     services.AddSingleton(ApiEx.ClientMain);
                     break;
                 case EnumAppSide.Universal:
-                    ApiEx.Universal = api;
-                    services.AddSingleton((ICoreAPICommon)api);
-                    services.AddSingleton(ApiEx.Universal);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(api.Side), api.Side,
                         "Fatal error found while registering the API within the DI Container.");
             }
-
             return services;
         }
     }

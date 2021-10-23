@@ -4,7 +4,7 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
-namespace ApacheTech.VintageMods.Core.Common.Singletons
+namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     /// <summary>
     ///     Global access to game's sided APIs. 

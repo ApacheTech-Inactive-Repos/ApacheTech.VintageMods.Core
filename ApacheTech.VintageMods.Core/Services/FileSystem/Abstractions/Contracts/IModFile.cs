@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions
+namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Represents a file on the filesystem.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public interface IModFile
+    public interface IModFile : IModFileBase
     {
         /// <summary>
         ///     Deserialises the specified file as a strongly-typed object.

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using JetBrains.Annotations;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions
+namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Represents a binary (ProtoBuf) file on the filesystem.

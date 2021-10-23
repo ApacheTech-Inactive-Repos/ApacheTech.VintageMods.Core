@@ -1,42 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
-using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using JetBrains.Annotations;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem.Files
+namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions
 {
     /// <summary>
     ///     A wrapper of a <see cref="FileInfo" /> for a specific file on on the filesystem. This class cannot be inherited.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public abstract class ModFile : IModFile
+    public abstract class ModFile : ModFileBase, IModFile
     {
         /// <summary>
-        ///     Initialises a new instance of the <see cref="ModFileInfo" /> class.
+        ///     Initialises a new instance of the <see cref="ModFile" /> class.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        protected ModFile(string filePath)
+        protected ModFile(string filePath) : base(filePath)
         {
-            ModFileInfo = new FileInfo(filePath);
         }
 
         /// <summary>
-        ///     Initialises a new instance of the <see cref="ModFileInfo" /> class.
+        ///     Initialises a new instance of the <see cref="ModFile" /> class.
         /// </summary>
         /// <param name="fileInfo">The file information.</param>
-        protected ModFile(FileInfo fileInfo)
+        protected ModFile(FileInfo fileInfo) : base(fileInfo)
         {
-            ModFileInfo = fileInfo;
         }
-
-        /// <summary>
-        ///     Gets the type of the file, be it JSON, or Binary.
-        /// </summary>
-        /// <value>The type of the file.</value>
-        internal abstract FileType FileType { get; }
-
-        protected FileInfo ModFileInfo { get; }
 
         /// <summary>
         ///     Deserialises the specified file as a strongly-typed object.

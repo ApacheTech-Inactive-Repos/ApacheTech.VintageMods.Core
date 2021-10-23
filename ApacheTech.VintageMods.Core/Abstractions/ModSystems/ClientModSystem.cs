@@ -1,13 +1,13 @@
-﻿using Vintagestory.API.Client;
+﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
 {
     /// <summary>
-    ///     Class ClientModSystem.
-    /// Implements the <see cref="ModSystemBase{ICoreClientAPI}" />
+    ///     Acts as a base class for Client-Side Only ModSystems. Derived classes will only be loaded on the Client.
     /// </summary>
-    /// <seealso cref="ModSystemBase{ICoreClientAPI}" />
+    /// <seealso cref="ModSystemBase{ICoreAPI}" />
     public abstract class ClientModSystem : ModSystemBase<ICoreClientAPI>
     {
         /// <summary>

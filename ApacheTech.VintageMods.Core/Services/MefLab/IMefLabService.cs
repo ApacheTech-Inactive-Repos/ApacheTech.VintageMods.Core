@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace ApacheTech.VintageMods.Core.Services.MefLab
 {
     /// <summary>
-    ///     Provides MEF Composition Functionality to mods.
+    ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IMefLabService
@@ -15,7 +15,6 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
         ///     Adds a directory to the aggregate Catalogue.
         /// </summary>
         /// <param name="path">The absolute path to the directory to add.</param>
-        /// <returns>The <see cref="DirectoryCatalog"/> instance that was added to the aggregate, so that it can be removed later.</returns>
         DirectoryCatalog AddDirectory(string path);
 
         /// <summary>
@@ -28,7 +27,6 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
         ///     Adds an assembly to the aggregate Catalogue.
         /// </summary>
         /// <param name="assembly">The assembly to add.</param>
-        /// <returns>The <see cref="AssemblyCatalog"/> instance that was added to the aggregate, so that it can be removed later.</returns>
         AssemblyCatalog AddAssembly(Assembly assembly);
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
         /// </summary>
         /// <typeparam name="TCatalogue">The type of the catalogue to remove.</typeparam>
         /// <param name="catalogue">The constituent catalogue instance that currently resides in the aggregate Catalogue.</param>
-        void Remove<TCatalogue>(TCatalogue catalogue) where TCatalogue : ComposablePartCatalog;
+        public void Remove<TCatalogue>(TCatalogue catalogue) where TCatalogue : ComposablePartCatalog;
 
         /// <summary>
         ///     Creates composable parts from an array of attributed objects.

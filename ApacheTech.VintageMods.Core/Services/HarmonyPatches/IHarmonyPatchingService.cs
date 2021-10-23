@@ -3,7 +3,7 @@
 namespace ApacheTech.VintageMods.Core.Services.HarmonyPatches
 {
     /// <summary>
-    ///     A service that provides methods of applying Harmony patches to the game. 
+    ///     Provides methods of applying Harmony patches to the game.
     /// </summary>
     public interface IHarmonyPatchingService
     {

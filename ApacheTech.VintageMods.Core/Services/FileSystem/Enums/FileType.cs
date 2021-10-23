@@ -15,6 +15,11 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Enums
         /// <summary>
         ///     Denotes that a file is stored in binary ProtoBuf format.
         /// </summary>
-        [Description("Binary (ProtofBuf) File")] Binary
+        [Description("Binary (ProtofBuf) File")] Binary,
+
+        /// <summary>
+        ///     Denotes that a file is stored in clear text format.
+        /// </summary>
+        [Description("Text File")] Text
     }
 }

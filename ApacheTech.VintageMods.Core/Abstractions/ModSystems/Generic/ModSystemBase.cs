@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
+namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic
 {
     /// <summary>
     ///     Base representation of a ModSystem used to extend Vintage Story.

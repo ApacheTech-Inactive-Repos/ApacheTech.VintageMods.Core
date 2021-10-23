@@ -5,10 +5,10 @@ using Vintagestory.API.Server;
 namespace ApacheTech.VintageMods.Core.Services.Network
 {
     /// <summary>
-    ///     A service that provides narrowed scope access to network channels within the game.
+    ///     Provides narrowed scope access to network channels within the game.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    internal interface INetworkService
+    public interface INetworkService
     {
         /// <summary>
         ///     Retrieves a client-side network channel.
@@ -16,6 +16,30 @@ namespace ApacheTech.VintageMods.Core.Services.Network
         /// <param name="channelName">Name of the channel.</param>
         /// <returns>An instance of <see cref="IClientNetworkChannel"/>, used to send and receive network messages on the client.</returns>
         public IClientNetworkChannel ClientChannel(string channelName);
+
+        /// <summary>
+        ///     Retrieves the mod's default server-side network channel.
+        /// </summary>
+        /// <returns>An instance of <see cref="IServerNetworkChannel"/>, used to send and receive network messages on the server.</returns>
+        public IServerNetworkChannel DefaultServerChannel { get; }
+
+        /// <summary>
+        ///     Retrieves the mod's default client-side network channel.
+        /// </summary>
+        /// <returns>An instance of <see cref="IClientNetworkChannel"/>, used to send and receive network messages on the client.</returns>
+        public IClientNetworkChannel DefaultClientChannel { get; }
+
+        /// <summary>
+        ///     Retrieves the shared server-side network channel, between all VintageMods mods.
+        /// </summary>
+        /// <returns>An instance of <see cref="IServerNetworkChannel"/>, used to send and receive network messages on the server.</returns>
+        public IServerNetworkChannel CommonServerChannel { get; }
+
+        /// <summary>
+        ///     Retrieves the shared client-side network channel, between all VintageMods mods.
+        /// </summary>
+        /// <returns>An instance of <see cref="IClientNetworkChannel"/>, used to send and receive network messages on the client.</returns>
+        public IClientNetworkChannel CommonClientChannel { get; }
 
         /// <summary>
         ///     Retrieves a server-side network channel.

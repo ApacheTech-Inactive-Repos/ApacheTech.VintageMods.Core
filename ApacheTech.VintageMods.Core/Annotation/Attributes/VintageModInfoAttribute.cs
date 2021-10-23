@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace ApacheTech.VintageMods.Core.Annotation.Attributes
 {
     /// <summary>
-    ///     
+    ///     Contains the metadata shared between VintageMods mods.
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Assembly)]
@@ -33,6 +33,12 @@ namespace ApacheTech.VintageMods.Core.Annotation.Attributes
         ///     Gets or sets the latest version.
         /// </summary>
         /// <value>The latest version.</value>
-        public string LatestVersion { get; set; }
+        public string Version { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the network version.
+        /// </summary>
+        /// <value>The network version.</value>
+        public string NetworkVersion { get; set; }
     }
 }

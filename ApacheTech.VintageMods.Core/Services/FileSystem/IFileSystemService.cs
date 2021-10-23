@@ -1,4 +1,4 @@
-﻿using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
+﻿using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using JetBrains.Annotations;
 
@@ -14,8 +14,36 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         ///     Retrieves a file that has previously been registered with the FileSystem Service.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <returns>Return an <see cref="IModFile"/> representation of the file, on disk.</returns>
-        IModFile GetRegisteredFile(string fileName);
+        /// <returns>Return an <see cref="object"/> representation of the file, on disk.</returns>
+        object GetRegisteredFile(string fileName);
+
+        /// <summary>
+        ///     Retrieves a file that has previously been registered with the FileSystem Service.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Return an <see cref="IJsonModFile"/> representation of the file, on disk.</returns>
+        IJsonModFile GetJsonFile(string fileName);
+
+        /// <summary>
+        ///     Retrieves a file that has previously been registered with the FileSystem Service.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Return an <see cref="IBinaryModFile"/> representation of the file, on disk.</returns>
+        IBinaryModFile GetBinaryFile(string fileName);
+
+        /// <summary>
+        ///     Retrieves a file that has previously been registered with the FileSystem Service.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Return an <see cref="ITextModFile"/> representation of the file, on disk.</returns>
+        ITextModFile GetTextFile(string fileName);
+
+        /// <summary>
+        ///     Retrieves a file that has previously been registered with the FileSystem Service.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Return an <see cref="TFileType"/> representation of the file, on disk.</returns>
+        TFileType GetRegisteredFile<TFileType>(string fileName) where TFileType : IModFileBase;
 
         /// <summary>
         ///     Registers a file with the FileSystem Service. This will copy a default implementation of the file from:

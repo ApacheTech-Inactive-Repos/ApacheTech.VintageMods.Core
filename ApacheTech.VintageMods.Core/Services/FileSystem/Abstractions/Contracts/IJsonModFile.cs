@@ -3,13 +3,13 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Vintagestory.API.Datastructures;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions
+namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Represents a JSON file on the filesystem.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public interface IJsonModFile : IModFile
+    public interface IJsonModFile : IModFile, ITextModFile
     {
         /// <summary>
         ///     Parses the file into Vintage Story's bespoke JsonObject wrapper.

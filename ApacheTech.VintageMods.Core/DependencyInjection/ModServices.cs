@@ -1,12 +1,13 @@
 ﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.FileSystem;
-using ApacheTech.VintageMods.Core.Services.HarmonyPatches;
+using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using ApacheTech.VintageMods.Core.Services.MefLab;
 using ApacheTech.VintageMods.Core.Services.Network;
 using JetBrains.Annotations;
 
-namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
+namespace ApacheTech.VintageMods.Core.DependencyInjection
 {
     /// <summary>
     ///     Globally accessible services, populated through the IOC Container. If a derived
@@ -15,7 +16,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
     ///     instantiated manually.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public static class ServiceEx
+    public static class ModServices
     {
         /// <summary>
         ///     Gets the mod information.

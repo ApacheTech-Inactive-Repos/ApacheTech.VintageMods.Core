@@ -7,9 +7,14 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
     /// <summary>
     ///     Acts as a base class for Server-Side Only ModSystems. Derived classes will only be loaded on the Server.
     /// </summary>
-    /// <seealso cref="ModSystemBase{ICoreAPI}" />
-    public abstract class ServerModSystem : ModSystemBase<ICoreServerAPI>
+    /// <seealso cref="ModSystemBase" />
+    public abstract class ServerModSystem : ModSystemBase
     {
+        /// <summary>
+        ///     The core API implemented by the server. The main interface for accessing the server. Contains all sub-components, and some miscellaneous methods.
+        /// </summary>
+        protected ICoreServerAPI Sapi => UApi as ICoreServerAPI;
+
         /// <summary>
         ///     Returns if this mod should be loaded for the given app side.
         /// </summary>

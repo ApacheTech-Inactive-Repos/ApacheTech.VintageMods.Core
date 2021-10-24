@@ -6,16 +6,14 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic
     /// <summary>
     ///     Base representation of a ModSystem used to extend Vintage Story.
     /// </summary>
-    /// <typeparam name="TApi">The type of the API.</typeparam>
     /// <seealso cref="ModSystem" />
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers | ImplicitUseTargetFlags.WithInheritors)]
-    public abstract class ModSystemBase<TApi> : ModSystem
-        where TApi : class, ICoreAPI
+    public abstract class ModSystemBase : ModSystem
     {
         /// <summary>
-        ///     The main API for the game.
+        ///     Common API Components that are available on the server and the client. Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
         /// </summary>
-        protected TApi Api { get; private set; }
+        protected ICoreAPI UApi { get; private set; }
 
         /// <summary>
         ///     Called during initial mod loading, called before any mod receives the call to Start().
@@ -26,7 +24,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic
         /// </param>
         public override void StartPre(ICoreAPI api)
         {
-            Api = api as TApi;
+            UApi = api;
         }
 
         /// <summary>

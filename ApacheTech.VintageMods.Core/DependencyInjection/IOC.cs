@@ -1,5 +1,6 @@
 ﻿using System;
-using ApacheTech.VintageMods.Core.Common.Extensions;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -7,11 +8,12 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
-namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
+namespace ApacheTech.VintageMods.Core.DependencyInjection
 {
     /// <summary>
     ///     Dependency Injection Services.
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class IOC
     {
         /// <summary>
@@ -30,9 +32,17 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             return Provider.GetRequiredService<TService>();
         }
+
+        /// <summary>
+        ///     Instantiate a type with constructor arguments provided directly and/or through the IOC Container.
+        ///     Required a Constructor decorated with a <see cref="ActivatorUtilitiesConstructorAttribute"/> attribute.
+        /// </summary>
+        /// <typeparam name="TService">The type of object to instantiate.</typeparam>
+        /// <param name="args">Optional parameter arguments to pass to the constructor.</param>
+        /// <returns>An activated object of type <typeparamref name="TService"/>, in the order the appear within the constructor signature.</returns>
         public static TService Resolve<TService>(params object[] args) where TService : class
         {
-            return Provider.CreateInstance<TService>(args);
+            return ActivatorUtilities.CreateInstance<TService>(Provider, args);
         }
 
         internal static IServiceCollection Configure(this IServiceCollection services,

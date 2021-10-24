@@ -1,6 +1,9 @@
 ﻿using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.Extensions;
+using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
@@ -16,6 +19,7 @@ namespace ApacheTech.VintageMods.Core.Services.Network
     ///     of the calling Mod. Other channels can be registered, as needed.
     /// </remarks>
     /// <seealso cref="INetworkService" />
+    [RegisteredService(ServiceLifetime.Singleton, typeof(INetworkService))]
     internal class NetworkService : INetworkService
     {
         [CanBeNull] private readonly ICoreClientAPI _capi;

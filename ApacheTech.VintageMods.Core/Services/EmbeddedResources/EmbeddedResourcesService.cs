@@ -3,7 +3,9 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Text;
+using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.FileSystem;
+using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Util;
 
 namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
@@ -12,6 +14,7 @@ namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
     ///     Provides a means for interacting with embedded resources within mod assemblies.
     /// </summary>
     /// <seealso cref="IEmbeddedResourcesService" />
+    [RegisteredService(ServiceLifetime.Singleton, typeof(IEmbeddedResourcesService))]
     internal class EmbeddedResourcesService : IEmbeddedResourcesService
     {
         /// <summary>

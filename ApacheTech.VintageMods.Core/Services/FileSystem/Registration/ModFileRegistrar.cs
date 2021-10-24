@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors;
+using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Config;
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Registration
 {
+    [RegisteredService(ServiceLifetime.Singleton, typeof(IModFileRegistrar))]
     internal sealed class ModFileRegistrar : IModFileRegistrar
     {
         private readonly IEmbeddedResourcesService _embeddedResources;

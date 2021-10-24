@@ -10,7 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ApacheTech.VintageMods.FluentChatCommands" Version="1.0.0" />
 		<PackageReference Include="IsExternalInit" Version="1.0.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,8 +23,8 @@
 
 	<ItemGroup>
 		<Reference Include="0Harmony">
-		  <HintPath>D:\Games\Vintage Story\Lib\0Harmony.dll</HintPath>
-		  <Private>false</Private>
+			<HintPath>D:\Games\Vintage Story\Lib\0Harmony.dll</HintPath>
+			<Private>false</Private>
 		</Reference>
 		<Reference Include="AnimatedGif">
 		  <HintPath>D:\Games\Vintage Story\Lib\AnimatedGif.dll</HintPath>

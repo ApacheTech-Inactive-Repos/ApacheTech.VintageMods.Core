@@ -1,14 +1,26 @@
 ﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
 {
     /// <summary>
     ///     Acts as a base class for Universal Mod Systems, that work on both the Client, and Server.
     /// </summary>
-    /// <seealso cref="ModSystemBase{ICoreAPI}" />
-    public abstract class UniversalModSystem : ModSystemBase<ICoreAPI>
+    /// <seealso cref="ModSystemBase" />
+    public abstract class UniversalModSystem : ModSystemBase
     {
+        /// <summary>
+        ///     The core API implemented by the client. The main interface for accessing the client. Contains all sub-components, and some miscellaneous methods.
+        /// </summary>
+        protected ICoreClientAPI Capi => UApi as ICoreClientAPI;
+
+        /// <summary>
+        ///     The core API implemented by the server. The main interface for accessing the server. Contains all sub-components, and some miscellaneous methods.
+        /// </summary>
+        protected ICoreServerAPI Sapi => UApi as ICoreServerAPI;
+
         /// <summary>
         ///     Returns if this mod should be loaded for the given app side.
         /// </summary>

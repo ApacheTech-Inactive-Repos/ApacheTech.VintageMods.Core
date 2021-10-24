@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
+using ApacheTech.VintageMods.Core.Common.Extensions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
-using ApacheTech.VintageMods.Core.Services.FileSystem;
-using ApacheTech.VintageMods.Core.Services.FileSystem.Registration;
-using ApacheTech.VintageMods.Core.Services.HarmonyPatches;
-using ApacheTech.VintageMods.Core.Services.MefLab;
-using ApacheTech.VintageMods.Core.Services.Network;
-using HarmonyLib;
+using ApacheTech.VintageMods.Core.DependencyInjection;
+using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
 using Microsoft.Extensions.DependencyInjection;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 // =========================================================================================================================
 
@@ -52,13 +52,15 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
     /// <seealso cref="UniversalModSystem" />
     public abstract class VintageModLoader : UniversalModSystem
     {
+        private readonly List<ServiceDescriptor> _disposingServices = new();
+
         /// <summary>
         ///     Initialises a new instance of the <see cref="VintageModLoader" /> class.
         /// </summary>
         protected VintageModLoader()
         {
             var assembly = AssemblyEx.ModAssembly = Assembly.GetAssembly(GetType());
-            ServiceEx.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
+            ModServices.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
         }
 
         /// <summary>
@@ -78,7 +80,38 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
                 .Configure(ConfigureModServices)
                 .Build();
 
-            ApplyHarmonyPatches(AssemblyEx.GetModAssembly());
+            switch (UApi.Side)
+            {
+                case EnumAppSide.Server:
+                    StartPreServerSide(Sapi);
+                    break;
+                case EnumAppSide.Client:
+                    StartPreClientSide(Capi);
+                    break;
+                case EnumAppSide.Universal:
+                    // Does not exist. Game breaks SRP/ISP for Enums.
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
+        ///     Called on the client, during initial mod loading, called before any mod receives the call to Start().
+        /// </summary>
+        /// <param name="capi">The core API implemented by the client. The main interface for accessing the client. Contains all sub-components, and some miscellaneous methods.</param>
+        protected virtual void StartPreClientSide(ICoreClientAPI capi)
+        {
+            // Left empty as an optional expansion method.
+        }
+
+        /// <summary>
+        ///     Called on the server, during initial mod loading, called before any mod receives the call to Start().
+        /// </summary>
+        /// <param name="sapi">The core API implemented by the server. The main interface for accessing the server. Contains all sub-components, and some miscellaneous methods.</param>
+        protected virtual void StartPreServerSide(ICoreServerAPI sapi)
+        {
+            // Left empty as an optional expansion method.
         }
 
         /// <summary>
@@ -86,16 +119,20 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         /// </summary>
         private void ConfigureRequiredServices(IServiceCollection services)
         {
-            services.AddSingleton(ServiceEx.ModInfo);
+            var types = AssemblyEx
+                .GetModAssembly()
+                .GetTypesWithAttribute<RegisteredServiceAttribute>()
+                .ToList();
 
-            services.AddSingleton<IEmbeddedResourcesService, EmbeddedResourcesService>();
-            services.AddSingleton<IModFileRegistrar, ModFileRegistrar>();
-            services.AddSingleton<IFileSystemService, FileSystemService>();
-
-            services.AddSingleton<IHarmonyPatchingService, HarmonyPatchingService>();
-            services.AddSingleton<INetworkService, NetworkService>();
-
-            services.AddTransient<IMefLabService, MefLabService>();
+            foreach (var (type, attribute) in types)
+            {
+                var descriptor = new ServiceDescriptor(attribute.ServiceType, type, attribute.ServiceScope);
+                if (type.GetInterface(nameof(IDisposable)) is not null)
+                {
+                    _disposingServices.Add(descriptor);
+                }
+                services.Add(descriptor);
+            }
         }
 
         /// <summary>
@@ -103,26 +140,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         /// </summary>
         /// <param name="services">The service collection.</param>
         protected abstract void ConfigureModServices(IServiceCollection services);
-
-        /// <summary>
-        ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
-        ///     be processed at launch. Manual patches can be processed later on at runtime.
-        /// </summary>
-        private void ApplyHarmonyPatches(Assembly assembly)
-        {
-            try
-            {
-                var harmony = ServiceEx.Harmony.CreateOrUseInstance(assembly.FullName);
-                harmony.PatchAll(assembly);
-                Api.Logger.Notification($"\t{assembly.GetName()} - Patched Methods:");
-                foreach (var method in harmony.GetPatchedMethods())
-                    Api.Logger.Notification($"\t\t{method.FullDescription()}");
-            }
-            catch (Exception ex)
-            {
-                Api.Logger.Error($"[VintageMods] {ex}");
-            }
-        }
 
         /// <summary>
         ///     If you need mods to be executed in a certain order, adjust this methods return value.
@@ -157,7 +174,12 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         /// </summary>
         public override void Dispose()
         {
-            ServiceEx.Harmony.UnpatchAll();
+            foreach (var service in from descriptor in _disposingServices
+                                    let service = IOC.Provider.GetService(descriptor.ServiceType)
+                                    select (IDisposable)service)
+            {
+                service.Dispose();
+            }
             base.Dispose();
         }
     }

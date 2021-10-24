@@ -55,6 +55,6 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         /// </summary>
         /// <param name="fileName">The name of the file, including file extension.</param>
         /// <param name="scope">The scope of the file, be it global, or per-world.</param>
-        public void RegisterFile(string fileName, FileScope scope);
+        public IFileSystemService RegisterFile(string fileName, FileScope scope);
     }
 }

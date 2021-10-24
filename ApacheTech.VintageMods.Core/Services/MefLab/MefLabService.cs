@@ -4,12 +4,15 @@ using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ApacheTech.VintageMods.Core.Services.MefLab
 {
     /// <summary>
     ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
     /// </summary>
+    [RegisteredService(ServiceLifetime.Transient, typeof(IMefLabService))]
     public class MefLabService : IMefLabService
     {
         private readonly AggregateCatalog _catalogue;

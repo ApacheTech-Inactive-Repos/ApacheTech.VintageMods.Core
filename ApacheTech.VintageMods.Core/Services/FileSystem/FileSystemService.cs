@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Registration;
+using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 
@@ -12,6 +14,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
     /// <summary>
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
+    [RegisteredService(ServiceLifetime.Singleton, typeof(IFileSystemService))]
     internal sealed class FileSystemService : IFileSystemService
     {
         private readonly IModFileRegistrar _registrar;
@@ -34,7 +37,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         /// </summary>
         /// <param name="fileName">The name of the file, including file extension.</param>
         /// <param name="scope">The scope of the file, be it global, or per-world.</param>
-        public void RegisterFile(string fileName, FileScope scope)
+        public IFileSystemService RegisterFile(string fileName, FileScope scope)
         {
             // TODO: Partially refactored... but just kicked the can down the road.
             //!? Open/Closed issues need to be resolved properly, rather than just pushed into a separate helper class.
@@ -42,8 +45,9 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
             var fileType = _registrar.ParseFileType(file);
             var modFile = _registrar.InstantiateModFile(fileType, file);
             _registeredFiles.Add(fileName, modFile);
-            if (file.Exists) return;
+            if (file.Exists) return this;
             _registrar.CopyFileToOutputDirectory(fileName, file, fileType);
+            return this;
         }
 
         /// <summary>

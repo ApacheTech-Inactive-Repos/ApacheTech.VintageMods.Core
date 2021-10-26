@@ -3,20 +3,11 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions
+namespace ApacheTech.VintageMods.Core.Common.Extensions.Game
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ApiExtensions
     {
-        #region Game Mode
-        
-        public static bool IsSurvival(this EnumGameMode mode) => mode == EnumGameMode.Survival;
-        public static bool IsCreative(this EnumGameMode mode) => mode == EnumGameMode.Creative;
-        public static bool IsSpectator(this EnumGameMode mode) => mode == EnumGameMode.Spectator;
-        public static bool IsGuest(this EnumGameMode mode) => mode == EnumGameMode.Guest;
-
-        #endregion
-
         #region ICoreAPI
 
         /// <summary>
@@ -50,7 +41,5 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions
         }
 
         #endregion
-
-
     }
 }

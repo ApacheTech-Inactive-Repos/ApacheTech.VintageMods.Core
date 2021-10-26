@@ -3,11 +3,20 @@ using JetBrains.Annotations;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions
+namespace ApacheTech.VintageMods.Core.Common.Extensions.Game
 {
-    [UsedImplicitly]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class GameFileExtensions
     {
+        #region Game Mode
+
+        public static bool IsSurvival(this EnumGameMode mode) => mode == EnumGameMode.Survival;
+        public static bool IsCreative(this EnumGameMode mode) => mode == EnumGameMode.Creative;
+        public static bool IsSpectator(this EnumGameMode mode) => mode == EnumGameMode.Spectator;
+        public static bool IsGuest(this EnumGameMode mode) => mode == EnumGameMode.Guest;
+
+        #endregion
+
         /// <summary>
         ///     Returns all remaining arguments as single merged string, concatenated with spaces.
         /// </summary>

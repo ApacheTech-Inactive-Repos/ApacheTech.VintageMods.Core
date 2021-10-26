@@ -12,7 +12,7 @@ using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using JetBrains.Annotations;
 using Vintagestory.API.Util;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions
+namespace ApacheTech.VintageMods.Core.Common.Extensions.System
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class DotNetExtensions

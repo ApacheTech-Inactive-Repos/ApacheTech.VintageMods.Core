@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ApacheTech.VintageMods.Core.Common.Extensions;
 using ApacheTech.VintageMods.Core.Common.Extensions.System;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -21,27 +20,27 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <summary>
         ///     VSEssentials.dll
         /// </summary>
-        public static Assembly VSEssentials => typeof(BlockEntityGeneric).Assembly;
+        public static Assembly VSEssentials => GetAssembly("VSEssentials.dll");
 
         /// <summary>
         ///     VSSurvivalMod.dll
         /// </summary>
-        public static Assembly VSSurvivalMod => typeof(BlockAnvil).Assembly;
+        public static Assembly VSSurvivalMod => GetAssembly("VSSurvivalMod.dll");
 
         /// <summary>
         ///     VSCreativeMod.dll
         /// </summary>
-        public static Assembly VSCreativeMod => typeof(BlockCommand).Assembly;
+        public static Assembly VSCreativeMod => GetAssembly("VSCreativeMod.dll");
 
         /// <summary>
-        ///     Vintagestory.dll
+        ///     VintagestoryAPI.dll
         /// </summary>
-        public static Assembly VintagestoryAPI => typeof(ICoreClientAPI).Assembly;
+        public static Assembly VintagestoryAPI => GetAssembly("VintagestoryAPI.dll");
 
         /// <summary>
         ///     VintagestoryLib.dll
         /// </summary>
-        public static Assembly VintagestoryLib => typeof(ClientMain).Assembly;
+        public static Assembly VintagestoryLib => GetAssembly("VintagestoryLib.dll");
 
         /// <summary>
         ///     Vintagestory.exe
@@ -88,6 +87,13 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             return All
                 .Select(assembly => assembly.FindType(typeName))
                 .FirstOrNull();
+        }
+
+        private static Assembly GetAssembly(string name)
+        {
+            return Assembly.GetEntryAssembly()?
+                .Modules?.FirstOrDefault(p => p.Name == name)?
+                .Assembly;
         }
     }
 }

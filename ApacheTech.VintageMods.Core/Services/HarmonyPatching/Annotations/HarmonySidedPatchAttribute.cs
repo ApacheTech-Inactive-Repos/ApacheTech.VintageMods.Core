@@ -1,5 +1,4 @@
 ﻿using System;
-using HarmonyLib;
 using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations

@@ -1,7 +1,7 @@
-﻿using ApacheTech.VintageMods.Core.Annotation.Attributes;
+﻿using System;
+using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.Extensions;
 using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
-using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Client;
@@ -34,8 +34,19 @@ namespace ApacheTech.VintageMods.Core.Services.Network
         public NetworkService(ICoreAPI api, IVintageModInfo modInfo)
         {
             _modId = modInfo.ModId;
-            _capi = api.ForClient();
-            _sapi = api.ForServer();
+            switch (api.Side)
+            {
+                case EnumAppSide.Server:
+                    _sapi = api.ForServer();
+                    break;
+                case EnumAppSide.Client:
+                    _capi = api.ForClient();
+                    break;
+                case EnumAppSide.Universal:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             RegisterChannel("VintageMods");
             RegisterChannel(_modId);

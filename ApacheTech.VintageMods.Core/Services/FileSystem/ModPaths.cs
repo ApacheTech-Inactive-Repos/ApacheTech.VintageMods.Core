@@ -19,13 +19,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         /// </summary>
         static ModPaths()
         {
-            ModAssembly = AssemblyEx.GetModAssembly();
+            ModAssembly = ApiEx.GetModAssembly();
             ModInfo = ModAssembly.GetCustomAttribute<VintageModInfoAttribute>();
-
             ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, ModInfo.RootDirectoryName));
             ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
             ModRootPath = Path.GetDirectoryName(ModAssembly.Location)!;
-            ModAssetsPath = Path.Combine(Path.GetDirectoryName(ModAssembly.Location)!, "assets"); ;
+            ModAssetsPath = Path.Combine(Path.GetDirectoryName(ModAssembly.Location)!, "assets");
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         {
             var dir = new DirectoryInfo(path);
             if (dir.Exists) return dir.FullName;
-            ApiEx.Universal?.Logger.VerboseDebug($"[VintageMods] Creating folder: {dir}");
+            ApiEx.Current?.Logger.VerboseDebug($"[VintageMods] Creating folder: {dir}");
             dir.Create();
             return dir.FullName;
         }

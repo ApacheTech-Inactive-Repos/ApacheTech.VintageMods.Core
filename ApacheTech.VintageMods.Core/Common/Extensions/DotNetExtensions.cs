@@ -171,7 +171,7 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions
             }
             catch (ArgumentNullException ex)
             {
-                ApiEx.Universal.Logger.Error($"{ex}");
+                ApiEx.Current.Logger.Error($"{ex}");
                 throw;
             }
         }

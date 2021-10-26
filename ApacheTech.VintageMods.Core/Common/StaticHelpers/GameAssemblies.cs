@@ -9,13 +9,11 @@ using Vintagestory.API.Client;
 using Vintagestory.Client.NoObf;
 using Vintagestory.GameContent;
 
-// ReSharper disable ReturnTypeCanBeEnumerable.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable InconsistentNaming
-// ReSharper disable MemberCanBePrivate.Global
-
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
+    /// <summary>
+    ///     
+    /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class GameAssemblies
     {
@@ -56,7 +54,8 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             get
             {
-                return typeof(GameAssemblies).GetProperties(BindingFlags.Public | BindingFlags.Static)
+                return typeof(GameAssemblies)
+                    .GetProperties(BindingFlags.Public | BindingFlags.Static)
                     .Where(p => p.PropertyType == typeof(Assembly))
                     .Select(prop => (Assembly)prop.GetValue(null))
                     .ToList();
@@ -72,7 +71,9 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <returns>The Type definition of the object being scanned for.</returns>
         public static Type FindType(this Assembly assembly, string typeName)
         {
-            return AccessTools.GetTypesFromAssembly(assembly).FirstOrNull(t => t.Name == typeName);
+            return AccessTools
+                .GetTypesFromAssembly(assembly)
+                .FirstOrNull(t => t.Name == typeName);
         }
 
         /// <summary>
@@ -83,7 +84,9 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <returns>The Type definition of the object being scanned for.</returns>
         public static Type FindType(string typeName)
         {
-            return All.Select(assembly => assembly.FindType(typeName)).FirstOrNull();
+            return All
+                .Select(assembly => assembly.FindType(typeName))
+                .FirstOrNull();
         }
     }
 }

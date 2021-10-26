@@ -23,7 +23,13 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
         /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
         /// <param name="collection">The collection of the objects to save to a single file.</param>
         /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public void SaveFrom<TModel>(IEnumerable<TModel> collection, Formatting formatting);
+        public void SaveFrom<TModel>(IEnumerable<TModel> collection, Formatting formatting = Formatting.Indented);
+
+        /// <summary>
+        ///     Serialises the specified collection of objects, and saves the resulting data to file.
+        /// </summary>
+        /// <param name="json">The serialised JSON string to save to a single file.</param>
+        /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
+        public void SaveFrom(string json, Formatting formatting = Formatting.Indented);
     }
 }

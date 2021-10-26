@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using ProtoBuf;
 
-namespace ApacheTech.VintageMods.Core.Common.Network.Packets
+namespace ApacheTech.VintageMods.Core.Services.Network.Packets
 {
     /// <summary>
     ///     Represents a network packet used for MEF composition.

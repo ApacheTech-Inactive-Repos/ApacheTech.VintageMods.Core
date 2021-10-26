@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class CrossPlatform
     {
         /// <summary>

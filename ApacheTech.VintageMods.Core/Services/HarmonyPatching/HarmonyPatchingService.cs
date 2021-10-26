@@ -26,10 +26,9 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         private readonly ICoreAPI _api;
         private readonly Dictionary<string, Harmony> _instances = new();
 
-        internal HarmonyPatchingService(ICoreAPI api)
+        public HarmonyPatchingService(ICoreAPI api)
         {
             _api = api;
-            ApplyHarmonyPatches(AssemblyEx.GetModAssembly());
         }
 
         /// <summary>
@@ -95,6 +94,15 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
             {
                 harmony.Value.UnpatchAll(harmony.Key);
             }
+        }
+
+        /// <summary>
+        ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+        ///     be processed at launch. Manual patches can be processed later on at runtime.
+        /// </summary>
+        public void UseHarmony()
+        {
+            ApplyHarmonyPatches(ApiEx.GetModAssembly());
         }
 
         /// <summary>

@@ -7,16 +7,25 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ApacheTech.VintageMods.Core.DependencyInjection
 {
+    /// <summary>
+    ///     Resolves dependencies within the IOC Container, for a given app-side.
+    /// </summary>
+    /// <seealso cref="IDependencyResolver" />
+    /// <seealso cref="IDisposable" />
     internal class DependencyResolver : IDependencyResolver, IDisposable
     {
+        private readonly List<IDisposable> _disposingServices = new();
+
         /// <summary>
         ///     Gets the service provider, used to resolve instances of services within the DI Container.
         /// </summary>
-        /// <value>The <see cref="IServiceProvider" /> service. provider.</value>
+        /// <value>The <see cref="IServiceProvider" /> service provider.</value>
         private readonly IServiceProvider _provider;
 
-        private readonly List<IDisposable> _disposingServices = new();
-        
+        /// <summary>
+        /// 	Initialises a new instance of the <see cref="DependencyResolver" /> class.
+        /// </summary>
+        /// <param name="provider">The pre-built provider, built with a <see cref="DependencyResolverBuilder"/>.</param>
         internal DependencyResolver(IServiceProvider provider)
         {
             _provider = provider;
@@ -38,17 +47,15 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
             return HandleDisposableInstances(service);
         }
 
+        /// <summary>
+        ///     Get a service of type <see cref="TService" />, from the underlying <see cref="IServiceProvider" />.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service object to get.</typeparam>
+        /// <returns>A service object of type <see cref="TService" /></returns>
         public TService Resolve<TService>()
         {
             var service = _provider.GetRequiredService<TService>();
             return HandleDisposableInstances(service);
-        }
-
-        private TService HandleDisposableInstances<TService>(TService service)
-        {
-            if (service.GetType().GetInterface(nameof(IDisposable)) is null) return service;
-            _disposingServices.AddIfNotPresent(service as IDisposable);
-            return service;
         }
 
         /// <summary>
@@ -56,11 +63,15 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
         /// </summary>
         public void Dispose()
         {
-            foreach (var service in _disposingServices.Where(service => service is not null))
-            {
-                service.Dispose();
-            }
+            foreach (var service in _disposingServices.Where(service => service is not null)) service.Dispose();
             _disposingServices.Clear();
+        }
+
+        private TService HandleDisposableInstances<TService>(TService service)
+        {
+            if (service.GetType().GetInterface(nameof(IDisposable)) is null) return service;
+            _disposingServices.AddIfNotPresent(service as IDisposable);
+            return service;
         }
     }
 }

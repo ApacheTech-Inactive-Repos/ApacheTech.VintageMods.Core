@@ -12,7 +12,7 @@ using Vintagestory.GameContent;
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     /// <summary>
-    ///     
+    ///     Direct access to the game's vanilla assemblies.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class GameAssemblies

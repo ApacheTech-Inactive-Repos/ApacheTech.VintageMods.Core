@@ -1,15 +1,13 @@
-﻿using System;
-using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.DependencyInjection.Abstractions;
+﻿using ApacheTech.VintageMods.Core.DependencyInjection.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
-using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Server;
-using Vintagestory.Client.NoObf;
-using Vintagestory.Server;
 
 namespace ApacheTech.VintageMods.Core.DependencyInjection
 {
+    /// <summary>
+    ///     Builds an IOC Dependency Resolver for the Client or Server.
+    /// </summary>
+    /// <seealso cref="IDependencyResolverBuilder" />
     internal class DependencyResolverBuilder : IDependencyResolverBuilder
     {
         /// <summary>
@@ -17,7 +15,7 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
         /// </summary>
         /// <value>The <see cref="IServiceCollection" /> DI container.</value>
         private readonly IServiceCollection _container = new ServiceCollection();
-
+        
         /// <summary>
         ///     Registers services within the DI container.
         /// </summary>
@@ -36,35 +34,16 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
             return new DependencyResolver(_container.BuildServiceProvider());
         }
 
-        public IDependencyResolverBuilder RegisterAPI(ICoreAPI api)
+        /// <summary>
+        ///     Registers the game's API within the DI container.
+        /// </summary>
+        /// <param name="api">The game's core API.</param>
+        /// <param name="registrar">The registrar to use, to register the API for the current app-side.</param>
+        /// <returns>Returns the same instance of <see cref="IDependencyResolver" /> that it was passed.</returns>
+        public IDependencyResolverBuilder RegisterAPI(ICoreAPI api, IRegistrar registrar)
         {
-            switch (api.Side)
-            {
-                case EnumAppSide.Server:
-                    ApiEx.Server = (ICoreServerAPI)api;
-                    ApiEx.ServerMain = (ServerMain)ApiEx.Server.World;
-                    _container.AddSingleton(ApiEx.Server);
-                    _container.AddSingleton(ApiEx.Server.World);
-                    _container.AddSingleton(ApiEx.ServerMain);
-                    _container.AddSingleton((ICoreAPICommon)ApiEx.Current);
-                    _container.AddSingleton(ApiEx.Current);
-                    break;
-                case EnumAppSide.Client:
-                    ApiEx.Client = (ICoreClientAPI)api;
-                    ApiEx.ClientMain = (ClientMain)ApiEx.Client.World;
-                    _container.AddSingleton(ApiEx.Client);
-                    _container.AddSingleton(ApiEx.Client.World);
-                    _container.AddSingleton(ApiEx.ClientMain);
-                    _container.AddSingleton((ICoreAPICommon)ApiEx.Current);
-                    _container.AddSingleton(ApiEx.Current);
-                    break;
-                case EnumAppSide.Universal:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            registrar.Register(api, _container);
             return this;
         }
-
     }
 }

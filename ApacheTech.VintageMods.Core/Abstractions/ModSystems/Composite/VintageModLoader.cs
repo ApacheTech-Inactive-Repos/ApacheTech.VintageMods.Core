@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
@@ -7,6 +6,7 @@ using ApacheTech.VintageMods.Core.Common.Extensions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.DependencyInjection;
 using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.DependencyInjection.Registrars;
 using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -52,15 +52,13 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
     /// <seealso cref="UniversalModSystem" />
     public abstract class VintageModLoader : UniversalModSystem
     {
-        private readonly List<ServiceDescriptor> _disposingServices = new();
-
         /// <summary>
         ///     Initialises a new instance of the <see cref="VintageModLoader" /> class.
         /// </summary>
         protected VintageModLoader()
         {
-            var assembly = AssemblyEx.ModAssembly = Assembly.GetAssembly(GetType());
-            ModServices.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
+            var assembly = ApiEx.ModAssembly = Assembly.GetAssembly(GetType());
+            ApiEx.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
         }
 
         /// <summary>
@@ -73,19 +71,24 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         public override void StartPre(ICoreAPI api)
         {
             base.StartPre(api);
-
-            IOC.Container
-                .RegisterAPI(api)
-                .Configure(ConfigureRequiredServices)
-                .Configure(ConfigureModServices)
-                .Build();
-
             switch (UApi.Side)
             {
                 case EnumAppSide.Server:
+                    ApiEx.ServerIOC =
+                        new DependencyResolverBuilder()
+                        .RegisterAPI(api, ServerRegistrar.CreateInstance())
+                        .Configure(ConfigureRequiredServices)
+                        .Configure(ConfigureModServices)
+                        .Build();
                     StartPreServerSide(Sapi);
                     break;
                 case EnumAppSide.Client:
+                    ApiEx.ClientIOC =
+                        new DependencyResolverBuilder()
+                        .RegisterAPI(api, ClientRegistrar.CreateInstance())
+                        .Configure(ConfigureRequiredServices)
+                        .Configure(ConfigureModServices)
+                        .Build();
                     StartPreClientSide(Capi);
                     break;
                 case EnumAppSide.Universal:
@@ -119,18 +122,15 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         /// </summary>
         private void ConfigureRequiredServices(IServiceCollection services)
         {
-            var types = AssemblyEx
-                .GetModAssembly()
+            services.AddSingleton(ApiEx.ModInfo);
+
+            var types = ApiEx.GetCoreAssembly()
                 .GetTypesWithAttribute<RegisteredServiceAttribute>()
                 .ToList();
 
             foreach (var (type, attribute) in types)
             {
                 var descriptor = new ServiceDescriptor(attribute.ServiceType, type, attribute.ServiceScope);
-                if (type.GetInterface(nameof(IDisposable)) is not null)
-                {
-                    _disposingServices.Add(descriptor);
-                }
                 services.Add(descriptor);
             }
         }
@@ -174,12 +174,8 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         /// </summary>
         public override void Dispose()
         {
-            foreach (var service in from descriptor in _disposingServices
-                                    let service = IOC.Provider.GetService(descriptor.ServiceType)
-                                    select (IDisposable)service)
-            {
-                service.Dispose();
-            }
+            (ApiEx.IOC as IDisposable)?.Dispose();
+            ApiEx.Dispose();
             base.Dispose();
         }
     }

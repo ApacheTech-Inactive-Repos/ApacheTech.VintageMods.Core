@@ -35,9 +35,9 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection.Annotation
         /// 	Initialises a new instance of the <see cref="RegisteredServiceAttribute"/> class.
         /// </summary>
         /// <param name="serviceScope">The service scope.</param>
-        /// <param name="registeredType">The type of the representation of the registered class within the IOC Container.</param>
+        /// <param name="serviceType">The type of the representation of the registered class within the IOC Container.</param>
         /// <remarks>
-        ///     If no specific type is supplied, the class will be registered via convention:<br/><br/>
+        ///     TODO: If no specific type is supplied, the class will be registered via convention:<br/><br/>
         ///
         ///      • If the class implements an interface, the interface will be be used as the representation.<br/>
         ///      • If the class implements more than one interface, the first interface will be be used as the representation.<br/>

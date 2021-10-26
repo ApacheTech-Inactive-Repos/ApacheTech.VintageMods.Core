@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Vintagestory.API.Datastructures;
@@ -18,6 +19,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
         public JsonObject ParseAsJsonObject();
 
         /// <summary>
+        ///     Parses the file into Vintage Story's bespoke JsonObject wrapper.
+        /// </summary>
+        /// <returns>An instance of type <see cref="JsonObject"/>, populated with data from this file.</returns>
+        public Task<JsonObject> ParseAsJsonObjectAsync();
+
+        /// <summary>
         ///     Serialises the specified collection of objects, and saves the resulting data to file.
         /// </summary>
         /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
@@ -29,7 +36,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
         ///     Serialises the specified collection of objects, and saves the resulting data to file.
         /// </summary>
         /// <param name="json">The serialised JSON string to save to a single file.</param>
-        /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
-        public void SaveFrom(string json, Formatting formatting = Formatting.Indented);
+        public void SaveFrom(string json);
+
+        /// <summary>
+        ///     Serialises the specified collection of objects, and saves the resulting data to file.
+        /// </summary>
+        /// <param name="json">The serialised JSON string to save to a single file.</param>
+        public Task SaveFromAsync(string json);
     }
 }

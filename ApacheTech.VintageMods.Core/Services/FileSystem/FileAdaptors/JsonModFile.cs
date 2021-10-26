@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Extensions;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Vintagestory.API.Datastructures;
@@ -50,6 +52,17 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
+        ///     Deserialises the specified file as a strongly-typed object.
+        ///     The consuming type must have a paramaterless constructor.
+        /// </summary>
+        /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+        /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
+        public override Task<TModel> ParseAsAsync<TModel>()
+        {
+            return Task.Factory.StartNew(ParseAs<TModel>);
+        }
+
+        /// <summary>
         ///     Deserialises the specified file as a collection of a strongly-typed object.
         ///     The consuming type must have a paramaterless constructor.
         /// </summary>
@@ -58,6 +71,17 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         public override IEnumerable<TModel> ParseAsMany<TModel>()
         {
             return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName));
+        }
+
+        /// <summary>
+        ///     Deserialises the specified file as a collection of a strongly-typed object.
+        ///     The consuming type must have a paramaterless constructor.
+        /// </summary>
+        /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+        /// <returns>An instance of type <see cref="IEnumerable{TModel}" />, populated with data from this file.</returns>
+        public override Task<IEnumerable<TModel>> ParseAsManyAsync<TModel>()
+        {
+            return Task.Factory.StartNew(ParseAsMany<TModel>);
         }
 
         /// <summary>
@@ -72,12 +96,52 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
+        ///     Serialises the specified instance, and saves the resulting data to file.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+        /// <param name="instance">The instance of the object to serialise.</param>
+        /// <returns>Task.</returns>
+        public override Task SaveFromAsync<TModel>(TModel instance)
+        {
+            return Task.Factory.StartNew(() => SaveFrom(instance));
+        }
+
+        /// <summary>
+        ///     Serialises the specified collection of objects, and saves the resulting data to file.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+        /// <param name="collection">The collection of the objects to save to a single file.</param>
+        /// <returns>Task.</returns>
+        public override Task SaveFromAsync<TModel>(IEnumerable<TModel> collection)
+        {
+            return Task.Factory.StartNew(() => SaveFrom(collection));
+        }
+
+        /// <summary>
         ///     Opens the file, reads all lines of text, and then closes the file.
         /// </summary>
         /// <returns>A <see cref="string" />, containing all lines of text within the file.</returns>
         public string ReadAllText()
         {
             return File.ReadAllText(ModFileInfo.FullName);
+        }
+
+        /// <summary>
+        ///     Asynchronously opens the file, reads all lines of text, and then closes the file.
+        /// </summary>
+        /// <returns>A <see cref="string" />, containing all lines of text within the file.</returns>
+        public Task<string> ReadAllTextAsync()
+        {
+            return ModFileInfo.ReadAllTextAsync();
+        }
+
+        /// <summary>
+        ///     Parses the file into Vintage Story's bespoke JsonObject wrapper.
+        /// </summary>
+        /// <returns>An instance of type <see cref="JsonObject" />, populated with data from this file.</returns>
+        public Task<JsonObject> ParseAsJsonObjectAsync()
+        {
+            return Task.Factory.StartNew(ParseAsJsonObject);
         }
 
         /// <summary>
@@ -89,17 +153,26 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         public void SaveFrom<TModel>(IEnumerable<TModel> collection, Formatting formatting)
         {
             var json = JsonConvert.SerializeObject(collection, formatting);
-            SaveFrom(json, formatting);
+            SaveFrom(json);
         }
 
         /// <summary>
         ///     Serialises the specified collection of objects, and saves the resulting data to file.
         /// </summary>
         /// <param name="json">The serialised JSON string to save to a single file.</param>
-        /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
-        public void SaveFrom(string json, Formatting formatting)
+        public void SaveFrom(string json)
         {
             File.WriteAllText(ModFileInfo.FullName, json);
+        }
+
+        /// <summary>
+        ///     Serialises the specified collection of objects, and saves the resulting data to file.
+        /// </summary>
+        /// <param name="json">The serialised JSON string to save to a single file.</param>
+        /// <returns>Task.</returns>
+        public Task SaveFromAsync(string json)
+        {
+            return ModFileInfo.WriteAllTextAsync(json);
         }
 
         /// <summary>

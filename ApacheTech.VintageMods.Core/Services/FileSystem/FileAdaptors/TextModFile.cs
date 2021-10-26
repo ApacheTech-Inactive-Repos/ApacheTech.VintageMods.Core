@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
@@ -39,10 +40,18 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         ///     Opens the file, reads all lines of text, and then closes the file.
         /// </summary>
         /// <returns>A <see cref="string" />, containing all lines of text within the file.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public string ReadAllText()
         {
             return File.ReadAllText(ModFileInfo.FullName);
+        }
+
+        /// <summary>
+        ///     Asynchronously opens the file, reads all lines of text, and then closes the file.
+        /// </summary>
+        /// <returns>A <see cref="string" />, containing all lines of text within the file.</returns>
+        public Task<string> ReadAllTextAsync()
+        {
+            return ModFileInfo.OpenText().ReadToEndAsync();
         }
     }
 }

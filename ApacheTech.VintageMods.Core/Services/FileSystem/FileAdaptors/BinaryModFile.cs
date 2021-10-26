@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
@@ -52,6 +53,17 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
+        /// parse as as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+        /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
+        public override async Task<TModel> ParseAsAsync<TModel>()
+        {
+            var bytes = await ModFileInfo.ReadAllBytesAsync();
+            return ProtoBufEx.Deserialise<TModel>(bytes);
+        }
+
+        /// <summary>
         ///     Deserialises the specified file as a collection of a strongly-typed object.
         ///     The consuming type must have a paramaterless constructor.
         /// </summary>
@@ -64,6 +76,18 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
+        ///     Deserialises the specified file as a collection of a strongly-typed object.
+        ///     The consuming type must have a paramaterless constructor.
+        /// </summary>
+        /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+        /// <returns>An instance of type <see cref="IEnumerable{TModel}" />, populated with data from this file.</returns>
+        public override async Task<IEnumerable<TModel>> ParseAsManyAsync<TModel>()
+        {
+            var bytes = await ModFileInfo.ReadAllBytesAsync();
+            return ProtoBufEx.Deserialise<IEnumerable<TModel>>(bytes);
+        }
+
+        /// <summary>
         ///     Serialises the specified instance, and saves the resulting data to file.
         /// </summary>
         /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
@@ -71,6 +95,28 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         public override void SaveFrom<TModel>(TModel instance)
         {
             File.WriteAllBytes(ModFileInfo.FullName, ProtoBufEx.Serialise(instance).ToArray());
+        }
+
+        /// <summary>
+        /// Serialises the specified instance, and saves the resulting data to file.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+        /// <param name="instance">The instance of the object to serialise.</param>
+        /// <returns>Task.</returns>
+        public override Task SaveFromAsync<TModel>(TModel instance)
+        {
+            return ModFileInfo.WriteAllBytesAsync(ProtoBufEx.Serialise(instance).ToArray());
+        }
+
+        /// <summary>
+        /// Serialises the specified collection of objects, and saves the resulting data to file.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+        /// <param name="collection">The collection of the objects to save to a single file.</param>
+        /// <returns>Task.</returns>
+        public override Task SaveFromAsync<TModel>(IEnumerable<TModel> collection)
+        {
+            return ModFileInfo.WriteAllBytesAsync(ProtoBufEx.Serialise(collection).ToArray());
         }
 
         /// <summary>
@@ -93,12 +139,30 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
+        ///     Parses the file into a primitive byte array.
+        /// </summary>
+        /// <returns>An array of type <see cref="byte" />, populated with data from this file.</returns>
+        public Task<byte[]> ParseAsByteArrayAsync()
+        {
+            return ModFileInfo.ReadAllBytesAsync();
+        }
+
+        /// <summary>
         /// Parses the file into a memory stream.
         /// </summary>
         /// <returns>An instance of type <see cref="MemoryStream" />, populated with data from this file.</returns>
         public MemoryStream ParseAsMemoryStream()
         {
             return new MemoryStream(ParseAsByteArray());
+        }
+
+        /// <summary>
+        /// Parses the file into a memory stream.
+        /// </summary>
+        /// <returns>An instance of type <see cref="MemoryStream" />, populated with data from this file.</returns>
+        public Task<MemoryStream> ParseAsMemoryStreamAsync()
+        {
+            return Task.Factory.StartNew(ParseAsMemoryStream);
         }
     }
 }

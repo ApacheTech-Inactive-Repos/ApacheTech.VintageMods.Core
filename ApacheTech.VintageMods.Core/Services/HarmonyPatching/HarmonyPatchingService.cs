@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
 using HarmonyLib;
 using JetBrains.Annotations;

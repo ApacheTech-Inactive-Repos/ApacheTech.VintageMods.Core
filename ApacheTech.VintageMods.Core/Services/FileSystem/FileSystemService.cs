@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Registration;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem
@@ -15,17 +15,16 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
     [RegisteredService(ServiceLifetime.Singleton, typeof(IFileSystemService))]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     internal sealed class FileSystemService : IFileSystemService
     {
         private readonly IModFileRegistrar _registrar;
 
         private readonly Dictionary<string, ModFileBase> _registeredFiles = new();
 
-        public FileSystemService(ICoreAPI api, IModFileRegistrar registrar)
+        public FileSystemService(IModFileRegistrar registrar)
         {
             _registrar = registrar;
-            ModPaths.ModDataWorldPath =
-                ModPaths.CreateDirectory(Path.Combine(ModPaths.ModDataRootPath, "World", api.World.SavegameIdentifier));
         }
 
         /// <summary>

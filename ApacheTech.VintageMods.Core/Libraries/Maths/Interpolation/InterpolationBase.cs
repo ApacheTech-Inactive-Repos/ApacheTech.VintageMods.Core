@@ -48,10 +48,10 @@ namespace ApacheTech.VintageMods.Core.Libraries.Maths.Interpolation
         public double ValueAt(double t)
         {
             if (!(t >= 0) || !(t <= 1)) return default;
-            KeyValuePair<double, double> firstPoint;
+            KeyValuePair<double, double> firstPoint = default;
             var indexFirst = -1;
 
-            KeyValuePair<double, double> secondPoint;
+            KeyValuePair<double, double> secondPoint = default;
             var indexSecond = -1;
 
             var i = 0;

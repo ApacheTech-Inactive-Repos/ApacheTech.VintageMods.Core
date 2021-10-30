@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ApacheTech.VintageMods.Core.DependencyInjection.Annotation
+namespace ApacheTech.VintageMods.Core.Hosting.Annotation
 {
     /// <summary>
     ///     Denotes that this class should be registered within the IOC container, when the mod is launched.

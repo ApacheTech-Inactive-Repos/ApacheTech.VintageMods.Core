@@ -1,18 +1,14 @@
 ﻿using System.IO;
 using System.Reflection;
-using ApacheTech.VintageMods.Core.Annotation.Attributes;
-using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using JetBrains.Annotations;
 using Vintagestory.API.Config;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem
+namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ModPaths
     {
         private static Assembly ModAssembly { get; }
-
-        private static IVintageModInfo ModInfo { get; }
 
         /// <summary>
         /// 	Initialises static members of the <see cref="ModPaths" /> class.
@@ -20,9 +16,9 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         static ModPaths()
         {
             ModAssembly = ApiEx.GetModAssembly();
-            ModInfo = ModAssembly.GetCustomAttribute<VintageModInfoAttribute>();
-            ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, ModInfo.RootDirectoryName));
+            ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, ApiEx.ModInfo.RootDirectoryName));
             ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
+            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, "World", ApiEx.Current.World.SavegameIdentifier));
             ModRootPath = Path.GetDirectoryName(ModAssembly.Location)!;
             ModAssetsPath = Path.Combine(Path.GetDirectoryName(ModAssembly.Location)!, "assets");
         }

@@ -1,12 +1,10 @@
 ﻿using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.Abstractions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Common;
-using Vintagestory.API.Server;
-using Vintagestory.Server;
 
-namespace ApacheTech.VintageMods.Core.DependencyInjection.Registrars
+namespace ApacheTech.VintageMods.Core.Hosting.Registrars
 {
     /// <summary>
     ///     Handles registration of the Game's API within the server-side IOC Container.
@@ -29,8 +27,6 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection.Registrars
         /// <param name="container">The IOC container.</param>
         public void Register(ICoreAPI api, IServiceCollection container)
         {
-            ApiEx.Server = (ICoreServerAPI)api;
-            ApiEx.ServerMain = (ServerMain)ApiEx.Server.World;
             container.AddSingleton(ApiEx.Server);
             container.AddSingleton(ApiEx.Server.World);
             container.AddSingleton(ApiEx.ServerMain);

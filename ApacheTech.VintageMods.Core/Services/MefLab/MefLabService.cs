@@ -4,7 +4,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 

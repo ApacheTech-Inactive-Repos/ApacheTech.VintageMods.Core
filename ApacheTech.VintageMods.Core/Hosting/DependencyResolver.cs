@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using ApacheTech.VintageMods.Core.Common.Extensions.System;
-using ApacheTech.VintageMods.Core.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ApacheTech.VintageMods.Core.DependencyInjection
+namespace ApacheTech.VintageMods.Core.Hosting
 {
     /// <summary>
     ///     Resolves dependencies within the IOC Container, for a given app-side.

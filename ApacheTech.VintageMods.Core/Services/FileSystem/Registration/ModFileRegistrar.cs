@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;

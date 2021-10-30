@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.DependencyInjection.Abstractions
+namespace ApacheTech.VintageMods.Core.Hosting.Abstractions
 {
     /// <summary>
     ///     Builds an IOC Dependency Resolver for the Client or Server.

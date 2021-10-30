@@ -136,7 +136,7 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         /// <returns>The number of entries within this enumeration.</returns>
         public static int Count<T>(this T en) where T : Enum
         {
-            return typeof(T).GetEnumNames().Length;
+            return en.GetType().GetEnumNames().Length;
         }
 
         #endregion
@@ -266,9 +266,10 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         /// <typeparam name="T">The type of object to work with.</typeparam>
         /// <param name="item">The item to work with.</param>
         /// <param name="work">The work to be done.</param>
-        public static void With<T>(this T item, Action<T> work)
+        public static T With<T>(this T item, Action<T> work)
         {
             work(item);
+            return item;
         }
 
         #endregion

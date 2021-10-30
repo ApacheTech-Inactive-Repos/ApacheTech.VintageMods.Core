@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
-using ApacheTech.VintageMods.Core.DependencyInjection.Abstractions;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -46,24 +44,6 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         public static ICoreAPI Current => Side.IsClient() ? Client : Server;
 
         /// <summary>
-        ///     Gets the IOC Resolver for the Server.
-        /// </summary>
-        /// <value>The IOC Resolver for the Server.</value>
-        public static IDependencyResolver ServerIOC { get; internal set; }
-
-        /// <summary>
-        ///     Gets the IOC Resolver for the Client.
-        /// </summary>
-        /// <value>The IOC Resolver for the Client.</value>
-        public static IDependencyResolver ClientIOC { get; internal set; }
-
-        /// <summary>
-        ///     Gets the IOC Resolver for the current app-side.
-        /// </summary>
-        /// <value>The IOC Resolver for the current app-side.</value>
-        public static IDependencyResolver IOC => Side.IsClient() ? ClientIOC : ServerIOC;
-
-        /// <summary>
         ///     The concrete implementation of the <see cref="IClientWorldAccessor"/> interface. Contains access to lots of world manipulation and management features.
         /// </summary>
         /// <value>The <see cref="Vintagestory.Client.NoObf.ClientMain"/> instance that controls access to features within  the gameworld.</value>
@@ -96,7 +76,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <returns>The <see cref="Assembly"/> that contains the core's entry point.</returns>
         public static Assembly GetCoreAssembly()
         {
-            return typeof(VintageModLoader).Assembly;
+            return typeof(ApiEx).Assembly;
         }
         
         internal static Assembly ModAssembly { private get; set; }

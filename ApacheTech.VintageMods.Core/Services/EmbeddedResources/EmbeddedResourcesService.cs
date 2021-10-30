@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Text;
-using ApacheTech.VintageMods.Core.DependencyInjection.Annotation;
-using ApacheTech.VintageMods.Core.Services.FileSystem;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Util;
 

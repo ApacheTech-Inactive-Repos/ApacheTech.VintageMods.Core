@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ApacheTech.VintageMods.Core.DependencyInjection.Abstractions
+namespace ApacheTech.VintageMods.Core.Hosting.Abstractions
 {
     /// <summary>
     ///     Resolves dependencies within the IOC Container, for a given app-side.

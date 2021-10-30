@@ -5,9 +5,6 @@ using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.Extensions.System;
 using HarmonyLib;
 using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.Client.NoObf;
-using Vintagestory.GameContent;
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {

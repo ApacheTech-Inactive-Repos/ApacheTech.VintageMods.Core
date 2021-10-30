@@ -19,8 +19,8 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Generic
         ///     Called during initial mod loading, called before any mod receives the call to Start().
         /// </summary>
         /// <param name="api">
-        ///     Common API Components that are available on the server and the client. Cast to ICoreServerAPI or
-        ///     ICoreClientAPI to access side specific features.
+        ///     Common API Components that are available on the server and the client.
+        ///     Cast to ICoreServerAPI or ICoreClientAPI to access side specific features.
         /// </param>
         public override void StartPre(ICoreAPI api)
         {

@@ -1,8 +1,7 @@
-﻿using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
-using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
+﻿using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using JetBrains.Annotations;
 
-namespace ApacheTech.VintageMods.Core.Services.FileSystem
+namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Provides a means for handling files, including embedded resources, used within a mod.

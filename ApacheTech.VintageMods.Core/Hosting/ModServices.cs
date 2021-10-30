@@ -1,13 +1,13 @@
-﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite;
-using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Services.FileSystem;
+﻿using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Hosting.Abstractions;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using ApacheTech.VintageMods.Core.Services.MefLab;
 using ApacheTech.VintageMods.Core.Services.Network;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.DependencyInjection
+namespace ApacheTech.VintageMods.Core.Hosting
 {
     /// <summary>
     ///     Globally accessible services, populated through the IOC Container. If a derived
@@ -32,7 +32,7 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
         ///      It is up to each mod to configure, and register their own files.
         ///      This template doesn't enforce any file policy upon derived mods.
         /// </remarks>
-        public static IFileSystemService FileSystem => ApiEx.IOC.Resolve<IFileSystemService>();
+        public static IFileSystemService FileSystem => IOC.Resolve<IFileSystemService>();
 
         /// <summary>
         ///     Provides methods of applying Harmony patches to the game.
@@ -41,7 +41,7 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
         ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
         ///     be processed at launch. Manual patches can be processed later on at runtime.
         /// </remarks>
-        public static IHarmonyPatchingService Harmony => ApiEx.IOC.Resolve<IHarmonyPatchingService>();
+        public static IHarmonyPatchingService Harmony => IOC.Resolve<IHarmonyPatchingService>();
 
         /// <summary>
         ///     Provides narrowed scope access to network channels within the game.
@@ -51,7 +51,7 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
         ///     used as an IPC pipe between VintageMods mods, and one for with the ModId
         ///     of the calling Mod. Other channels can be registered, as needed.
         /// </remarks>
-        public static INetworkService Network => ApiEx.IOC.Resolve<INetworkService>();
+        public static INetworkService Network => IOC.Resolve<INetworkService>();
 
         /// <summary>
         ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
@@ -62,6 +62,24 @@ namespace ApacheTech.VintageMods.Core.DependencyInjection
         ///     default assembly will be present. Further Assemblies, and Directories
         ///     can be added as needed. 
         /// </remarks>
-        public static IMefLabService MefLab => ApiEx.IOC.Resolve<IMefLabService>();
+        public static IMefLabService MefLab => IOC.Resolve<IMefLabService>();
+
+        /// <summary>
+        ///     Gets the IOC Resolver for the Server.
+        /// </summary>
+        /// <value>The IOC Resolver for the Server.</value>
+        internal static IDependencyResolver ServerIOC { private get; set; }
+
+        /// <summary>
+        ///     Gets the IOC Resolver for the Client.
+        /// </summary>
+        /// <value>The IOC Resolver for the Client.</value>
+        internal static IDependencyResolver ClientIOC { private get; set; }
+
+        /// <summary>
+        ///     Gets the IOC Resolver for the current app-side.
+        /// </summary>
+        /// <value>The IOC Resolver for the current app-side.</value>
+        public static IDependencyResolver IOC => ApiEx.Side.IsClient() ? ClientIOC : ServerIOC;
     }
 }

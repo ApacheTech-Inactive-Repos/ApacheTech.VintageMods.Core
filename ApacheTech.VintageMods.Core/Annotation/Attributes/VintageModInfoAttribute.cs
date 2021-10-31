@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using SmartAssembly.Attributes;
 
 namespace ApacheTech.VintageMods.Core.Annotation.Attributes
 {
@@ -9,6 +10,8 @@ namespace ApacheTech.VintageMods.Core.Annotation.Attributes
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Assembly)]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType, DoNotPrune]
+    [DoNotObfuscateType, DoNotObfuscate, DoNotObfuscateControlFlow]
     public sealed class VintageModInfoAttribute : Attribute, IVintageModInfo
     {
         /// <summary>

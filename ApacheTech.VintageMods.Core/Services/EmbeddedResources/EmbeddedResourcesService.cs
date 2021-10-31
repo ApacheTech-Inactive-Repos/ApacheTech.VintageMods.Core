@@ -5,7 +5,9 @@ using System.Resources;
 using System.Text;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.Annotation;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using SmartAssembly.Attributes;
 using Vintagestory.API.Util;
 
 namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
@@ -15,6 +17,7 @@ namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
     /// </summary>
     /// <seealso cref="IEmbeddedResourcesService" />
     [RegisteredService(ServiceLifetime.Singleton, typeof(IEmbeddedResourcesService))]
+    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     internal class EmbeddedResourcesService : IEmbeddedResourcesService
     {
         /// <summary>

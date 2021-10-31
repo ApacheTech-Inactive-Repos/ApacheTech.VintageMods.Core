@@ -4,6 +4,7 @@ using ApacheTech.VintageMods.Core.Common.Extensions.Game;
 using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using SmartAssembly.Attributes;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
@@ -20,6 +21,7 @@ namespace ApacheTech.VintageMods.Core.Services.Network
     /// </remarks>
     /// <seealso cref="INetworkService" />
     [RegisteredService(ServiceLifetime.Singleton, typeof(INetworkService))]
+    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     internal class NetworkService : INetworkService
     {
         [CanBeNull] private readonly ICoreClientAPI _capi;

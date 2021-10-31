@@ -7,6 +7,7 @@ using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Registration;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using SmartAssembly.Attributes;
 using Vintagestory.API.Config;
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem
@@ -15,7 +16,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
     [RegisteredService(ServiceLifetime.Singleton, typeof(IFileSystemService))]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     internal sealed class FileSystemService : IFileSystemService
     {
         private readonly IModFileRegistrar _registrar;

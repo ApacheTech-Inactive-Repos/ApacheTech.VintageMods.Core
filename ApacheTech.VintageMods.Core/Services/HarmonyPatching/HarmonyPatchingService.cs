@@ -8,6 +8,7 @@ using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
 using HarmonyLib;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using SmartAssembly.Attributes;
 using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
@@ -19,7 +20,7 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
     ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
     ///     be processed at launch. Manual patches can be processed later on at runtime.
     /// </remarks>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [RegisteredService(ServiceLifetime.Singleton, typeof(IHarmonyPatchingService))]
     internal class HarmonyPatchingService : IHarmonyPatchingService, IDisposable
     {

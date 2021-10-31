@@ -7,6 +7,7 @@ using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.Annotation;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using SmartAssembly.Attributes;
 
 namespace ApacheTech.VintageMods.Core.Services.MefLab
 {
@@ -14,7 +15,7 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
     ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
     /// </summary>
     [RegisteredService(ServiceLifetime.Transient, typeof(IMefLabService))]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class MefLabService : IMefLabService
     {
         private readonly AggregateCatalog _catalogue;

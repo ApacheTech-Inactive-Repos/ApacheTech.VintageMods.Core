@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Vintagestory.API.Common;
+﻿using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.Hosting.Abstractions
+namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions
 {
     /// <summary>
     ///     Registers the Game's API within the IOC Container for a given app-side.

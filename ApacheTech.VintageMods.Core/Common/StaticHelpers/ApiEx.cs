@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using System.Threading;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using JetBrains.Annotations;
@@ -61,26 +60,6 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <value>The current app-side.</value>
         public static EnumAppSide Side => GetAppSide();
 
-        /// <summary>
-        ///     Ensures that the correct Mod assembly is retrieved, when the core is not merged into mod assembly.
-        /// </summary>
-        /// <returns>The <see cref="Assembly"/> that contains the mod's entry point.</returns>
-        public static Assembly GetModAssembly()
-        {
-            return ModAssembly;
-        }
-
-        /// <summary>
-        ///     Ensures that the correct Core assembly is retrieved, when the core is not merged into mod assembly.
-        /// </summary>
-        /// <returns>The <see cref="Assembly"/> that contains the core's entry point.</returns>
-        public static Assembly GetCoreAssembly()
-        {
-            return typeof(ApiEx).Assembly;
-        }
-        
-        internal static Assembly ModAssembly { private get; set; }
-
         private static readonly Dictionary<int, EnumAppSide> FastSideLookup = new();
 
         private static void CacheCurrentThread()
@@ -93,7 +72,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 
         private static EnumAppSide GetAppSide()
         {
-            if (FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out EnumAppSide side)) return side;
+            if (FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out var side)) return side;
             CacheCurrentThread();
             side = FastSideLookup[Thread.CurrentThread.ManagedThreadId];
             return side;

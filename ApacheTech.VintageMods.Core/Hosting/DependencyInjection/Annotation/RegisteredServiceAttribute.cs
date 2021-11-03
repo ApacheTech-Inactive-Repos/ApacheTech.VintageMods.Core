@@ -1,8 +1,7 @@
 ﻿using System;
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 
-namespace ApacheTech.VintageMods.Core.Hosting.Annotation
+namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation
 {
     /// <summary>
     ///     Denotes that this class should be registered within the IOC container, when the mod is launched.
@@ -15,7 +14,6 @@ namespace ApacheTech.VintageMods.Core.Hosting.Annotation
     ///      • If the class does not implement an interface, it will be registered as itself.
     /// </remarks>
     /// <seealso cref="Attribute" />
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisteredServiceAttribute : Attribute
     {

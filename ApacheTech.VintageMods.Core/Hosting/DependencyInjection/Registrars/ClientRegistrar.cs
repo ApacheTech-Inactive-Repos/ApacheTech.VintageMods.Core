@@ -1,15 +1,15 @@
 ﻿using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
+using SmartAssembly.Attributes;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.Hosting.Registrars
+namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars
 {
     /// <summary>
     ///     Handles registration of the Game's API within the client-side IOC Container.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     internal sealed class ClientRegistrar : IRegistrar
     {
         /// <summary>
@@ -27,11 +27,11 @@ namespace ApacheTech.VintageMods.Core.Hosting.Registrars
         /// <param name="services">The IOC container.</param>
         public void Register(ICoreAPI api, IServiceCollection services)
         {
-            services.AddSingleton(ApiEx.Client);
-            services.AddSingleton(ApiEx.Client.World);
-            services.AddSingleton(ApiEx.ClientMain);
-            services.AddSingleton((ICoreAPICommon)ApiEx.Current);
-            services.AddSingleton(ApiEx.Current);
+            services.RegisterSingleton(ApiEx.Client);
+            services.RegisterSingleton(ApiEx.Client.World);
+            services.RegisterSingleton(ApiEx.ClientMain);
+            services.RegisterSingleton((ICoreAPICommon)ApiEx.Current);
+            services.RegisterSingleton(ApiEx.Current);
         }
     }
 }

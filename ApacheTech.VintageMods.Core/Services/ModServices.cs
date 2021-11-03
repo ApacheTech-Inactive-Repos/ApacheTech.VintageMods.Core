@@ -1,5 +1,6 @@
-﻿using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.Abstractions;
+﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using ApacheTech.VintageMods.Core.Services.MefLab;
@@ -7,11 +8,11 @@ using ApacheTech.VintageMods.Core.Services.Network;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.Hosting
+namespace ApacheTech.VintageMods.Core.Services
 {
     /// <summary>
     ///     Globally accessible services, populated through the IOC Container. If a derived
-    ///     instance of type <see cref="VintageModLoader"/> has not been created within the
+    ///     instance of type <see cref="ModHost"/> has not been created within the
     ///     Application layer, these services will not be available, and will have to be
     ///     instantiated manually.<br/><br/>
     ///
@@ -68,18 +69,18 @@ namespace ApacheTech.VintageMods.Core.Hosting
         ///     Gets the IOC Resolver for the Server.
         /// </summary>
         /// <value>The IOC Resolver for the Server.</value>
-        internal static IDependencyResolver ServerIOC { private get; set; }
+        internal static IServiceResolver ServerIOC { private get; set; }
 
         /// <summary>
         ///     Gets the IOC Resolver for the Client.
         /// </summary>
         /// <value>The IOC Resolver for the Client.</value>
-        internal static IDependencyResolver ClientIOC { private get; set; }
+        internal static IServiceResolver ClientIOC { private get; set; }
 
         /// <summary>
         ///     Gets the IOC Resolver for the current app-side.
         /// </summary>
         /// <value>The IOC Resolver for the current app-side.</value>
-        public static IDependencyResolver IOC => ApiEx.Side.IsClient() ? ClientIOC : ServerIOC;
+        public static IServiceResolver IOC => ApiEx.Side.IsClient() ? ClientIOC : ServerIOC;
     }
 }

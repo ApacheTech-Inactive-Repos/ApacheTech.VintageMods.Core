@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
 using HarmonyLib;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Common;
 
@@ -103,7 +103,7 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         /// </summary>
         public void UseHarmony()
         {
-            ApplyHarmonyPatches(ApiEx.GetModAssembly());
+            ApplyHarmonyPatches(AssemblyEx.GetModAssembly());
         }
 
         /// <summary>

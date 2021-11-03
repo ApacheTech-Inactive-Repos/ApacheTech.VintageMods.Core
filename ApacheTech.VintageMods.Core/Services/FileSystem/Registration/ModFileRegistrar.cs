@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Vintagestory.API.Config;
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Registration
@@ -27,7 +27,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Registration
 
         public void CopyFileToOutputDirectory(string fileName, FileInfo file, FileType fileType)
         {
-            var assembly = ApiEx.GetModAssembly();
+            var assembly = AssemblyEx.GetModAssembly();
             if (_embeddedResources.ResourceExists(assembly, fileName))
             {
                 _embeddedResources.DisembedResource(assembly, fileName, file.FullName);

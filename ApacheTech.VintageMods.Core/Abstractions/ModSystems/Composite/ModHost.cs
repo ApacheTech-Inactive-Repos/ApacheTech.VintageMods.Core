@@ -2,11 +2,11 @@
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting;
-using ApacheTech.VintageMods.Core.Hosting.Registrars;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars;
+using ApacheTech.VintageMods.Core.Services;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
@@ -24,14 +24,14 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
     /// <seealso cref="UniversalModSystem" />
     public abstract class ModHost : UniversalModSystem
     {
-        private IHostBuilder _hostBuilder;
+        private IServiceCollection _services;
 
         /// <summary>
         ///     Initialises a new instance of the <see cref="ModHost" /> class.
         /// </summary>
         protected ModHost()
         {
-            var assembly = ApiEx.ModAssembly = Assembly.GetAssembly(GetType());
+            var assembly = AssemblyEx.ModAssembly = Assembly.GetAssembly(GetType());
             ApiEx.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
             StartPreUniversal();
         }
@@ -40,62 +40,15 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
 
         private void StartPreUniversal()
         {
-            _hostBuilder = new HostBuilder()
-                .ConfigureServices(ConfigureCoreModServices);
+            _services = new ServiceCollection();
+            _services.Configure(ConfigureCoreModServices);
         }
 
         private void ConfigureCoreModServices(IServiceCollection services)
         {
-            services.AddSingleton(ApiEx.ModInfo);
-            services.AddAnnotatedServicesFromAssembly(ApiEx.GetCoreAssembly());
+            services.RegisterSingleton(ApiEx.ModInfo);
+            services.RegisterAnnotatedServicesFromAssembly(AssemblyEx.GetCoreAssembly());
         }
-
-        #endregion
-
-        #region Client Configuration
-
-        private void BuildClientHost(ICoreClientAPI capi)
-        {
-            //  1. Set ApiEx endpoints.
-            ApiEx.Client = capi;
-            ApiEx.ClientMain = (ClientMain)capi.World;
-
-            //  2. Delegate mod configuration building to derived class.
-            _hostBuilder.ConfigureAppConfiguration(ConfigureClientModConfiguration);
-
-            //  3. Configure game API services.
-            _hostBuilder.ConfigureServices(p =>
-                p.RegisterAPI(capi, ClientRegistrar.CreateInstance()));
-
-            //  4. Delegate mod service configuration to derived class.
-            _hostBuilder.ConfigureServices(ConfigureClientModServices);
-
-            //  5. Build IOC Container.
-            var host = _hostBuilder.Build();
-            ModServices.ClientIOC = new DependencyResolver(host.Services);
-
-            // ONLY NOW ARE SERVICES AVAILABLE
-
-            // 6. Delegate mod PreStart to derived class.
-            StartPreClientSide(capi);
-        }
-
-        /// <summary>
-        ///     Configures providers for the configuration settings, on the client side.
-        /// </summary>
-        /// <param name="configurationBuilder">The as-of-yet un-built configuration builder.</param>
-        protected virtual void ConfigureClientModConfiguration(IConfigurationBuilder configurationBuilder) { }
-
-        /// <summary>
-        ///     Configures any services that need to be added to the IO Container, on the client side.
-        /// </summary>
-        /// <param name="services">The as-of-yet un-built services container.</param>
-        protected virtual void ConfigureClientModServices(IServiceCollection services) { }
-
-        /// <summary>
-        ///     Called during initial mod loading, called before any mod receives the call to Start().
-        /// </summary>
-        protected virtual void StartPreClientSide(ICoreClientAPI capi) { }
 
         #endregion
 
@@ -107,31 +60,20 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
             ApiEx.Server = sapi;
             ApiEx.ServerMain = (ServerMain)sapi.World;
 
-            //  2. Delegate mod configuration building to derived class.
-            _hostBuilder.ConfigureAppConfiguration(ConfigureServerModConfiguration);
+            //  2. Configure game API services.
+            _services.RegisterAPI(sapi, ServerRegistrar.CreateInstance());
 
-            //  3. Configure game API services.
-            _hostBuilder.ConfigureServices(p =>
-                p.RegisterAPI(sapi, ServerRegistrar.CreateInstance()));
+            //  3. Delegate mod service configuration to derived class.
+            _services.Configure(ConfigureServerModServices);
 
-            //  4. Delegate mod service configuration to derived class.
-            _hostBuilder.ConfigureServices(ConfigureServerModServices);
-
-            //  5. Build IOC Container.
-            var host = _hostBuilder.Build();
-            ModServices.ServerIOC = new DependencyResolver(host.Services);
+            //  4. Build IOC Container.
+            ModServices.ServerIOC = _services.Build();
 
             // ONLY NOW ARE SERVICES AVAILABLE
 
-            //  6. Delegate mod PreStart to derived class.
+            // 5. Delegate mod PreStart to derived class.
             StartPreServerSide(sapi);
         }
-
-        /// <summary>
-        ///     Configures providers for the configuration settings, on the server side.
-        /// </summary>
-        /// <param name="configurationBuilder">The as-of-yet un-built configuration builder.</param>
-        protected virtual void ConfigureServerModConfiguration(IConfigurationBuilder configurationBuilder) { }
 
         /// <summary>
         ///     Configures any services that need to be added to the IO Container, on the server side.
@@ -143,6 +85,42 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         ///     Called during initial mod loading, called before any mod receives the call to Start().
         /// </summary>
         protected virtual void StartPreServerSide(ICoreServerAPI sapi) { }
+
+        #endregion
+
+        #region Client Configuration
+
+        private void BuildClientHost(ICoreClientAPI capi)
+        {
+            //  1. Set ApiEx endpoints.
+            ApiEx.Client = capi;
+            ApiEx.ClientMain = (ClientMain)capi.World;
+
+            //  2. Configure game API services.
+            _services.RegisterAPI(capi, ClientRegistrar.CreateInstance());
+
+            //  3. Delegate mod service configuration to derived class.
+            _services.Configure(ConfigureClientModServices);
+
+            //  4. Build IOC Container.
+            ModServices.ClientIOC = _services.Build();
+
+            // ONLY NOW ARE SERVICES AVAILABLE
+
+            // 5. Delegate mod PreStart to derived class.
+            StartPreClientSide(capi);
+        }
+
+        /// <summary>
+        ///     Configures any services that need to be added to the IO Container, on the client side.
+        /// </summary>
+        /// <param name="services">The as-of-yet un-built services container.</param>
+        protected virtual void ConfigureClientModServices(IServiceCollection services) { }
+
+        /// <summary>
+        ///     Called during initial mod loading, called before any mod receives the call to Start().
+        /// </summary>
+        protected virtual void StartPreClientSide(ICoreClientAPI capi) { }
 
         #endregion
 
@@ -202,7 +180,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
         /// </summary>
         public override void Dispose()
         {
-            (ModServices.IOC as IDisposable)?.Dispose();
+            ModServices.IOC?.Dispose();
             ApiEx.Dispose();
             base.Dispose();
         }

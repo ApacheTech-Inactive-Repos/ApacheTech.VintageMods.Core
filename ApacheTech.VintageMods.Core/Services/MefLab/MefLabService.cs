@@ -4,9 +4,9 @@ using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using SmartAssembly.Attributes;
 
 namespace ApacheTech.VintageMods.Core.Services.MefLab
@@ -26,7 +26,7 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
         public MefLabService()
         {
             _catalogue = new AggregateCatalog();
-            AddAssembly(ApiEx.GetModAssembly());
+            AddAssembly(AssemblyEx.GetModAssembly());
         }
 
         /// <summary>

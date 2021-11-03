@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -219,6 +220,20 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         /// <param name="item">The item to add.</param>
         /// <returns><c>true</c> if the item was added to collection, <c>false</c> otherwise.</returns>
         public static bool AddIfNotPresent<TItem>(this ICollection<TItem> collection, TItem item)
+        {
+            var contains = collection.Contains(item);
+            if (!contains) collection.Add(item);
+            return !contains;
+        }
+
+        /// <summary>
+        ///     Adds an item to the <see cref="ICollection{TItem}" />, if it not already present in the collection.
+        /// </summary>
+        /// <typeparam name="TItem">The type of the elements of <paramref name="item" />.</typeparam>
+        /// <param name="collection">The collection to add the item to.</param>
+        /// <param name="item">The item to add.</param>
+        /// <returns><c>true</c> if the item was added to collection, <c>false</c> otherwise.</returns>
+        public static bool AddIfNotPresent<TItem>(this ConcurrentBag<TItem> collection, TItem item)
         {
             var contains = collection.Contains(item);
             if (!contains) collection.Add(item);

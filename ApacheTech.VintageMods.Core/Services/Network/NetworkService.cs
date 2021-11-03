@@ -1,9 +1,9 @@
 ﻿using System;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.Extensions.Game;
-using ApacheTech.VintageMods.Core.Hosting.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;

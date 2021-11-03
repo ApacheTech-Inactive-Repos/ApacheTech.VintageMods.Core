@@ -21,18 +21,6 @@
 		</PackageReference>
 		<PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.NewtonsoftJson" Version="5.0.1" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
 		<PackageReference Include="RedGate.SmartAssembly.Attributes" Version="8.0.4.4860" />
 		<PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
 	</ItemGroup>

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using ApacheTech.VintageMods.Core.Hosting.Annotation;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Registration;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Config;
 

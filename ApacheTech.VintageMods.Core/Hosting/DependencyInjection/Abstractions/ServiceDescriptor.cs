@@ -31,6 +31,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions
         /// <value>The <see cref="ServiceLifetime"/> of the service.</value>
         public ServiceLifetime Lifetime { get; }
 
+        private Func<IServiceResolver, object> ImplementationFactory { get; set; }
+
         /// <summary>
         /// 	Initialises a new instance of the <see cref="ServiceDescriptor"/> class.
         /// </summary>

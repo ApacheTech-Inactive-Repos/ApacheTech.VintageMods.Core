@@ -15,6 +15,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
     public class ServiceCollection : IServiceCollection
     {
         private readonly List<ServiceDescriptor> _serviceDescriptors = new();
+        private readonly Dictionary<Type, Func<IServiceResolver, object>> _factories = new();
         private readonly IServiceResolver _resolver;
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
         /// </summary>
         public ServiceCollection()
         {
-            _resolver = new ServiceResolver(_serviceDescriptors);
+            _resolver = new ServiceResolver(_serviceDescriptors, _factories);
         }
 
         /// <summary>
@@ -64,7 +65,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
         /// <seealso cref="ServiceLifetime.Singleton"/>
         public void RegisterSingleton<TService>(Func<IServiceResolver, TService> implementationFactory) where TService : class
         {
-            _serviceDescriptors.AddIfNotPresent(new ServiceDescriptor(implementationFactory(_resolver), ServiceLifetime.Singleton));
+            _factories.Add(typeof(TService), implementationFactory);
+            _serviceDescriptors.AddIfNotPresent(new ServiceDescriptor(typeof(TService), ServiceLifetime.Singleton));
         }
 
         /// <summary>
@@ -106,7 +108,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
         /// <seealso cref="ServiceLifetime.Transient"/>
         public void RegisterTransient<TService>(Func<IServiceResolver, TService> implementationFactory) where TService : class
         {
-            _serviceDescriptors.AddIfNotPresent(new ServiceDescriptor(implementationFactory(_resolver), ServiceLifetime.Transient));
+            _factories.Add(typeof(TService), implementationFactory);
+            _serviceDescriptors.AddIfNotPresent(new ServiceDescriptor(typeof(TService), ServiceLifetime.Transient));
         }
 
         /// <summary>

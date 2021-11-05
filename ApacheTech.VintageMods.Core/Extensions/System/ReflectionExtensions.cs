@@ -260,5 +260,10 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         }
 
         #endregion
+
+        public static bool HasCustomAttribute<T>(this MemberInfo member) where T : Attribute
+        {
+            return member.GetCustomAttributes().OfType<T>().Any();
+        }
     }
 }

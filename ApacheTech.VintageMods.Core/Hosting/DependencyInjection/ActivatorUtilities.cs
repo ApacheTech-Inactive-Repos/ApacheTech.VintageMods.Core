@@ -4,7 +4,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using ApacheTech.VintageMods.Core.Common.Extensions.System;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using JetBrains.Annotations;
+using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
 {
@@ -15,7 +18,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
     public static class ActivatorUtilities
     {
         private static readonly MethodInfo GetServiceInfo =
-            GetMethodInfo<Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
+            GetMethodInfo<System.Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
 
         /// <summary>
         /// Instantiate a type with constructor arguments provided directly and/or from an <see cref="IServiceProvider"/>.
@@ -39,7 +42,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                     .Where(c => !c.IsStatic && c.IsPublic))
                 {
                     var matcher = new ConstructorMatcher(constructor);
-                    var isPreferred = constructor.IsDefined(typeof(ActivatorUtilitiesConstructorAttribute), false);
+
+                    var isPreferred = IOCEnabled(constructor);
                     var length = matcher.Match(parameters);
 
                     if (isPreferred)
@@ -94,7 +98,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
             var argumentArray = Expression.Parameter(typeof(object[]), "argumentArray");
             var factoryExpressionBody = BuildFactoryExpression(constructor, parameterMap, provider, argumentArray);
 
-            var factoryLambda = Expression.Lambda<Func<IServiceProvider, object[], object>>(
+            var factoryLambda = Expression.Lambda<System.Func<IServiceProvider, object[], object>>(
                 factoryExpressionBody, provider, argumentArray);
 
             var result = factoryLambda.Compile();
@@ -254,26 +258,32 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                 {
                     continue;
                 }
-
-                if (constructor.IsDefined(typeof(ActivatorUtilitiesConstructorAttribute), false))
+                
+                if (!IOCEnabled(constructor)) continue;
+                if (seenPreferred)
                 {
-                    if (seenPreferred)
-                    {
-                        ThrowMultipleConstructorsMarkedWithAttributeException();
-                    }
-
-                    if (!TryCreateParameterMap(constructor.GetParameters(), argumentTypes, out var tempParameterMap))
-                    {
-                        ThrowMarkedCtorDoesNotTakeAllProvidedArguments();
-                    }
-
-                    matchingConstructor = constructor;
-                    parameterMap = tempParameterMap;
-                    seenPreferred = true;
+                    ThrowMultipleConstructorsMarkedWithAttributeException();
                 }
+
+                if (!TryCreateParameterMap(constructor.GetParameters(), argumentTypes, out var tempParameterMap))
+                {
+                    ThrowMarkedCtorDoesNotTakeAllProvidedArguments();
+                }
+
+                matchingConstructor = constructor;
+                parameterMap = tempParameterMap;
+                seenPreferred = true;
             }
 
             return matchingConstructor != null;
+        }
+
+        public static bool IOCEnabled(this ConstructorInfo constructor)
+        {
+            return constructor
+                .GetCustomAttributes(typeof(IocConstructorAttribute), false)
+                .Cast<IocConstructorAttribute>()
+                .Any(q => q.Side == EnumAppSide.Universal || q.Side == ApiEx.Side);
         }
 
         // Creates an injectable parameterMap from givenParameterTypes to assignable constructorParameters.
@@ -404,12 +414,12 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
 
         private static void ThrowMultipleConstructorsMarkedWithAttributeException()
         {
-            throw new InvalidOperationException($"Multiple constructors were marked with {nameof(ActivatorUtilitiesConstructorAttribute)}.");
+            throw new InvalidOperationException($"Multiple constructors were marked with {nameof(IocConstructorAttribute)}.");
         }
 
         private static void ThrowMarkedCtorDoesNotTakeAllProvidedArguments()
         {
-            throw new InvalidOperationException($"Constructor marked with {nameof(ActivatorUtilitiesConstructorAttribute)} does not accept all given argument types.");
+            throw new InvalidOperationException($"Constructor marked with {nameof(IocConstructorAttribute)} does not accept all given argument types.");
         }
     }
 }

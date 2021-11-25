@@ -3,11 +3,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
-using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
+using ApacheTech.Common.Extensions.Abstractions;
+using ApacheTech.Common.Extensions.Reflection;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using JetBrains.Annotations;
-using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
 {
@@ -15,13 +14,12 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
     ///     Helper code for the various activator services.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public static class ActivatorUtilities
+    public static class ActivatorEx
     {
         private static readonly MethodInfo GetServiceInfo =
-            GetMethodInfo<System.Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
+            GetMethodInfo<Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
 
         /// <summary>
-        /// Instantiate a type with constructor arguments provided directly and/or from an <see cref="IServiceProvider"/>.
         /// </summary>
         /// <param name="provider">The service provider used to resolve dependencies</param>
         /// <param name="instanceType">The type to activate</param>
@@ -43,7 +41,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                 {
                     var matcher = new ConstructorMatcher(constructor);
 
-                    var isPreferred = IOCEnabled(constructor);
+                    var isPreferred = constructor.IOCEnabled();
                     var length = matcher.Match(parameters);
 
                     if (isPreferred)
@@ -69,13 +67,10 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                 }
             }
 
-            if (bestMatcher == null)
-            {
-                var message = $"A suitable constructor for type '{instanceType}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.";
-                throw new InvalidOperationException(message);
-            }
+            if (bestMatcher != null) return bestMatcher.CreateInstance(provider);
+            var message = $"A suitable constructor for type '{instanceType}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.";
+            throw new InvalidOperationException(message);
 
-            return bestMatcher.CreateInstance(provider);
         }
 
         /// <summary>
@@ -98,7 +93,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
             var argumentArray = Expression.Parameter(typeof(object[]), "argumentArray");
             var factoryExpressionBody = BuildFactoryExpression(constructor, parameterMap, provider, argumentArray);
 
-            var factoryLambda = Expression.Lambda<System.Func<IServiceProvider, object[], object>>(
+            var factoryLambda = Expression.Lambda<Func<IServiceProvider, object[], object>>(
                 factoryExpressionBody, provider, argumentArray);
 
             var result = factoryLambda.Compile();
@@ -208,12 +203,11 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
             matchingConstructor = null;
             parameterMap = null;
 
-            if (!TryFindPreferredConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap) &&
-                !TryFindMatchingConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap))
-            {
-                var message = $"A suitable constructor for type '{instanceType}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.";
-                throw new InvalidOperationException(message);
-            }
+            if (TryFindPreferredConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap) ||
+                TryFindMatchingConstructor(instanceType, argumentTypes, ref matchingConstructor,
+                    ref parameterMap)) return;
+            var message = $"A suitable constructor for type '{instanceType}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.";
+            throw new InvalidOperationException(message);
         }
 
         // Tries to find constructor based on provided argument types
@@ -258,8 +252,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                 {
                     continue;
                 }
-                
-                if (!IOCEnabled(constructor)) continue;
+
+                if (!constructor.IOCEnabled()) continue;
                 if (seenPreferred)
                 {
                     ThrowMultipleConstructorsMarkedWithAttributeException();
@@ -276,14 +270,6 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
             }
 
             return matchingConstructor != null;
-        }
-
-        public static bool IOCEnabled(this ConstructorInfo constructor)
-        {
-            return constructor
-                .GetCustomAttributes(typeof(IocConstructorAttribute), false)
-                .Cast<IocConstructorAttribute>()
-                .Any(q => q.Side == EnumAppSide.Universal || q.Side == ApiEx.Side);
         }
 
         // Creates an injectable parameterMap from givenParameterTypes to assignable constructorParameters.
@@ -305,12 +291,14 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                         continue;
                     }
 
-                    if (constructorParameters[j].ParameterType.GetTypeInfo().IsAssignableFrom(givenParameter))
+                    if (!constructorParameters[j].ParameterType.GetTypeInfo().IsAssignableFrom(givenParameter))
                     {
-                        foundMatch = true;
-                        parameterMap[j] = i;
-                        break;
+                        continue;
                     }
+
+                    foundMatch = true;
+                    parameterMap[j] = i;
+                    break;
                 }
 
                 if (!foundMatch)
@@ -348,20 +336,19 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
 
                     for (var applyIndex = applyIndexStart; givenMatched == false && applyIndex != _parameters.Length; ++applyIndex)
                     {
-                        if (_parameterValuesSet[applyIndex] == false &&
-                            _parameters[applyIndex].ParameterType.GetTypeInfo().IsAssignableFrom(givenType))
+                        if (_parameterValuesSet[applyIndex] ||
+                            !_parameters[applyIndex]
+                                .ParameterType
+                                .GetTypeInfo()
+                                .IsAssignableFrom(givenType)) continue;
+                        givenMatched = true;
+                        _parameterValuesSet[applyIndex] = true;
+                        _parameterValues[applyIndex] = givenParameters[givenIndex];
+                        if (applyIndexStart != applyIndex) continue;
+                        applyIndexStart++;
+                        if (applyIndex == givenIndex)
                         {
-                            givenMatched = true;
-                            _parameterValuesSet[applyIndex] = true;
-                            _parameterValues[applyIndex] = givenParameters[givenIndex];
-                            if (applyIndexStart == applyIndex)
-                            {
-                                applyIndexStart++;
-                                if (applyIndex == givenIndex)
-                                {
-                                    applyExactLength = applyIndex;
-                                }
-                            }
+                            applyExactLength = applyIndex;
                         }
                     }
 
@@ -386,10 +373,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
                             {
                                 throw new InvalidOperationException($"Unable to resolve service for type '{_parameters[index].ParameterType}' while attempting to activate '{_constructor.DeclaringType}'.");
                             }
-                            else
-                            {
-                                _parameterValues[index] = defaultValue;
-                            }
+                            _parameterValues[index] = defaultValue;
                         }
                         else
                         {
@@ -414,12 +398,12 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
 
         private static void ThrowMultipleConstructorsMarkedWithAttributeException()
         {
-            throw new InvalidOperationException($"Multiple constructors were marked with {nameof(IocConstructorAttribute)}.");
+            throw new InvalidOperationException("Multiple constructors were marked with a service-based constructor attribute.");
         }
 
         private static void ThrowMarkedCtorDoesNotTakeAllProvidedArguments()
         {
-            throw new InvalidOperationException($"Constructor marked with {nameof(IocConstructorAttribute)} does not accept all given argument types.");
+            throw new InvalidOperationException("Constructor marked with a service-based constructor attribute does not accept all given argument types.");
         }
     }
 }

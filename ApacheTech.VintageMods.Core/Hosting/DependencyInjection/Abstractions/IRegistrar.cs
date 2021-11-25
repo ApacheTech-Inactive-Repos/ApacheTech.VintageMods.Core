@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Common;
+﻿using ApacheTech.Common.Extensions.Abstractions;
+using Vintagestory.API.Common;
 
 namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions
 {

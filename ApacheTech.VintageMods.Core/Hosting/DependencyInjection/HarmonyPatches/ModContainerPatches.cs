@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Extensions.Reflection;
+using ApacheTech.VintageMods.Core.Extensions.System;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Services;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -41,26 +43,10 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.HarmonyPatches
             var systems = __instance.CallMethod<IEnumerable<Type>>("GetModSystems", __instance.Assembly);
             foreach (var type in systems)
             {
-                try
-                {
-                    ModSystem modSystem;
-                    if (type.GetConstructors().Any(p => p.IOCEnabled()))
-                    {
-                        __instance.Logger.Audit($"ModSystem {type} initialised through IOC.");
-                        modSystem = (ModSystem)ModServices.IOC.CreateInstance(type);
-                    }
-                    else
-                    {
-                        __instance.Logger.Audit($"ModSystem {type} initialised through Activator.");
-                        modSystem = (ModSystem)Activator.CreateInstance(type);
-                    }
-                    modSystem.SetProperty("Mod", __instance);
-                    list.Add(modSystem);
-                }
-                catch (Exception ex)
-                {
-                    __instance.Logger.Error($"Exception thrown when trying to create an instance of ModSystem {type}:\n{ex}");
-                }
+                if (!TryCreateModSystemInstance(__instance, type, out var modSystem)) continue;
+                modSystem.SetProperty("Mod", __instance);
+                list.Add(modSystem);
+
             }
             __instance.SetProperty("Systems", list.AsReadOnly());
             if (__instance.Systems.Count == 0 && __instance.FolderPath == null)
@@ -68,6 +54,25 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.HarmonyPatches
                 __instance.Logger.Warning("Is a Code mod, but no ModSystems found");
             }
             return false;
+        }
+
+        private static bool TryCreateModSystemInstance(ModContainer __instance, Type type, out ModSystem modSystem)
+        {
+            try
+            {
+                modSystem = type
+                    .GetConstructors()
+                    .Any(p => p.IOCEnabled())
+                    ? (ModSystem)ModServices.IOC.CreateSidedInstance(type)
+                    : (ModSystem)Activator.CreateInstance(type);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                __instance.Logger.Error($"Exception thrown when trying to create an instance of ModSystem {type}:\n{ex}");
+                modSystem = default;
+                return false;
+            }
         }
     }
 }

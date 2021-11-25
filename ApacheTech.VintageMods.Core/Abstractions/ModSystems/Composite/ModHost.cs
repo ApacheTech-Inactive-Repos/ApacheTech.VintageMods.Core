@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Reflection;
+using ApacheTech.Common.Extensions;
+using ApacheTech.Common.Extensions.Abstractions;
+using ApacheTech.Common.Extensions.Extensions;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars;
 using ApacheTech.VintageMods.Core.Services;

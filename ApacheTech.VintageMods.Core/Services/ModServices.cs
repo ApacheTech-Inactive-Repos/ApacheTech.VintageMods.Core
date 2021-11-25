@@ -1,6 +1,6 @@
-﻿using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite;
+﻿using ApacheTech.Common.Extensions.Abstractions;
+using ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using ApacheTech.VintageMods.Core.Services.MefLab;

@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
+using ApacheTech.VintageMods.Core.Extensions.Reflection;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.GameContent;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions.Game
+namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
     /// <summary>
     ///     Extension Methods for the World Map Manager.

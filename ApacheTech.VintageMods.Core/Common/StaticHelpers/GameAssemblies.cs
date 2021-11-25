@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
+using ApacheTech.Common.Extensions.System;
 using HarmonyLib;
 using JetBrains.Annotations;
 

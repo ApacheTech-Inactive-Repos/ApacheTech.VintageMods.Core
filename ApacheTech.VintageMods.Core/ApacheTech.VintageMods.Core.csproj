@@ -11,11 +11,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="app.config" />
+		<InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
+		<InternalsVisibleTo Include="$(AssemblyName).Tests.Integration" />
+		<InternalsVisibleTo Include="$(AssemblyName).Tests.Acceptance" />
+		<InternalsVisibleTo Include="$(AssemblyName).Tests.Benchmarking" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<!-- CompileTime Packages -->
+		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.0.0" />
+		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.0.0" />
 		<PackageReference Include="IsExternalInit" Version="1.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,6 +32,32 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- Vintage Story Game Libraries -->
+		<Reference Include="Vintagestory">
+			<HintPath>D:\Games\Vintage Story\Vintagestory.exe</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VintagestoryAPI">
+			<HintPath>D:\Games\Vintage Story\VintagestoryAPI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VintagestoryLib">
+			<HintPath>D:\Games\Vintage Story\VintagestoryLib.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSCreativeMod">
+			<HintPath>D:\Games\Vintage Story\Mods\VSCreativeMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSEssentials">
+			<HintPath>D:\Games\Vintage Story\Mods\VSEssentials.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSSurvivalMod">
+			<HintPath>D:\Games\Vintage Story\Mods\VSSurvivalMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<!-- Vintage Story Included Libraries -->
 		<Reference Include="0Harmony">
 			<HintPath>D:\Games\Vintage Story\Lib\0Harmony.dll</HintPath>
 			<Private>false</Private>
@@ -57,30 +88,6 @@
 		</Reference>
 		<Reference Include="Tavis.JsonPatch">
 		  <HintPath>D:\Games\Vintage Story\Lib\Tavis.JsonPatch.dll</HintPath>
-		  <Private>false</Private>
-		</Reference>
-		<Reference Include="Vintagestory">
-		  <HintPath>D:\Games\Vintage Story\Vintagestory.exe</HintPath>
-		  <Private>false</Private>
-		</Reference>
-		<Reference Include="VintagestoryAPI">
-			<HintPath>D:\Games\Vintage Story\VintagestoryAPI.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="VintagestoryLib">
-			<HintPath>D:\Games\Vintage Story\VintagestoryLib.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="VSCreativeMod">
-		  <HintPath>D:\Games\Vintage Story\Mods\VSCreativeMod.dll</HintPath>
-		  <Private>false</Private>
-		</Reference>
-		<Reference Include="VSEssentials">
-		  <HintPath>D:\Games\Vintage Story\Mods\VSEssentials.dll</HintPath>
-		  <Private>false</Private>
-		</Reference>
-		<Reference Include="VSSurvivalMod">
-		  <HintPath>D:\Games\Vintage Story\Mods\VSSurvivalMod.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
 	</ItemGroup>

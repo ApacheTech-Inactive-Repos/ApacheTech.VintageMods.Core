@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ApacheTech.Common.Extensions.System;
 using HarmonyLib;
-using JetBrains.Annotations;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions.System
+// ReSharper disable UnusedMember.Global
+
+namespace ApacheTech.VintageMods.Core.Extensions.Reflection
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public static class ReflectionExtensions
+    public static class HarmonyReflectionExtensions
     {
         #region Fields
 
@@ -74,46 +74,6 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         public static void SetProperty(this object instance, string propertyName, object setVal)
         {
             AccessTools.Property(instance.GetType(), propertyName).SetValue(instance, setVal);
-        }
-
-        /// <summary>
-        ///     Tries the get default value of a property, via its <see cref="PropertyInfo"/>.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <returns><c>true</c> if the default value has been set, <c>false</c> otherwise.</returns>
-        public static bool TryGetDefaultValue(this ParameterInfo parameter, out object defaultValue)
-        {
-            bool hasDefaultValue;
-            var tryToGetDefaultValue = true;
-            defaultValue = null;
-
-            try
-            {
-                hasDefaultValue = parameter.HasDefaultValue;
-            }
-            catch (FormatException) when (parameter.ParameterType == typeof(DateTime))
-            {
-                // Workaround for https://github.com/dotnet/corefx/issues/12338
-                // If HasDefaultValue throws FormatException for DateTime
-                // we expect it to have default value
-                hasDefaultValue = true;
-                tryToGetDefaultValue = false;
-            }
-
-            if (!hasDefaultValue) return false;
-
-            if (tryToGetDefaultValue)
-            {
-                defaultValue = parameter.DefaultValue;
-            }
-
-            // Workaround for https://github.com/dotnet/corefx/issues/11797
-            if (defaultValue == null && parameter.ParameterType.IsValueType)
-            {
-                defaultValue = Activator.CreateInstance(parameter.ParameterType);
-            }
-            return true;
         }
 
         #endregion
@@ -187,61 +147,10 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         /// <param name="assembly">The assembly the class resides in.</param>
         /// <param name="className">The name of the class.</param>
         /// <returns>The <see cref="Type"/> of the class, if found within the assembly, otherwise, returns <c>null</c>.</returns>
-        [CanBeNull]
         public static Type GetClassType(this Assembly assembly, string className)
         {
             var ts = AccessTools.GetTypesFromAssembly(assembly);
             return ts.FirstOrNull(t => t.Name == className);
-        }
-
-        #endregion
-
-        #region Assemblies
-
-        /// <summary>
-        ///     Scans an assembly for all instantiable classes of a specified type, and forms an array of instances.
-        /// </summary>
-        /// <typeparam name="T">The type of class to find.</typeparam>
-        /// <param name="assembly">The assembly to scan.</param>
-        /// <param name="constructorArgs">The constructor arguments to pass to each instance.</param>
-        /// <returns>An array of instantiated classes of a specified type.</returns>
-        public static IEnumerable<T> InstantiateAllTypes<T>(this Assembly assembly, params object[] constructorArgs)
-            where T : class, IComparable<T>
-        {
-            var objects = assembly
-                .GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)))
-                .Select(type => (T)Activator.CreateInstance(type, constructorArgs))
-                .ToList();
-            objects.Sort();
-
-            return objects;
-        }
-
-        /// <summary>
-        ///     Gets the derived types of a specified Attribute, within the assembly.
-        /// </summary>
-        /// <typeparam name="T">The type of class level attribute to scan for.</typeparam>
-        /// <param name="_">The attribute to scan for.</param>
-        /// <param name="assembly">The assembly to scan.</param>
-        /// <returns>Returns an array of Types that are decorated with the specified class level attribute.</returns>
-        public static IEnumerable<(Type Type, T Attribute)> GetDerivedTypes<T>(this T _, Assembly assembly) where T : Attribute
-        {
-            return assembly.GetTypesWithAttribute<T>();
-        }
-
-        /// <summary>   
-        ///     Gets the derived types of a specified Attribute, within the assembly.
-        /// </summary>
-        /// <typeparam name="T">The type of class level attribute to scan for.</typeparam>
-        /// <param name="assembly">The assembly to scan.</param>
-        /// <returns>Returns an array of Types that are decorated with the specified class level attribute.</returns>
-        public static IEnumerable<(Type Type, T Attribute)> GetTypesWithAttribute<T>(this Assembly assembly)
-            where T: Attribute
-        {
-            var types = assembly.GetTypes()
-                .Where(type => type.GetCustomAttributes(typeof(T), false).Length > 0);
-            return types.Select(p => (p, (T)p.GetCustomAttribute(typeof(T), false)));
         }
 
         #endregion
@@ -260,10 +169,5 @@ namespace ApacheTech.VintageMods.Core.Common.Extensions.System
         }
 
         #endregion
-
-        public static bool HasCustomAttribute<T>(this MemberInfo member) where T : Attribute
-        {
-            return member.GetCustomAttributes().OfType<T>().Any();
-        }
     }
 }

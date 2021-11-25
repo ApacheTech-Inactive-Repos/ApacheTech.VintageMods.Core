@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Common.InternalSystems;
+using ApacheTech.VintageMods.Core.Extensions.Reflection;
 using JetBrains.Annotations;
 using Vintagestory.API.Server;
 using Vintagestory.Server;
 
 // ReSharper disable StringLiteralTypo
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions.Threading
+namespace ApacheTech.VintageMods.Core.Extensions.Threading
 {
     /// <summary>
     ///     Provides methods for injecting ServerSystems into the game.

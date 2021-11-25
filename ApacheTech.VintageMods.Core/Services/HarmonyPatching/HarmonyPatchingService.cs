@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
+using ApacheTech.Common.Extensions.Abstractions;
+using ApacheTech.Common.Extensions.Annotation;
+using ApacheTech.Common.Extensions.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
 using HarmonyLib;
 using JetBrains.Annotations;

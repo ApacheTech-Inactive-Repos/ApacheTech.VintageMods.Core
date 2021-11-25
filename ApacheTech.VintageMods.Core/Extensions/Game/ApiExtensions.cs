@@ -3,7 +3,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions.Game
+namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ApiExtensions

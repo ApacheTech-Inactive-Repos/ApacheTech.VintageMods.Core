@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ApacheTech.VintageMods.Core.Common.Extensions.System;
+using ApacheTech.VintageMods.Core.Extensions.Reflection;
 using ApacheTech.VintageMods.Core.Services.Network.Packets;
 using Vintagestory.API.Client;
 using Vintagestory.API.Server;

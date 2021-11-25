@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
-namespace ApacheTech.VintageMods.Core.Common.Extensions.Game
+namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
     /// <summary>
     ///     Extension methods for when working with entities.

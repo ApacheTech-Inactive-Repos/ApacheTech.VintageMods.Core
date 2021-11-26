@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using ApacheTech.VintageMods.Core.Extensions.Reflection;
+using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.VintageMods.Core.Services.Network.Packets;
 using Vintagestory.API.Client;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
 
 namespace ApacheTech.VintageMods.Core.Services.Network.Extensions
 {

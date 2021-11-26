@@ -21,6 +21,7 @@
 		<!-- CompileTime Packages -->
 		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.0.0" />
 		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.0.0" />
+		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.0.1" />
 		<PackageReference Include="IsExternalInit" Version="1.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using ApacheTech.VintageMods.Core.Extensions.Reflection;
-using ApacheTech.VintageMods.Core.Extensions.System;
+using ApacheTech.Common.Extensions.Harmony;
 using HarmonyLib;
 
 #region Analyser Cleanup

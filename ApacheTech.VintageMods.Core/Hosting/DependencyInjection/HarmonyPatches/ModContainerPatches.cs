@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Extensions.Reflection;
-using ApacheTech.VintageMods.Core.Extensions.System;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Services;
 using HarmonyLib;

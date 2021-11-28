@@ -19,9 +19,6 @@
 
 	<ItemGroup>
 		<!-- CompileTime Packages -->
-		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.0.0" />
-		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.0.0" />
-		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.0.1" />
 		<PackageReference Include="IsExternalInit" Version="1.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,6 +27,9 @@
 		<PackageReference Include="RedGate.SmartAssembly.Attributes" Version="8.0.4.4860" />
 		<!-- Runtime Packages -->
 		<PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.0.1" />
+		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.0.0" />
+		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,5 @@
 ﻿using System;
-using ApacheTech.Common.Extensions.Annotation;
+using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Abstractions.Contracts;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;

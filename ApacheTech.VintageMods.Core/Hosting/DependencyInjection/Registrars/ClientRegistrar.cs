@@ -1,4 +1,4 @@
-﻿using ApacheTech.Common.Extensions.Abstractions;
+﻿using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 using JetBrains.Annotations;

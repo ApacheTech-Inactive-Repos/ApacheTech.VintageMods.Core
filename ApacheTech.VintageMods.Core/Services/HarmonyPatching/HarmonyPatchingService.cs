@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ApacheTech.Common.Extensions.Abstractions;
-using ApacheTech.Common.Extensions.Annotation;
+using ApacheTech.Common.DependencyInjection.Abstractions;
+using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.Common.Extensions.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;

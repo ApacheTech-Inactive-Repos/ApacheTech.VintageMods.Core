@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ApacheTech.Common.Extensions.Abstractions;
-using ApacheTech.Common.Extensions.Annotation;
+using ApacheTech.Common.DependencyInjection.Abstractions;
+using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;

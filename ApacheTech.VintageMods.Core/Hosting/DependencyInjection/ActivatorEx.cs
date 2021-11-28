@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using ApacheTech.Common.Extensions.Abstractions;
+using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.Extensions.Reflection;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using JetBrains.Annotations;

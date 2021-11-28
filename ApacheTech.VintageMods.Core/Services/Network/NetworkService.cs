@@ -1,6 +1,6 @@
 ﻿using System;
-using ApacheTech.Common.Extensions.Abstractions;
-using ApacheTech.Common.Extensions.Annotation;
+using ApacheTech.Common.DependencyInjection.Abstractions;
+using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Extensions.Game;
 using JetBrains.Annotations;

@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.Client.NoObf;
 
-// ReSharper disable StringLiteralTypoInstall-Package ApacheTech.Common.Extensions.Harmony -Version 1.0.1
+// ReSharper disable StringLiteralTypo
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game.Threading
 {
@@ -95,6 +95,13 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game.Threading
             return new Stack<ClientSystem>((world as ClientMain).GetField<ClientSystem[]>("clientSystems"));
         }
 
+        /// <summary>
+        ///     Injects custom thread into the client process, passing control of 
+        ///     the thread's lifetime and integration, from the mod, to the game.
+        /// </summary>
+        /// <param name="capi">The internal API for the client.</param>
+        /// <param name="name">The name of the thread to inject.</param>
+        /// <param name="systems">One or more custom <see cref="ClientSystem" /> implementations to run on the thread.</param>
         public static void InjectClientThread(this ICoreClientAPI capi, string name, params ClientSystem[] systems)
         {
             capi.World.InjectClientThread(name, systems);

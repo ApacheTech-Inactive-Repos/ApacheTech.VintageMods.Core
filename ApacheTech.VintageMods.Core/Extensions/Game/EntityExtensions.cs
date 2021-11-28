@@ -47,7 +47,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="agentPos">The agent's position.</param>
         /// <param name="targetPos">The target position.</param>
         /// <returns>An <see cref="EntityPos"/>, containing the agent's current XYZ position, and the new YPR rotations.</returns>
-        public static EntityPos LookAtTarget(this EntityPos agentPos, Vec3d targetPos)
+        public static EntityPos LookAt(this EntityPos agentPos, Vec3d targetPos)
         {
             var cartesianCoordinates = targetPos.SubCopy(agentPos.XYZ).Normalize();
             var yaw = GameMath.TWOPI - (float) Math.Atan2(cartesianCoordinates.Z, cartesianCoordinates.X);

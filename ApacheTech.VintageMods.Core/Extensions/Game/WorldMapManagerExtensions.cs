@@ -22,7 +22,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         }
 
         /// <summary>
-        ///     Trick the server into sending waypoints to the client even if they don't have their map opened.
+        ///     Trick the server into sending waypoints to the client even if they don't have their map opened. <br/>
         ///     Credit to Novocain.
         /// </summary>
         /// <param name="mapManager">The map manager.</param>

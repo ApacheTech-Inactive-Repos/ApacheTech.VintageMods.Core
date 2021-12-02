@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
@@ -15,21 +14,6 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
 {
     public static class HostExtensions
     {
-
-
-        /// <summary>
-        ///     Registers the game's API within the DI container.
-        /// </summary>
-        /// <param name="services">The service collection to register the API with.</param>
-        /// <param name="api">The game's core API.</param>
-        /// <param name="registrar">The registrar to use, to register the API for the current app-side.</param>
-        /// <returns>Returns the same instance of <see cref="IServiceResolver" /> that it was passed.</returns>
-        public static IServiceCollection RegisterAPI(this IServiceCollection services, ICoreAPI api, IRegistrar registrar)
-        {
-            registrar.Register(api, services);
-            return services;
-        }
-
         /// <summary>
         ///     Determines whether a constructor is decorated with a <see cref="SidedServiceProviderConstructorAttribute"/> attribute that matched the current app-side.
         /// </summary>

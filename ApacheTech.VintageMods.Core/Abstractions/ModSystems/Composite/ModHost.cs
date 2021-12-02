@@ -5,7 +5,6 @@ using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars;
 using ApacheTech.VintageMods.Core.Services;
 using Vintagestory.API.Client;
@@ -62,7 +61,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
             ApiEx.ServerMain = (ServerMain)sapi.World;
 
             //  2. Configure game API services.
-            _services.RegisterAPI(sapi, ServerRegistrar.CreateInstance());
+            _services.Configure(ServerApiRegistrar.RegisterServerApiEndpoints);
 
             //  3. Delegate mod service configuration to derived class.
             _services.Configure(ConfigureServerModServices);
@@ -98,7 +97,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
             ApiEx.ClientMain = (ClientMain)capi.World;
 
             //  2. Configure game API services.
-            _services.RegisterAPI(capi, ClientRegistrar.CreateInstance());
+            _services.Configure(ClientApiRegistrar.RegisterClientApiEndpoints);
 
             //  3. Delegate mod service configuration to derived class.
             _services.Configure(ConfigureClientModServices);

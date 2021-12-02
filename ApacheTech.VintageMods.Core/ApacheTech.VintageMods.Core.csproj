@@ -35,60 +35,60 @@
 	<ItemGroup>
 		<!-- Vintage Story Game Libraries -->
 		<Reference Include="Vintagestory">
-			<HintPath>D:\Games\Vintage Story\Vintagestory.exe</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\Vintagestory.exe</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VintagestoryAPI">
-			<HintPath>D:\Games\Vintage Story\VintagestoryAPI.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\VintagestoryAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VintagestoryLib">
-			<HintPath>D:\Games\Vintage Story\VintagestoryLib.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\VintagestoryLib.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSCreativeMod">
-			<HintPath>D:\Games\Vintage Story\Mods\VSCreativeMod.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="VSEssentials">
-			<HintPath>D:\Games\Vintage Story\Mods\VSEssentials.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\Mods\VSCreativeMod.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSSurvivalMod">
-			<HintPath>D:\Games\Vintage Story\Mods\VSSurvivalMod.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\Mods\VSSurvivalMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSEssentials">
+			<HintPath>C:\Games\Vintage Story Beta\Mods\VSEssentials.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<!-- Vintage Story Included Libraries -->
 		<Reference Include="0Harmony">
-			<HintPath>D:\Games\Vintage Story\Lib\0Harmony.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\Lib\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="AnimatedGif">
-		  <HintPath>D:\Games\Vintage Story\Lib\AnimatedGif.dll</HintPath>
+		  <HintPath>C:\Games\Vintage Story Beta\Lib\AnimatedGif.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
 		<Reference Include="cairo-sharp">
-		  <HintPath>D:\Games\Vintage Story\Lib\cairo-sharp.dll</HintPath>
+		  <HintPath>C:\Games\Vintage Story Beta\Lib\cairo-sharp.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
-			<HintPath>D:\Games\Vintage Story\Lib\Newtonsoft.Json.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\Lib\Newtonsoft.Json.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="OpenTK">
-		  <HintPath>D:\Games\Vintage Story\Lib\OpenTK.dll</HintPath>
+		  <HintPath>C:\Games\Vintage Story Beta\Lib\OpenTK.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
 		<Reference Include="protobuf-net">
-			<HintPath>D:\Games\Vintage Story\Lib\protobuf-net.dll</HintPath>
+			<HintPath>C:\Games\Vintage Story Beta\Lib\protobuf-net.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="System.Data.SQLite">
-		  <HintPath>D:\Games\Vintage Story\Lib\System.Data.SQLite.dll</HintPath>
+		  <HintPath>C:\Games\Vintage Story Beta\Lib\System.Data.SQLite.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
 		<Reference Include="Tavis.JsonPatch">
-		  <HintPath>D:\Games\Vintage Story\Lib\Tavis.JsonPatch.dll</HintPath>
+		  <HintPath>C:\Games\Vintage Story Beta\Lib\Tavis.JsonPatch.dll</HintPath>
 		  <Private>false</Private>
 		</Reference>
 	</ItemGroup>

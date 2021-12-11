@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
-using ApacheTech.VintageMods.Core.Services.FileSystem.Registration;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Extensions;
 using JetBrains.Annotations;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Config;
@@ -19,13 +22,13 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
     [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     internal sealed class FileSystemService : IFileSystemService
     {
-        private readonly IModFileRegistrar _registrar;
+        private readonly IEmbeddedResourcesService _embeddedResources;
 
         private readonly Dictionary<string, ModFileBase> _registeredFiles = new();
 
-        public FileSystemService(IModFileRegistrar registrar)
+        public FileSystemService(IEmbeddedResourcesService embeddedResources)
         {
-            _registrar = registrar;
+            _embeddedResources = embeddedResources;
         }
 
         /// <summary>
@@ -39,14 +42,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         /// <param name="scope">The scope of the file, be it global, or per-world.</param>
         public IFileSystemService RegisterFile(string fileName, FileScope scope)
         {
-            // TODO: Partially refactored... but just kicked the can down the road.
-            //!? Open/Closed issues need to be resolved properly, rather than just pushed into a separate helper class.
-            var file = new FileInfo(_registrar.GetScopedPath(fileName, scope));
-            var fileType = _registrar.ParseFileType(file);
-            var modFile = _registrar.InstantiateModFile(fileType, file);
-            _registeredFiles.Add(fileName, modFile);
-            if (file.Exists) return this;
-            _registrar.CopyFileToOutputDirectory(fileName, file, fileType);
+            var file = new FileInfo(ModPaths.GetScopedPath(scope, fileName));
+            _registeredFiles.Add(fileName, file.CreateModFileWrapper());
+            if (!file.Exists)
+            {
+                CopyFileToOutputDirectory(file);
+            }
             return this;
         }
 
@@ -101,6 +102,33 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         public ITextModFile GetTextFile(string fileName)
         {
             return GetRegisteredFile<ITextModFile>(fileName);
+        }
+
+        private void CopyFileToOutputDirectory(FileInfo file)
+        {
+            var assembly = AssemblyEx.GetModAssembly();
+            if (_embeddedResources.ResourceExists(assembly, file.Name))
+            {
+                _embeddedResources.DisembedResource(assembly, file.Name, file.FullName);
+                return;
+            }
+
+            var locations = new List<string>
+            {
+                Path.Combine(ModPaths.ModAssetsPath, file.Name),
+                Path.Combine(ModPaths.ModRootPath, file.Name)
+            };
+            foreach (var location in locations.Where(File.Exists))
+            {
+                if (file.Exists) return;
+                File.Copy(location, file.FullName, false);
+                return;
+            }
+
+            file.Create();
+            if (file.ParseFileType() != FileType.Json) return;
+            using var writer = file.AppendText();
+            writer.WriteLine("{\n\n}");
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using JetBrains.Annotations;
 using Vintagestory.API.Config;
 
@@ -68,5 +70,29 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             return dir.FullName;
         }
 
+        internal static string GetScopedPath(FileScope scope, string fileName)
+        {
+            var directory = scope switch
+            {
+                FileScope.Global => ModDataGlobalPath,
+                FileScope.World => ModDataWorldPath,
+                FileScope.Local => ModRootPath,
+                _ => throw new ArgumentOutOfRangeException(nameof(scope), scope, null)
+            };
+
+            if (scope is not FileScope.Local) return Path.Combine(directory, fileName);
+            if (File.Exists(directory)) return Path.Combine(directory, fileName);
+
+            var files = Directory.GetFiles(ModPaths.ModRootPath, fileName, SearchOption.AllDirectories);
+            return files.Length switch
+            {
+                1 => files[0],
+                < 1 => throw new FileNotFoundException(
+                    // TODO: Move to lang file.
+                    Lang.Get("Local file, `{0}`, does not exist within the mod folder.", fileName)),
+                > 1 => throw new FileLoadException(
+                    Lang.Get("Local file, `{0}`, is duplicated within the mod folder.", fileName))
+            };
+        }
     }
 }

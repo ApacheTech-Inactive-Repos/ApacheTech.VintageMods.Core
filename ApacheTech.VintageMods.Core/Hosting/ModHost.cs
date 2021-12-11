@@ -3,6 +3,7 @@ using System.Reflection;
 using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Extensions;
+using ApacheTech.VintageMods.Core.Abstractions.ModSystems;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars;
@@ -13,7 +14,7 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
-namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems.Composite
+namespace ApacheTech.VintageMods.Core.Hosting
 {
     /// <summary>
     ///     Only one derived instance of this base-class should be added to any single mod within

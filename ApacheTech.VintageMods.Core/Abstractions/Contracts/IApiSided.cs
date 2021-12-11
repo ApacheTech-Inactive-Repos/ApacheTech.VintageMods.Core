@@ -1,5 +1,7 @@
 ﻿using Vintagestory.API.Common;
 
+// ReSharper disable UnusedMemberInSuper.Global
+
 namespace ApacheTech.VintageMods.Core.Abstractions.Contracts
 {
     /// <summary>

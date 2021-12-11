@@ -2,6 +2,9 @@
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
+
 namespace ApacheTech.VintageMods.Core.Abstractions.ModSystems
 {
     /// <summary>

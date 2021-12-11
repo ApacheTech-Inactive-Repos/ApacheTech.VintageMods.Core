@@ -16,7 +16,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Enum
     public abstract class StringEnum<T> : IEquatable<T> where T : StringEnum<T>, new()
     {
         /// <summary>
-        ///     The value dictionary
+        ///     A dictionary of values held be this instance.
         /// </summary>
         private static readonly Dictionary<string, T> ValueDict = new();
 

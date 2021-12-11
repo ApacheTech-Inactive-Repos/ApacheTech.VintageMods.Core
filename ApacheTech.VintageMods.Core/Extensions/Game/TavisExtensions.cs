@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using ApacheTech.Common.Extensions.Harmony;
+using Newtonsoft.Json;
+using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.ServerMods.NoObf;
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
@@ -15,7 +19,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="patch">The patch to apply.</param>
         public static void ApplyPatch(this ModJsonPatchLoader jsonPatcher, JsonPatch patch)
         {
-            jsonPatcher.ApplyPatches(new List<JsonPatch>{patch});
+            jsonPatcher.ApplyPatches(new List<JsonPatch> { patch });
         }
 
         /// <summary>
@@ -31,8 +35,29 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
                 var notFound = 0;
                 var errorCount = 0;
                 var patch = patches[i];
-                jsonPatcher.ApplyPatch(i, patch.File, patch, ref applied, ref notFound, ref errorCount);
+                jsonPatcher.CallMethod("ApplyPatch", i, patch.File, patch, applied, notFound, errorCount);
             }
+        }
+
+        /// <summary>
+        ///     Registers a BlockBehaviour with the API, and patches the JSON file to add the behaviour to the block.
+        /// </summary>
+        /// <typeparam name="TBlockBehaviour">The type of <see cref="BlockBehavior"/> to register.</typeparam>
+        /// <param name="api">The API to register the <see cref="BlockBehavior"/> with.</param>
+        /// <param name="fileAsset">The file to patch.</param>
+        public static void PatchBlockBehaviour<TBlockBehaviour>(this ICoreAPI api, AssetLocation fileAsset)
+            where TBlockBehaviour : BlockBehavior
+        {
+            api.RegisterBlockBehaviour<TBlockBehaviour>();
+            var value = new KeyValuePair<string, string>("name", nameof(TBlockBehaviour));
+            var json = JsonConvert.SerializeObject(value);
+            api.ModLoader.GetModSystem<ModJsonPatchLoader>().ApplyPatch(new JsonPatch
+            {
+                Op = EnumJsonPatchOp.Add,
+                File = fileAsset,
+                Path = "/behaviors/-",
+                Value = JsonObject.FromJson(json)
+            });
         }
     }
 }

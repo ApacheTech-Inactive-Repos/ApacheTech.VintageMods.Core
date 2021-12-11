@@ -2,12 +2,44 @@
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
+using Vintagestory.Client.NoObf;
+using Vintagestory.Server;
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ApiExtensions
     {
+
+        #region Client
+
+        public static ClientMain AsClientMain(this ICoreClientAPI api)
+        {
+            return (ClientMain)api.World;
+        }
+
+        public static ICoreClientAPI AsApi(this ClientMain game)
+        {
+            return (ICoreClientAPI)game.Api;
+        }
+
+        #endregion
+
+
+        #region Server
+
+        public static ServerMain AsServerMain(this ICoreServerAPI api)
+        {
+            return (ServerMain)api.World;
+        }
+
+        public static ICoreServerAPI AsApi(this ServerMain game)
+        {
+            return (ICoreServerAPI)game.Api;
+        }
+
+        #endregion
+
         #region ICoreAPI
 
         /// <summary>

@@ -1,13 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using ApacheTech.Common.Extensions.Harmony;
-using HarmonyLib;
+using ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropertyChanged;
 
 #region Analyser Cleanup
-
-#pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable IDE0060 // Remove unused parameter
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Local
@@ -22,13 +17,11 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures
     /// </summary>
     /// <typeparam name="T">The <see cref="Type"/> of object to watch.</typeparam>
     /// <seealso cref="IDisposable" />
-    public class ObservableFeature<T> : IDisposable
+    public class ObservableFeature<T> : IDisposable where T : class
     {
+        private readonly DynamicNotifyPropertyChanged<T> _observedInstance;
         private static ObservableFeature<T> _instance;
-
-        private readonly Harmony _harmony;
         private readonly string _featureName;
-        private readonly T _featureInstance;
 
         /// <summary>
         /// 	Initialises a new instance of the <see cref="ObservableFeature{T}" /> class.
@@ -37,16 +30,9 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures
         /// <param name="instance">The instance to watch.</param>
         private ObservableFeature(string featureName, T instance)
         {
-            _featureInstance = instance;
             _featureName = featureName;
-            var objectType = instance.GetType();
-            _harmony = new Harmony(objectType.FullName);
-            foreach (var propertyInfo in objectType.GetProperties())
-            {
-                var original = propertyInfo.SetMethod;
-                var postfix = this.GetMethod("Patch_PropertySetMethod_Postfix");
-                _harmony.Patch(original, postfix: new HarmonyMethod(postfix));
-            }
+            _observedInstance = DynamicNotifyPropertyChanged<T>.Bind(instance);
+            _observedInstance.PropertyChanged += OnObservedInstancePropertyChanged;
         }
 
         /// <summary>
@@ -66,22 +52,18 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures
         /// </summary>
         public event FeatureSettingsChangedEventHandler<T> PropertyChanged;
 
+        private void OnObservedInstancePropertyChanged(DynamicPropertyChangedEventArgs<T> args)
+        {
+            var featureArgs = new FeatureSettingsChangedEventArgs<T>(_featureName, args.Instance);
+            PropertyChanged?.Invoke(featureArgs);
+        }
+
         /// <summary>
         ///     Un-patches the dynamic property watch on the POCO class. 
         /// </summary>
         public void Dispose()
         {
-            _harmony.UnpatchAll();
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private static void Patch_PropertySetMethod_Postfix(object __instance)
-        {
-            var args = new FeatureSettingsChangedEventArgs<T>(
-                _instance._featureName, 
-                _instance._featureInstance);
-
-            _instance.PropertyChanged?.Invoke(args);
+            _observedInstance.Dispose();
         }
     }
 }

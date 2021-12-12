@@ -1,2 +1,10 @@
 {
+  // Boolean Values:
+  "vmods:boolean-value-True:": "True",
+  "vmods:boolean-value-False": "False",
+
+  // Ordinal Numbers Suffices:
+  "vmods:ordinal-numbers-st:": "st",
+  "vmods:ordinal-numbers-nd:": "nd",
+  "vmods:ordinal-numbers-rd:": "rd"
 }

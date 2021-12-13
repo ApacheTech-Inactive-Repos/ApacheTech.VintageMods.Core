@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.Abstractions;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
@@ -52,10 +53,15 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
 
         private void OnPropertyChanged<T>(FeatureSettingsChangedEventArgs<T> args)
         {
+            ApiEx.Current.Logger.Audit("T1");
             var json = _file.ParseAs<JObject>();
+            ApiEx.Current.Logger.Audit("T2");
             var featureObj = json.SelectToken($"$.Features.{args.FeatureName}");
+            ApiEx.Current.Logger.Audit("T3");
             featureObj.Replace(JToken.FromObject(args.FeatureSettings));
+            ApiEx.Current.Logger.Audit("T4");
             _file.SaveFrom(json.ToString(Formatting.Indented));
+            ApiEx.Current.Logger.Audit("T5");
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures;
 using HarmonyLib;
+using SmartAssembly.Attributes;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Local
@@ -17,6 +18,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropert
     /// </summary>
     /// <typeparam name="T">The <see cref="Type"/> of object to watch.</typeparam>
     /// <seealso cref="IDisposable" />
+    [DoNotPruneType]
     public class DynamicNotifyPropertyChanged<T> : IDisposable where T : class
     {
         private static DynamicNotifyPropertyChanged<T> _instance;
@@ -33,11 +35,10 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropert
             _observedInstance = instance;
             var objectType = instance.GetType();
             _harmony = new Harmony(objectType.FullName);
+            var postfix = this.GetMethod("Patch_PropertySetMethod_Postfix");
             foreach (var propertyInfo in objectType.GetProperties())
             {
-                var original = propertyInfo.SetMethod;
-                var postfix = this.GetMethod("Patch_PropertySetMethod_Postfix");
-                _harmony.Patch(original, postfix: new HarmonyMethod(postfix));
+                _harmony.Patch(propertyInfo.SetMethod, postfix: new HarmonyMethod(postfix));
             }
         }
 
@@ -65,11 +66,12 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropert
             _harmony.UnpatchAll();
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Harmony")]
-        private static void Patch_PropertySetMethod_Postfix(MemberInfo __instance)
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Harmony Injected Method")]
+        private static void Patch_PropertySetMethod_Postfix(MemberInfo __originalMethod)
         {
-            var args = new DynamicPropertyChangedEventArgs<T>(_observedInstance, __instance.Name);
+            var propertyName = __originalMethod.Name.Remove(0, 4);
+            var args = new DynamicPropertyChangedEventArgs<T>(_observedInstance, propertyName);
             _instance.PropertyChanged?.Invoke(args);
         }
     }

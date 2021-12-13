@@ -1,10 +1,51 @@
 {
-  // Boolean Values:
-  "vmods:boolean-value-True:": "True",
+  // Boolean Values.
+  "vmods:boolean-value-True": "True",
   "vmods:boolean-value-False": "False",
 
-  // Ordinal Numbers Suffices:
+  // Ordinal Numbers.
   "vmods:ordinal-numbers-st:": "st",
   "vmods:ordinal-numbers-nd:": "nd",
-  "vmods:ordinal-numbers-rd:": "rd"
+  "vmods:ordinal-numbers-rd:": "rd",
+
+  // Dates and Times.
+  "vmods:datetime-months-abbr-0": "Jan",
+  "vmods:datetime-months-full-0": "January",
+  "vmods:datetime-months-abbr-1": "Feb",
+  "vmods:datetime-months-full-1": "February",
+  "vmods:datetime-months-abbr-2": "Mar",
+  "vmods:datetime-months-full-2": "March",
+  "vmods:datetime-months-abbr-3": "Apr",
+  "vmods:datetime-months-full-3": "April",
+  "vmods:datetime-months-abbr-4": "May",
+  "vmods:datetime-months-full-4": "May",
+  "vmods:datetime-months-abbr-5": "Jun",
+  "vmods:datetime-months-full-5": "June",
+  "vmods:datetime-months-abbr-6": "Jul",
+  "vmods:datetime-months-full-6": "July",
+  "vmods:datetime-months-abbr-7": "Aug",
+  "vmods:datetime-months-full-7": "August",
+  "vmods:datetime-months-abbr-8": "Sep",
+  "vmods:datetime-months-full-8": "September",
+  "vmods:datetime-months-abbr-9": "Oct",
+  "vmods:datetime-months-full-9": "October",
+  "vmods:datetime-months-abbr-10": "Nov",
+  "vmods:datetime-months-full-10": "November",
+  "vmods:datetime-months-abbr-11": "Dec",
+  "vmods:datetime-months-full-11": "December",
+
+  "vmods:datetime-days-abbr-0": "Mon",
+  "vmods:datetime-days-full-0": "Monday",
+  "vmods:datetime-days-abbr-1": "Tue",
+  "vmods:datetime-days-full-1": "Tuesday",
+  "vmods:datetime-days-abbr-2": "Wed",
+  "vmods:datetime-days-full-2": "Wednesday",
+  "vmods:datetime-days-abbr-3": "Thu",
+  "vmods:datetime-days-full-3": "Thursday",
+  "vmods:datetime-days-abbr-4": "Fri",
+  "vmods:datetime-days-full-4": "Friday",
+  "vmods:datetime-days-abbr-5": "Sat",
+  "vmods:datetime-days-full-5": "Saturday",
+  "vmods:datetime-days-abbr-6": "Sun",
+  "vmods:datetime-days-full-6": "Sunday"
 }

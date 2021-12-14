@@ -7,7 +7,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropert
     ///     Contains data pertaining to an <see cref="ObservableFeature{T}"/>, as an observed property changes.
     /// </summary>
     /// <typeparam name="T">The <see cref="Type"/> of the strongly-typed POCO settings class.</typeparam>
-    /// <seealso cref="System.EventArgs" />
+    /// <seealso cref="EventArgs" />
     public class DynamicPropertyChangedEventArgs<T> : EventArgs
     {
         /// <summary>

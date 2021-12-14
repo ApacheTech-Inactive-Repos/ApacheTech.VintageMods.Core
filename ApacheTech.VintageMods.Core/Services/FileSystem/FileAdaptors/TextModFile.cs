@@ -3,7 +3,11 @@ using System.Threading.Tasks;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
 {
@@ -11,7 +15,6 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
     ///     Represents a Text file, used by the mod. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="ModFile" />
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class TextModFile : ModFileBase, ITextModFile
     {
         /// <summary>

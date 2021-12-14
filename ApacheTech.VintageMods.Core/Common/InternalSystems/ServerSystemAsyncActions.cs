@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using JetBrains.Annotations;
 using Vintagestory.Server;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Common.InternalSystems
 {
@@ -9,7 +13,6 @@ namespace ApacheTech.VintageMods.Core.Common.InternalSystems
     ///     An internal system that is injected into the game, on the server.
     /// </summary>
     /// <seealso cref="ServerSystem" />
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class ServerSystemAsyncActions : ServerSystem
     {
         private readonly ServerMain _game;

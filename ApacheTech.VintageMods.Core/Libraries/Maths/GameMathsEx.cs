@@ -1,10 +1,13 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Vintagestory.API.MathTools;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Libraries.Maths
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class GameMathsEx
     {
         public static double I { get; } = GameMath.Sqrt(-1);

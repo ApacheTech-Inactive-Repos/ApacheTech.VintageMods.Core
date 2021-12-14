@@ -1,14 +1,17 @@
 ﻿using System.IO;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions
 {
     /// <summary>
     ///     A wrapper of a <see cref="FileInfo" /> for a specific file on on the filesystem. This class cannot be inherited.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class ModFileBase : IModFileBase
     {
         /// <summary>

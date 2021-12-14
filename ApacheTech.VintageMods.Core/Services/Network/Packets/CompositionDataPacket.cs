@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
-using JetBrains.Annotations;
 using ProtoBuf;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.Network.Packets
 {
@@ -8,6 +12,5 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Packets
     ///     Represents a network packet used for MEF composition.
     /// </summary>
     [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public record CompositionDataPacket(string Contract, IEnumerable<byte> Data);
 }

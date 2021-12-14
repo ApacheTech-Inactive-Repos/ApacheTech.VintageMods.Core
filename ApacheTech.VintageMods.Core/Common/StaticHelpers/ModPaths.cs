@@ -2,12 +2,15 @@
 using System.IO;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
-using JetBrains.Annotations;
 using Vintagestory.API.Config;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ModPaths
     {
         private static Assembly ModAssembly { get; }

@@ -1,6 +1,6 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 
 // ReSharper disable CommentTypo
 
@@ -8,11 +8,9 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Exceptions
 {
     /// <summary>
     ///     Acts as a base class for all custom exceptions within the VintageMods domain.
-    /// Implements the <see cref="System.Exception" />
     /// </summary>
-    /// <seealso cref="System.Exception" />
+    /// <seealso cref="Exception" />
     [Serializable]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers|ImplicitUseTargetFlags.WithInheritors)]
     public abstract class VintageModsException : Exception
     {
         //
@@ -42,7 +40,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Exceptions
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="inner">The exception that was the cause of the current exception, or a null reference, if no inner exception is provided.</param>
-        protected VintageModsException(string message, [CanBeNull] Exception inner) : base(message, inner)
+        protected VintageModsException(string message, Exception? inner) : base(message, inner)
         {
         }
 

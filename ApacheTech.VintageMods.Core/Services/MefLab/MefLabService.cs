@@ -6,8 +6,12 @@ using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.MefLab
 {
@@ -15,7 +19,7 @@ namespace ApacheTech.VintageMods.Core.Services.MefLab
     ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
     /// </summary>
     [RegisteredService(ServiceLifetime.Transient, typeof(IMefLabService))]
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType]
     public class MefLabService : IMefLabService
     {
         private readonly AggregateCatalog _catalogue;

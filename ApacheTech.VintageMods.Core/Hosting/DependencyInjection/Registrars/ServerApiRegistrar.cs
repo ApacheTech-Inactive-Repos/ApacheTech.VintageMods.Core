@@ -1,6 +1,5 @@
 ﻿using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Common;
 
@@ -9,8 +8,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars
     /// <summary>
     ///     Handles registration of the Game's API within the server-side IOC Container.
     /// </summary>
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    internal sealed class ServerApiRegistrar
+    [DoNotPruneType]
+    internal static class ServerApiRegistrar
     {
         /// <summary>
         ///     Registers the Game's API within the server-side IOC Container.

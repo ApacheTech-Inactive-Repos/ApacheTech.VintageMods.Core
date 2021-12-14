@@ -1,13 +1,17 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+
+// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Represents a binary (ProtoBuf) file on the filesystem.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IBinaryModFile : IModFile
     {
         /// <summary>

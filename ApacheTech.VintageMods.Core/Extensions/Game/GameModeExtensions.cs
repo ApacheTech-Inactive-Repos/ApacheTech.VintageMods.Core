@@ -1,9 +1,12 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
+﻿using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class GameModeExtensions
     {
         /// <summary>

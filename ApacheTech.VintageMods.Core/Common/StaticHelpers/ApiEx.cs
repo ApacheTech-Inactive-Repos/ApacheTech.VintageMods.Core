@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
-using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
@@ -10,12 +9,16 @@ using Vintagestory.Server;
 
 // AppSide Anywhere - Code by: Novocain1
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
+
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     /// <summary>
     ///     Global access to game's sided APIs. 
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ApiEx
     {
         /// <summary>

@@ -1,12 +1,16 @@
 ﻿using System;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Hosting.Configuration.Extensions
 {
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType]
     public static class FileSystemServiceExtensions
     {
         /// <summary>

@@ -5,18 +5,21 @@ using System.Linq;
 using System.Threading;
 using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.VintageMods.Core.Common.InternalSystems;
-using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.Client.NoObf;
 
 // ReSharper disable StringLiteralTypo
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
+
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game.Threading
 {
     /// <summary>
     ///     Provides methods for injecting ClientSystems into the game.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ClientThreadInjectionExtensions
     {
         private static readonly Type ClientThread;
@@ -42,7 +45,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game.Threading
             api.Event.LevelFinalize += () =>
             {
                 if (!api.IsClientSystemLoaded<ClientSystemAsyncActions>())
-                    api.InjectClientThread("AsyncActions", new ClientSystemAsyncActions(api.World as ClientMain));
+                    api.InjectClientThread("AsyncActions", new ClientSystemAsyncActions((ClientMain)api.World));
             };
         }
 

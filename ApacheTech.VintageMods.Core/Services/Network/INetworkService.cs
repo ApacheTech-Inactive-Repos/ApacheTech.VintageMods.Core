@@ -1,13 +1,16 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
+﻿using Vintagestory.API.Client;
 using Vintagestory.API.Server;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.Network
 {
     /// <summary>
     ///     Provides narrowed scope access to network channels within the game.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface INetworkService
     {
         /// <summary>

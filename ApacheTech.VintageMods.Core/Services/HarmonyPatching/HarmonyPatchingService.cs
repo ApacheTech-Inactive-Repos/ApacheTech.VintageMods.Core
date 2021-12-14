@@ -7,9 +7,13 @@ using ApacheTech.Common.Extensions.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
 using HarmonyLib;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
 {
@@ -20,7 +24,7 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
     ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
     ///     be processed at launch. Manual patches can be processed later on at runtime.
     /// </remarks>
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType]
     [RegisteredService(ServiceLifetime.Singleton, typeof(IHarmonyPatchingService))]
     internal class HarmonyPatchingService : IHarmonyPatchingService, IDisposable
     {

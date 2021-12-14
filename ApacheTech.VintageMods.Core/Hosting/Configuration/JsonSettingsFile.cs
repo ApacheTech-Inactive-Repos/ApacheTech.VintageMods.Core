@@ -1,13 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
-using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.Abstractions;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SmartAssembly.Attributes;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Hosting.Configuration
 {
@@ -15,7 +18,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
     ///     Represents a settings file for the mod, in JSON format.
     /// </summary>
     /// <seealso cref="IJsonSettingsFile" />
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType]
     public class JsonSettingsFile : IJsonSettingsFile
     {
         private readonly IJsonModFile _file;
@@ -53,15 +56,10 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
 
         private void OnPropertyChanged<T>(FeatureSettingsChangedEventArgs<T> args)
         {
-            ApiEx.Current.Logger.Audit("T1");
             var json = _file.ParseAs<JObject>();
-            ApiEx.Current.Logger.Audit("T2");
             var featureObj = json.SelectToken($"$.Features.{args.FeatureName}");
-            ApiEx.Current.Logger.Audit("T3");
             featureObj.Replace(JToken.FromObject(args.FeatureSettings));
-            ApiEx.Current.Logger.Audit("T4");
             _file.SaveFrom(json.ToString(Formatting.Indented));
-            ApiEx.Current.Logger.Audit("T5");
         }
     }
 }

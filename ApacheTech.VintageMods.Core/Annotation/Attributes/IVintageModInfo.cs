@@ -1,11 +1,15 @@
-﻿using JetBrains.Annotations;
+﻿using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Annotation.Attributes
 {
     /// <summary>
     ///     Contains the metadata shared between VintageMods mods.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IVintageModInfo
     {
         /// <summary>
@@ -37,5 +41,11 @@ namespace ApacheTech.VintageMods.Core.Annotation.Attributes
         /// </summary>
         /// <value>The network version.</value>
         public string NetworkVersion { get; }
+
+        /// <summary>
+        ///     Gets or sets the app side that the mod will run on.
+        /// </summary>
+        /// <value>The app side to run the mod on.</value>
+        public EnumAppSide Side { get; }
     }
 }

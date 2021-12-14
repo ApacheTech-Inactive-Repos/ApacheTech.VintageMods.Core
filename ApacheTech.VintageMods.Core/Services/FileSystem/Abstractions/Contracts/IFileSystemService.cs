@@ -1,12 +1,17 @@
 ﻿using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
-using JetBrains.Annotations;
+
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IFileSystemService
     {
         /// <summary>

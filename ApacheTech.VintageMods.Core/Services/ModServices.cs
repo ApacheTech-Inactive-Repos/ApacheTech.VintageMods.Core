@@ -1,12 +1,17 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
+﻿using System;
+using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
 using ApacheTech.VintageMods.Core.Services.MefLab;
 using ApacheTech.VintageMods.Core.Services.Network;
-using JetBrains.Annotations;
 using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services
 {
@@ -23,7 +28,6 @@ namespace ApacheTech.VintageMods.Core.Services
     ///     used them anywhere they are needed, in lieu of being able to pass it in through
     ///     an importing constructor.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ModServices
     {
         /// <summary>
@@ -81,6 +85,13 @@ namespace ApacheTech.VintageMods.Core.Services
         ///     Gets the IOC Resolver for the current app-side.
         /// </summary>
         /// <value>The IOC Resolver for the current app-side.</value>
-        public static IServiceResolver IOC => ApiEx.Side.IsClient() ? ClientIOC : ServerIOC;
+        public static IServiceResolver IOC =>
+            ApiEx.ModInfo.Side switch
+            {
+                EnumAppSide.Server => ServerIOC,
+                EnumAppSide.Client => ClientIOC,
+                EnumAppSide.Universal => ApiEx.Side.IsClient() ? ClientIOC : ServerIOC,
+                _ => throw new ArgumentOutOfRangeException()
+            };
     }
 }

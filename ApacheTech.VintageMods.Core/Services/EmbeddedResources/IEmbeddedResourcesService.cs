@@ -1,13 +1,17 @@
 ﻿using System.IO;
 using System.Reflection;
-using JetBrains.Annotations;
+
+// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
 {
     /// <summary>
     ///     Provides a means for interacting with embedded resources within mod assemblies.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IEmbeddedResourcesService
     {
         /// <summary>

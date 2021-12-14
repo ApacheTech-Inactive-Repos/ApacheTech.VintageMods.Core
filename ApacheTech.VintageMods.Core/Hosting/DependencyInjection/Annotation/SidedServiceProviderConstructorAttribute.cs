@@ -1,8 +1,12 @@
 ﻿using System;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Abstractions.Contracts;
-using JetBrains.Annotations;
 using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation
 {
@@ -11,7 +15,6 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation
     /// </summary>
     // Token: 0x02000019 RID: 25
     [AttributeUsage(AttributeTargets.Constructor)]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class SidedServiceProviderConstructorAttribute : ServiceProviderConstructorAttribute, IApiSided
     {
         /// <summary>

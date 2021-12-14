@@ -1,6 +1,11 @@
 ﻿using System;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
+using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Annotation.Attributes
 {
@@ -9,7 +14,6 @@ namespace ApacheTech.VintageMods.Core.Annotation.Attributes
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Assembly)]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [DoNotPruneType, DoNotPrune]
     [DoNotObfuscateType, DoNotObfuscate, DoNotObfuscateControlFlow]
     public sealed class VintageModInfoAttribute : Attribute, IVintageModInfo
@@ -43,5 +47,11 @@ namespace ApacheTech.VintageMods.Core.Annotation.Attributes
         /// </summary>
         /// <value>The network version.</value>
         public string NetworkVersion { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the app side that the mod will run on.
+        /// </summary>
+        /// <value>The app side to run the mod on.</value>
+        public EnumAppSide Side { get; set; }
     }
 }

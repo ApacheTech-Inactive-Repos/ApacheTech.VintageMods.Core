@@ -1,14 +1,15 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
     /// <summary>
     ///     Extension methods for when working with entities.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class EntityExtensions
     {
         /// <summary>

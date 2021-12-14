@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Abstractions.Enum
 {
@@ -12,7 +16,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Enum
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IEquatable{T}" />
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class StringEnum<T> : IEquatable<T> where T : StringEnum<T>, new()
     {
         /// <summary>

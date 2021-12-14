@@ -6,14 +6,17 @@ using System.Runtime.ExceptionServices;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.Extensions.Reflection;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
 {
     /// <summary>
     ///     Helper code for the various activator services.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ActivatorEx
     {
         private static readonly MethodInfo GetServiceInfo =

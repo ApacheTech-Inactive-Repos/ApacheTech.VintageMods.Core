@@ -1,15 +1,18 @@
 ﻿using System.Linq;
 using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.GameContent;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
     /// <summary>
     ///     Extension Methods for the World Map Manager.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class WorldMapManagerExtensions
     {
         /// <summary>
@@ -18,7 +21,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
         public static WaypointMapLayer WaypointMapLayer(this WorldMapManager mapManager)
         {
-            return mapManager.MapLayers.OfType<WaypointMapLayer>().FirstOrDefault();
+            return mapManager.MapLayers.OfType<WaypointMapLayer>().First();
         }
 
         /// <summary>

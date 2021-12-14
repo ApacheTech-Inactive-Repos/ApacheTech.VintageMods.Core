@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Libraries.Maths.Interpolation
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers | ImplicitUseTargetFlags.WithInheritors)]
     public abstract class InterpolationBase : IInterpolator
     {
         protected readonly Dictionary<double, double> Points = new();

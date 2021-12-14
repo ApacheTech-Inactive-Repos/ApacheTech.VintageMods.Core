@@ -3,11 +3,15 @@ using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Extensions.Game;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.Network
 {
@@ -21,11 +25,11 @@ namespace ApacheTech.VintageMods.Core.Services.Network
     /// </remarks>
     /// <seealso cref="INetworkService" />
     [RegisteredService(ServiceLifetime.Singleton, typeof(INetworkService))]
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType]
     internal class NetworkService : INetworkService
     {
-        [CanBeNull] private readonly ICoreClientAPI _capi;
-        [CanBeNull] private readonly ICoreServerAPI _sapi;
+        private readonly ICoreClientAPI _capi;
+        private readonly ICoreServerAPI _sapi;
         private readonly string _modId;
 
         /// <summary>

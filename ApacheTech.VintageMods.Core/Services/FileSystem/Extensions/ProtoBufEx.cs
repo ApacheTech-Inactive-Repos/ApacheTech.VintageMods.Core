@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
 using ProtoBuf;
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Extensions
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ProtoBufEx
     {
         /// <summary>

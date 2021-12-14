@@ -4,14 +4,16 @@ using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.Extensions.System;
 using HarmonyLib;
-using JetBrains.Annotations;
+
+// ReSharper disable UnusedType.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     /// <summary>
     ///     Direct access to the game's vanilla assemblies.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class GameAssemblies
     {
         /// <summary>

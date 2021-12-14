@@ -1,14 +1,19 @@
 ﻿using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Reflection;
-using JetBrains.Annotations;
+
+// ReSharper disable UnusedMemberInSuper.Global
+// ReSharper disable UnusedMethodReturnValue.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.MefLab
 {
     /// <summary>
     ///     Provides methods for resolving dependencies, through the Managed Extensibility Framework (MEF).
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IMefLabService
     {
         /// <summary>

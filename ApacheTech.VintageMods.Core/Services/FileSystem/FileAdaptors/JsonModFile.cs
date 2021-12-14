@@ -5,9 +5,13 @@ using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Extensions;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Vintagestory.API.Datastructures;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
 {
@@ -15,7 +19,6 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
     ///     Represents a JSON file, used by the mod. This class cannot be inherited.
     /// </summary>
     /// <seealso cref="ModFile" />
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class JsonModFile : ModFile, IJsonModFile
     {
         /// <summary>

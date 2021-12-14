@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class CrossPlatform
     {
         /// <summary>

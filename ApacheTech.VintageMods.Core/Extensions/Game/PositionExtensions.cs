@@ -1,10 +1,8 @@
 ﻿using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using JetBrains.Annotations;
 using Vintagestory.API.MathTools;
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class PositionExtensions
     {
         /// <summary>

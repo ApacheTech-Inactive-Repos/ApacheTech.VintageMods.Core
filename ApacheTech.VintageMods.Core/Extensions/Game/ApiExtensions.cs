@@ -1,16 +1,18 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
+﻿using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
+
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ApiExtensions
     {
-
         #region Client
 
         public static ClientMain AsClientMain(this ICoreClientAPI api)
@@ -24,7 +26,6 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         }
 
         #endregion
-
 
         #region Server
 
@@ -46,10 +47,9 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         ///     Gets the world seed.
         /// </summary>
         /// <param name="api">The core game API.</param>
-        [CanBeNull]
         public static string GetSeed(this ICoreAPI api)
         {
-            return api?.World?.Seed.ToString();
+            return api.World?.Seed.ToString();
         }
 
         /// <summary>

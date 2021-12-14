@@ -6,7 +6,11 @@ using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Extensions;
-using JetBrains.Annotations;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
 {
@@ -15,7 +19,6 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
     /// </summary>
     /// <seealso cref="ModFile" />
     /// <seealso cref="IBinaryModFile" />
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class BinaryModFile : ModFile, IBinaryModFile
     {
         /// <summary>

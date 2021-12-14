@@ -1,5 +1,9 @@
-﻿using JetBrains.Annotations;
-using ProtoBuf;
+﻿using ProtoBuf;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.Network.Packets
 {
@@ -7,6 +11,5 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Packets
     ///     Represents a generic signalling packet, used to raise an event for a change of state.
     /// </summary>
     [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public readonly ref struct SignalPacket { }
 }

@@ -6,9 +6,13 @@ using System.Text;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using JetBrains.Annotations;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Util;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
 {
@@ -17,7 +21,7 @@ namespace ApacheTech.VintageMods.Core.Services.EmbeddedResources
     /// </summary>
     /// <seealso cref="IEmbeddedResourcesService" />
     [RegisteredService(ServiceLifetime.Singleton, typeof(IEmbeddedResourcesService))]
-    [DoNotPruneType, UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [DoNotPruneType]
     internal class EmbeddedResourcesService : IEmbeddedResourcesService
     {
         /// <summary>

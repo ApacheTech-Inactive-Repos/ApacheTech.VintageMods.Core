@@ -5,18 +5,21 @@ using System.Linq;
 using System.Threading;
 using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.VintageMods.Core.Common.InternalSystems;
-using JetBrains.Annotations;
 using Vintagestory.API.Server;
 using Vintagestory.Server;
 
 // ReSharper disable StringLiteralTypo
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
+
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game.Threading
 {
     /// <summary>
     ///     Provides methods for injecting ServerSystems into the game.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ServerThreadInjectionExtensions
     {
         private static readonly Type ServerThread;
@@ -42,7 +45,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game.Threading
             api.Event.SaveGameLoaded += () =>
             {
                 if (!api.IsServerSystemLoaded<ServerSystemAsyncActions>())
-                    api.InjectServerThread("AsyncActions", new ServerSystemAsyncActions(api.World as ServerMain));
+                    api.InjectServerThread("AsyncActions", new ServerSystemAsyncActions((ServerMain)api.World));
             };
         }
 

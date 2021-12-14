@@ -6,15 +6,18 @@ using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Services;
 using HarmonyLib;
-using JetBrains.Annotations;
 using Vintagestory.API.Common;
 using Vintagestory.Common;
 
 // ReSharper disable InconsistentNaming
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
+
 
 namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.HarmonyPatches
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class ModContainerPatches
     {
         [HarmonyPrefix]

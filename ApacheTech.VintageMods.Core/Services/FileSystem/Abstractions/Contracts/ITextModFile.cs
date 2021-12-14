@@ -1,12 +1,15 @@
-﻿using JetBrains.Annotations;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Represents a Text file on the filesystem.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface ITextModFile : IModFileBase
     {
         /// <summary>

@@ -4,7 +4,6 @@ using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
-using JetBrains.Annotations;
 using Vintagestory.API.Common;
 
 // ReSharper disable UnusedMember.Global
@@ -38,7 +37,6 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
         /// -or-
         /// 
         /// <see langword="null" /> if no object of type <paramref name="serviceType" /> can be instantiated from the service collection.</returns>
-        [CanBeNull]
         public static object CreateSidedInstance(this IServiceResolver provider, Type serviceType, params object[] args)
         {
             return ActivatorEx.CreateInstance(provider as IServiceProvider, serviceType, args);

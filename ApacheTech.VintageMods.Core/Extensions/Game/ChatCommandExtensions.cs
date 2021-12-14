@@ -1,12 +1,14 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
+﻿using Vintagestory.API.Common;
+
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ChatCommandExtensions
     {
-
         /// <summary>
         ///     Returns all remaining arguments as single merged string, concatenated with spaces.
         /// </summary>

@@ -3,7 +3,7 @@ using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
-using ApacheTech.VintageMods.Core.Services.HarmonyPatching;
+using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Abstractions;
 using ApacheTech.VintageMods.Core.Services.MefLab;
 using ApacheTech.VintageMods.Core.Services.Network;
 using Vintagestory.API.Common;

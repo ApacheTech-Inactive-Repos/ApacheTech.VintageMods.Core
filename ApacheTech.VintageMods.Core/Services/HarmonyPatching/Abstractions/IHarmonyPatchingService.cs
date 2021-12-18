@@ -1,4 +1,4 @@
-﻿namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
+﻿namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching.Abstractions
 {
     /// <summary>
     ///     Provides methods of applying Harmony patches to the game.

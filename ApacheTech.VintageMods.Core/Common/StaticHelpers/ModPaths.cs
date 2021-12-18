@@ -86,15 +86,14 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             if (scope is not FileScope.Local) return Path.Combine(directory, fileName);
             if (File.Exists(directory)) return Path.Combine(directory, fileName);
 
-            var files = Directory.GetFiles(ModPaths.ModRootPath, fileName, SearchOption.AllDirectories);
+            var files = Directory.GetFiles(ModRootPath, fileName, SearchOption.AllDirectories);
             return files.Length switch
             {
                 1 => files[0],
                 < 1 => throw new FileNotFoundException(
-                    // TODO: Move to lang file.
-                    Lang.Get("Local file, `{0}`, does not exist within the mod folder.", fileName)),
+                    Lang.Get("vmods:exceptions.local-file-does-not-exist", fileName)),
                 > 1 => throw new FileLoadException(
-                    Lang.Get("Local file, `{0}`, is duplicated within the mod folder.", fileName))
+                    Lang.Get("vmods:exceptions.local-file-duplicated", fileName))
             };
         }
     }

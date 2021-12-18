@@ -45,9 +45,19 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
         public T Feature<T>(string featureName) where T: class, new()
         {
             var json = _file.ParseAs<JObject>();
-            var featureObj = json
-                .SelectToken($"$.Features.{featureName}")
-                .ToObject<T>();
+            T featureObj;
+            try
+            {
+                featureObj = json
+                    .SelectToken($"$.Features.{featureName}")
+                    .ToObject<T>();
+            }
+            catch
+            {
+                featureObj = new T();
+                var args = new FeatureSettingsChangedEventArgs<T>(featureName, featureObj);
+                OnPropertyChanged(args);
+            }
             
             var observer = ObservableFeature<T>.Bind(featureName, featureObj);
             observer.PropertyChanged += OnPropertyChanged;

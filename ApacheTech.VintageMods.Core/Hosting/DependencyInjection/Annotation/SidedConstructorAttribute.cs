@@ -15,7 +15,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation
     /// </summary>
     // Token: 0x02000019 RID: 25
     [AttributeUsage(AttributeTargets.Constructor)]
-    public class SidedServiceProviderConstructorAttribute : ServiceProviderConstructorAttribute, IApiSided
+    public class SidedConstructorAttribute : ServiceProviderConstructorAttribute, IApiSided
     {
         /// <summary>
         ///     The app-side that this instance was instantiated on.
@@ -24,17 +24,17 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation
         public EnumAppSide Side { get; }
 
         /// <summary>
-        /// 	Initialises a new instance of the <see cref="SidedServiceProviderConstructorAttribute"/> class.
+        /// 	Initialises a new instance of the <see cref="SidedConstructorAttribute"/> class.
         /// </summary>
-        public SidedServiceProviderConstructorAttribute() : this(EnumAppSide.Universal)
+        public SidedConstructorAttribute() : this(EnumAppSide.Universal)
         {
         }
 
         /// <summary>
-        /// 	Initialises a new instance of the <see cref="SidedServiceProviderConstructorAttribute"/> class.
+        /// 	Initialises a new instance of the <see cref="SidedConstructorAttribute"/> class.
         /// </summary>
         /// <param name="side">The side.</param>
-        public SidedServiceProviderConstructorAttribute(EnumAppSide side)
+        public SidedConstructorAttribute(EnumAppSide side)
         {
             Side = side;
         }

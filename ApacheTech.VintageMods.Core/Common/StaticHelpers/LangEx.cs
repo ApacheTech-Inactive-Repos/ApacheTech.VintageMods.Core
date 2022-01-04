@@ -59,5 +59,29 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             return Lang.Get($"vmods:datetime-days-abbr-{dateTime.Month}");
         }
+
+        /// <summary>
+        ///     Returns a localised string.
+        /// </summary>
+        /// <param name="featureName">The name of the feature.</param>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <param name="args">The arguments to pass to the lang file.</param>
+        /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
+        public static string FeatureString(string featureName, string path, params object[] args)
+        {
+            return Lang.Get(FeatureCode(featureName, path), args);
+        }
+
+        /// <summary>
+        ///     Returns a localised string.
+        /// </summary>
+        /// <param name="featureName">The name of the feature.</param>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
+        public static string FeatureCode(string featureName, string path)
+        {
+            return $"{ApiEx.ModInfo.ModId}:Features.{featureName}.{path}";
+        }
+
     }
 }

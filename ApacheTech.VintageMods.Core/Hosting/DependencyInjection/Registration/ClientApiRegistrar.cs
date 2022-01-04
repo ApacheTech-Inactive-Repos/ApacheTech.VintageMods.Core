@@ -8,7 +8,7 @@ using Vintagestory.API.Common;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedType.Global
 
-namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars
+namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration
 {
     /// <summary>
     ///     Handles registration of the Game's API within the client-side IOC Container.

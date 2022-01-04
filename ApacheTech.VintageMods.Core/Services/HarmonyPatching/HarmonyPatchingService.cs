@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
@@ -61,32 +62,12 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         /// <param name="assembly">The assembly that hold the annotated patch classes to process.</param>
         private void PatchAll(Harmony instance, Assembly assembly)
         {
-            // Assume all vanilla patched classes are universal... for backwards compatibility.
-            //
-            // ROADMAP: This should be obsolete by the time all mods have been migrated over to Core-v2.
-            //          It is planned that by convention, only `HarmonySidedPatchAttribute`s will be used
-            //          from now on, with this custom patching method being applied wherever it is needed.
-            //
-            //          This will mean a far more robust Harmony Wrapper will be needed for the VintageMods
-            //          Core, that limits access to the underlying Harmony instance. That should be the 
-            //          purpose of this service, as we move forwards. This will save any confusion, and also
-            //          solve the problem of a lack of documentation from Harmony, as I will add my own XML
-            //          Documentation to each accessible method that a mod could use.
-            //
-            //          It's possible that this could also be shipped separately as a Nuget Package, and
-            //          made available to the modding community as a wrapper for their own mods.
-            var vanillaPatches = assembly.GetTypesWithAttribute<HarmonyPatch>();
-            foreach (var patch in vanillaPatches)
-            {
-                instance.CreateClassProcessor(patch.Type).Patch();
-            }
-
             var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
             foreach (var (type, attribute) in sidedPatches)
             {
                 if (attribute.Side is EnumAppSide.Universal || attribute.Side == _api.Side)
                 {
-                    instance.CreateClassProcessor(type).Patch();
+                    instance.CreateClassProcessor(type).Patch();        
                 }
             }
         }
@@ -121,8 +102,10 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
             {
                 var harmony = CreateOrUseInstance(assembly.FullName);
                 PatchAll(harmony, assembly);
+                var patches = harmony.GetPatchedMethods().ToList();
+                if (!patches.Any()) return;
                 _api.Logger.Notification($"\t{assembly.GetName()} - Patched Methods:");
-                foreach (var method in harmony.GetPatchedMethods())
+                foreach (var method in patches)
                 {
                     _api.Logger.Notification($"\t\t{method.FullDescription()}");
                 }

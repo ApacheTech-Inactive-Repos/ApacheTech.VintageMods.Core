@@ -3,7 +3,7 @@ using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars
+namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration
 {
     /// <summary>
     ///     Handles registration of the Game's API within the server-side IOC Container.

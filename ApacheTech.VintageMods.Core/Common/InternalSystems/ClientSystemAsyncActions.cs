@@ -12,7 +12,7 @@ namespace ApacheTech.VintageMods.Core.Common.InternalSystems
     ///     An internal system that is injected into the game, on the client.
     /// </summary>
     /// <seealso cref="ClientSystem" />
-    public class ClientSystemAsyncActions : ClientSystem
+    public class ClientSystemAsyncActions : ClientSystem, IAsyncActions
     {
         private readonly ClientMain _game;
 
@@ -60,6 +60,14 @@ namespace ApacheTech.VintageMods.Core.Common.InternalSystems
         public void Dispose(ICoreClientAPI capi)
         {
             Dispose(capi.World as ClientMain);
+        }
+
+        /// <summary>
+        ///     Disposes this instance.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(_game);
         }
 
         /// <summary>

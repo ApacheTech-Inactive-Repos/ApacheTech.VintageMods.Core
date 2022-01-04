@@ -1,5 +1,4 @@
-﻿using System;
-using ApacheTech.Common.DependencyInjection.Abstractions;
+﻿using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Hosting;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
@@ -85,13 +84,6 @@ namespace ApacheTech.VintageMods.Core.Services
         ///     Gets the IOC Resolver for the current app-side.
         /// </summary>
         /// <value>The IOC Resolver for the current app-side.</value>
-        public static IServiceResolver IOC =>
-            ApiEx.ModInfo.Side switch
-            {
-                EnumAppSide.Server => ServerIOC,
-                EnumAppSide.Client => ClientIOC,
-                EnumAppSide.Universal => ApiEx.Side.IsClient() ? ClientIOC : ServerIOC,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+        public static IServiceResolver IOC => ApiEx.OneOf(ClientIOC, ServerIOC);
     }
 }

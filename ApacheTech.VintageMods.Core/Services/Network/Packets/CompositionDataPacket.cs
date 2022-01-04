@@ -12,5 +12,9 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Packets
     ///     Represents a network packet used for MEF composition.
     /// </summary>
     [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
-    public record CompositionDataPacket(string Contract, IEnumerable<byte> Data);
+    public class CompositionDataPacket
+    {
+        public string Contract { get; set; }
+        public IEnumerable<byte> Data { get; set; }
+    }
 }

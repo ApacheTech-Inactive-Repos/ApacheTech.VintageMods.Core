@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using ApacheTech.Common.Extensions.Harmony;
-using Newtonsoft.Json;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.ServerMods.NoObf;
@@ -12,6 +10,44 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
     /// </summary>
     public static class TavisExtensions
     {
+        private static int _dummyValue;
+
+        /// <summary>
+        /// 	Initialises static members of the <see cref="TavisExtensions"/> class.
+        /// </summary>
+        static TavisExtensions()
+        {
+            _dummyValue = 0;
+        }
+
+        /// <summary>
+        ///     Applies a single patch to a JSON file.
+        /// </summary>
+        /// <param name="api">The core API used by the game, on both the client, and the server.</param>
+        /// <param name="patch">The patch to apply.</param>
+        public static void ApplyJsonPatch(this ICoreAPI api, JsonPatch patch)
+        {
+            // Still using these awkward pass by reference dummy values.
+            // Ideally, the part of the method that actually adds the patch should be extracted.
+            var jsonPatcher = api.ModLoader.GetModSystem<ModJsonPatchLoader>();
+            jsonPatcher.ApplyPatch(0, patch.File, patch,
+                ref _dummyValue, ref _dummyValue, ref _dummyValue);
+        }
+
+        /// <summary>
+        ///     Applies a number of patches to the JSON assets of the game.
+        /// </summary>
+        /// <param name="api">The core API used by the game, on both the client, and the server.</param>
+        /// <param name="patches">The patches to apply.</param>
+        public static void ApplyJsonPatches(this ICoreAPI api, List<JsonPatch> patches)
+        {
+            var jsonPatcher = api.ModLoader.GetModSystem<ModJsonPatchLoader>();
+            foreach (var patch in patches)
+            {
+                jsonPatcher.ApplyPatch(patch);
+            }
+        }
+
         /// <summary>
         ///     Applies a single patch to a JSON file.
         /// </summary>
@@ -19,7 +55,9 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="patch">The patch to apply.</param>
         public static void ApplyPatch(this ModJsonPatchLoader jsonPatcher, JsonPatch patch)
         {
-            jsonPatcher.ApplyPatches(new List<JsonPatch> { patch });
+            // Still using these awkward pass by reference dummy values.
+            // Ideally, the part of the method that actually adds the patch should be extracted.
+            jsonPatcher.ApplyPatch(0, patch.File, patch, ref _dummyValue, ref _dummyValue, ref _dummyValue);
         }
 
         /// <summary>
@@ -29,13 +67,9 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="patches">The patches to apply.</param>
         public static void ApplyPatches(this ModJsonPatchLoader jsonPatcher, List<JsonPatch> patches)
         {
-            for (var i = 0; i < patches.Count; i++)
+            foreach (var patch in patches)
             {
-                var applied = 0;
-                var notFound = 0;
-                var errorCount = 0;
-                var patch = patches[i];
-                jsonPatcher.CallMethod("ApplyPatch", i, patch.File, patch, applied, notFound, errorCount);
+                jsonPatcher.ApplyPatch(patch);
             }
         }
 
@@ -49,15 +83,32 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             where TBlockBehaviour : BlockBehavior
         {
             api.RegisterBlockBehaviour<TBlockBehaviour>();
-            var value = new KeyValuePair<string, string>("name", nameof(TBlockBehaviour));
-            var json = JsonConvert.SerializeObject(value);
-            api.ModLoader.GetModSystem<ModJsonPatchLoader>().ApplyPatch(new JsonPatch
+            api.ApplyJsonPatch(new JsonPatch
             {
-                Op = EnumJsonPatchOp.Add,
+                Op = EnumJsonPatchOp.AddEach,
                 File = fileAsset,
                 Path = "/behaviors/-",
-                Value = JsonObject.FromJson(json)
+                Value = JsonObject.FromJson($"[{{ \"name\": \"{typeof(TBlockBehaviour).Name}\" }}]")
             });
         }
+
+            /// <summary>
+            ///     Registers a BlockEntityBehaviour with the API, and patches the JSON file to add the behaviour to the block.
+            /// </summary>
+            /// <typeparam name="TBehaviour">The type of <see cref="BlockEntityBehavior"/> to register.</typeparam>
+            /// <param name="api">The API to register the <see cref="BlockEntityBehavior"/> with.</param>
+            /// <param name="fileAsset">The file to patch.</param>
+            public static void PatchBlockEntityBehaviour<TBehaviour>(this ICoreAPI api, AssetLocation fileAsset)
+                where TBehaviour : BlockEntityBehavior
+            {
+                api.RegisterBlockEntityBehaviour<TBehaviour>();
+                api.ApplyJsonPatch(new JsonPatch
+                {
+                    Op = EnumJsonPatchOp.AddEach,
+                    File = fileAsset,
+                    Path = "/entityBehaviors",
+                    Value = JsonObject.FromJson($"[{{ \"name\": \"{typeof(TBehaviour).Name}\" }}]")
+                });
+            }
     }
 }

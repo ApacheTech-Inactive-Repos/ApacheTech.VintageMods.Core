@@ -13,7 +13,7 @@ namespace ApacheTech.VintageMods.Core.Common.InternalSystems
     ///     An internal system that is injected into the game, on the server.
     /// </summary>
     /// <seealso cref="ServerSystem" />
-    public class ServerSystemAsyncActions : ServerSystem
+    public class ServerSystemAsyncActions : ServerSystem, IAsyncActions
     {
         private readonly ServerMain _game;
 

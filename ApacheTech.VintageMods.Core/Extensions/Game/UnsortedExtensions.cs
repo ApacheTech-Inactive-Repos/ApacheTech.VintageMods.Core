@@ -8,6 +8,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
+using Vintagestory.Common;
 using Vintagestory.Server;
 
 // ReSharper disable UnusedMember.Global
@@ -17,8 +18,15 @@ using Vintagestory.Server;
 
 namespace ApacheTech.VintageMods.Core.Extensions.Game
 {
+    // TODO: This is a mess.
     public static class UnsortedExtensions
     {
+
+        public static ModSystem GetModSystem(this ModLoader modLoader, Type type)
+        {
+            return modLoader.Systems.FirstOrDefault(p => p.GetType() == type);
+        }
+
         public static void SendMessage(this IServerPlayer player, string message)
         {
             player.SendMessage(GlobalConstants.CurrentChatGroup, message, EnumChatType.Notification);
@@ -42,12 +50,19 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             }
         }
 
+        public static void RegisterDelayedCallback(this ICoreAPI api, Action<float> onDelayedCallbackTick, int millisecondInterval)
+        {
+            api.Event.EnqueueMainThreadTask(() =>
+            {
+                api.Event.RegisterCallback(onDelayedCallbackTick, millisecondInterval);
+            }, "");
+        }
+
         public static Vec2f ClientWindowSize(this ICoreClientAPI capi)
         {
             var platform = capi.AsClientMain().GetField<ClientPlatformWindows>("Platform");
             return new Vec2f(platform.window.Width, platform.window.Height);
         }
-
 
         public static object GetVanillaClientSystem(this ICoreClientAPI api, string name)
         {
@@ -149,6 +164,32 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             float horRange, float vertRange) where TBlockEntity : BlockEntity
         {
             return world.GetNearestBlockEntity<TBlockEntity>(pos, horRange, vertRange, _ => true);
+        }
+
+        public static TBlock GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos pos,
+            float horRange, float vertRange, Vintagestory.API.Common.Func<TBlock, bool> predicate, out BlockPos blockPosOut) where TBlock : Block
+        {
+            TBlock blockEntity = null;
+            BlockPos blockPosTemp = null;
+            var found = false;
+            var minPos = pos.AddCopy(-horRange, -vertRange, -horRange);
+            var maxPos = pos.AddCopy(horRange, vertRange, horRange);
+            world.BlockAccessor.WalkBlocks(minPos, maxPos, (block, blockPos) =>
+            {
+                if (found) return;
+                if (block.GetType() != typeof(TBlock) || !predicate((TBlock)block)) return;
+                blockEntity = (TBlock)block;
+                blockPosTemp = blockPos.DeepClone();
+                found = true;
+            }, true);
+            blockPosOut = blockPosTemp;
+            return blockEntity;
+        }
+
+        public static TBlock GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos pos,
+            float horRange, float vertRange, out BlockPos blockPosOut) where TBlock : Block
+        {
+            return world.GetNearestBlock<TBlock>(pos, horRange, vertRange, _ => true, out blockPosOut);
         }
 
         public static bool InRangeCubic(this BlockPos pos, BlockPos relativeToBlock, int horizontalRadius = 10,

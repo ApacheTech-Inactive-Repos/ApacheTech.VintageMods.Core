@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 
 // ReSharper disable UnusedMemberInSuper.Global
@@ -93,5 +95,15 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions
         /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
         /// <param name="collection">The collection of the objects to save to a single file.</param>
         public abstract void SaveFrom<TModel>(IEnumerable<TModel> collection) where TModel : class, new();
+
+        /// <summary>
+        ///     Disembeds the file from a specific assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly to disembed the file from.</param>
+        public void DisembedFrom(Assembly assembly)
+        {
+            var service = ModServices.IOC.Resolve<IEmbeddedResourcesService>();
+            service.DisembedResource(assembly, ModFileInfo.Name, ModFileInfo.FullName);
+        }
     }
 }

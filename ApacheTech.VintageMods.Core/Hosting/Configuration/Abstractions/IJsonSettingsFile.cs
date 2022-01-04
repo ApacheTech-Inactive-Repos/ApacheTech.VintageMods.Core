@@ -15,5 +15,13 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.Abstractions
         /// <param name="featureName">The name of the feature.</param>
         /// <returns>An object, that represents the settings for a given mod feature.</returns>
         public T Feature<T>(string featureName) where T : class, new();
+
+        /// <summary>
+        ///     Saves the specified settings to file.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
+        /// <param name="featureName">The name of the feature.</param>
+        /// <param name="settings">The settings.</param>
+        public void Save<T>(string featureName, T settings);
     }
 }

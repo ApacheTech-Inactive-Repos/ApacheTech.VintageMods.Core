@@ -77,6 +77,17 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection
         }
 
         /// <summary>
+        ///     Creates an instance of a specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of instance to create.</typeparam>
+        /// <param name="args">The arguments to pass to the constructor.</param>
+        /// <returns>T.</returns>
+        public static T CreateInstance<T>(params object[] args)
+        {
+            return (T)Activator.CreateInstance(typeof(T), args: args);
+        }
+
+        /// <summary>
         /// Create a delegate that will instantiate a type with constructor arguments provided directly
         /// and/or from an <see cref="IServiceProvider"/>.
         /// </summary>

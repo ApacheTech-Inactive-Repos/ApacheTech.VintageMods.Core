@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 // ReSharper disable UnusedMemberInSuper.Global
@@ -73,5 +74,11 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
         /// <param name="collection">The collection of the objects to save to a single file.</param>
         public Task SaveFromAsync<TModel>(IEnumerable<TModel> collection) 
             where TModel : class, new();
+
+        /// <summary>
+        ///     Disembeds the file from a specific assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly to disembed the file from.</param>
+        public void DisembedFrom(Assembly assembly);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
@@ -6,13 +8,16 @@ using ApacheTech.Common.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Abstractions.ModSystems;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registrars;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
+using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration;
 using ApacheTech.VintageMods.Core.Services;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
+
+// ReSharper disable UnusedParameter.Global
 
 namespace ApacheTech.VintageMods.Core.Hosting
 {
@@ -34,6 +39,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
         {
             var assembly = AssemblyEx.ModAssembly = Assembly.GetAssembly(GetType());
             ApiEx.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
+
             StartPreUniversal();
         }
 
@@ -45,7 +51,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
             _services.Configure(ConfigureCoreModServices);
         }
 
-        private void ConfigureCoreModServices(IServiceCollection services)
+        private static void ConfigureCoreModServices(IServiceCollection services)
         {
             services.RegisterSingleton(ApiEx.ModInfo);
             services.RegisterAnnotatedServicesFromAssembly(AssemblyEx.GetCoreAssembly());
@@ -55,27 +61,46 @@ namespace ApacheTech.VintageMods.Core.Hosting
 
         #region Server Configuration
 
+        /// <summary>
+        ///     Gets a list of all client-side features within the mod that need registration.
+        /// </summary>
+        private List<IServerServiceRegistrar> ServerFeatures { get; set; }
+
         private void BuildServerHost(ICoreServerAPI sapi)
         {
             //  1. Set ApiEx endpoints.
             ApiEx.Server = sapi;
             ApiEx.ServerMain = (ServerMain)sapi.World;
 
+            ServerFeatures = (AssemblyEx.GetModAssembly()
+                .GetTypes()
+                .Where(p => typeof(IServerServiceRegistrar).IsAssignableFrom(p) && !p.IsAbstract)
+                .Select(p => (IServerServiceRegistrar)Activator.CreateInstance(p))).ToList();
+            
             //  2. Configure game API services.
             _services.Configure(ServerApiRegistrar.RegisterServerApiEndpoints);
 
-            //  3. Delegate mod service configuration to derived class.
+            //  3. Register all ModSystems within the mod. Will also self-reference this ModHost. 
+            _services.RegisterModSystems();
+
+            //  4. Delegate mod service configuration to derived class.
             _services.Configure(ConfigureServerModServices);
 
-            //  4. Build IOC Container.
+            //  5. Register all features that need registering. 
+            ServerFeatures.ForEach(p => p.ConfigureServerModServices(_services));
+
+            //  6. Build IOC Container.
             ModServices.ServerIOC = _services.Build();
 
             // ONLY NOW ARE SERVICES AVAILABLE
 
-            // 5. Delegate mod PreStart to derived class.
+            //  7. Delegate mod PreStart to derived class.
             StartPreServerSide(sapi);
-        }
 
+            //  8. Delegate PreStart to features.
+            ServerFeatures.ForEach(p => p.StartPreServerSide(sapi));
+        }
+        
         /// <summary>
         ///     Configures any services that need to be added to the IO Container, on the server side.
         /// </summary>
@@ -91,25 +116,47 @@ namespace ApacheTech.VintageMods.Core.Hosting
 
         #region Client Configuration
 
+        /// <summary>
+        ///     Gets a list of all client-side features within the mod that need registration.
+        /// </summary>
+        private List<IClientServiceRegistrar> ClientFeatures { get; set; }
+            
+
         private void BuildClientHost(ICoreClientAPI capi)
         {
             //  1. Set ApiEx endpoints.
             ApiEx.Client = capi;
             ApiEx.ClientMain = (ClientMain)capi.World;
 
+            ClientFeatures = AssemblyEx
+                .GetModAssembly()
+                .GetTypes()
+                .Where(p => typeof(IClientServiceRegistrar).IsAssignableFrom(p) && !p.IsAbstract)
+                .Select(p => (IClientServiceRegistrar)Activator.CreateInstance(p))
+                .ToList();
+
             //  2. Configure game API services.
             _services.Configure(ClientApiRegistrar.RegisterClientApiEndpoints);
 
-            //  3. Delegate mod service configuration to derived class.
+            //  3. Register all ModSystems within the mod. Will also self-reference this ModHost. 
+            _services.RegisterModSystems();
+
+            //  4. Delegate mod service configuration to derived class.
             _services.Configure(ConfigureClientModServices);
 
-            //  4. Build IOC Container.
+            //  5. Register all features that need registering. 
+            ClientFeatures.ForEach(p => p.ConfigureClientModServices(_services));
+
+            //  6. Build IOC Container.
             ModServices.ClientIOC = _services.Build();
 
             // ONLY NOW ARE SERVICES AVAILABLE
 
-            // 5. Delegate mod PreStart to derived class.
+            //  7. Delegate mod PreStart to derived class.
             StartPreClientSide(capi);
+
+            //  8. Delegate PreStart to features.
+            ClientFeatures.ForEach(p => p.StartPreClientSide(capi));
         }
 
         /// <summary>
@@ -144,6 +191,31 @@ namespace ApacheTech.VintageMods.Core.Hosting
                     break;
                 case EnumAppSide.Client:
                     BuildClientHost(api as ICoreClientAPI);
+                    break;
+                case EnumAppSide.Universal:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
+        ///     Side agnostic Start method, called after all mods received a call to StartPre().
+        /// </summary>
+        /// <param name="api">
+        ///     Common API Components that are available on the server and the client.
+        ///     Cast to ICoreServerAPI or ICoreClientAPI to access side specific features.
+        /// </param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public override void Start(ICoreAPI api)
+        {
+            switch (api.Side)
+            {
+                case EnumAppSide.Server:
+                    ServerFeatures.ForEach(p => p.Start(api));
+                    break;
+                case EnumAppSide.Client:
+                    ClientFeatures.ForEach(p => p.Start(api));
                     break;
                 case EnumAppSide.Universal:
                     break;

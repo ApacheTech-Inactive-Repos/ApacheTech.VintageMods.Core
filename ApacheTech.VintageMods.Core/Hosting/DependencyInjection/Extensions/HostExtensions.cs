@@ -14,15 +14,15 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
     public static class HostExtensions
     {
         /// <summary>
-        ///     Determines whether a constructor is decorated with a <see cref="SidedServiceProviderConstructorAttribute"/> attribute that matched the current app-side.
+        ///     Determines whether a constructor is decorated with a <see cref="SidedConstructorAttribute"/> attribute that matched the current app-side.
         /// </summary>
         /// <param name="constructor">The constructor to check.</param>
         /// <returns><c>true</c> if the dependencies for the constructor should be resolved via the service provider, <c>false</c> otherwise.</returns>
         public static bool IOCEnabled(this ConstructorInfo constructor)
         {
             return constructor
-                .GetCustomAttributes(typeof(SidedServiceProviderConstructorAttribute), false)
-                .Cast<SidedServiceProviderConstructorAttribute>()
+                .GetCustomAttributes(typeof(SidedConstructorAttribute), false)
+                .Cast<SidedConstructorAttribute>()
                 .Any(q => q.Side == EnumAppSide.Universal || q.Side == ApiEx.Side);
         }
 
@@ -56,6 +56,33 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
         public static T CreateSidedInstance<T>(this IServiceResolver provider, params object[] args) where T : class
         {
             return (T)CreateSidedInstance(provider, typeof(T), args);
+        }
+
+        /// <summary>
+        ///     Registers all <see cref="ModSystem"/>s in the current mod, into the service collection.
+        /// </summary>
+        /// <param name="services">The service collection to add the <see cref="ModSystem"/>s to.</param>
+        public static void RegisterModSystems(this IServiceCollection services)
+        {
+            var modSystems = AssemblyEx
+                .GetModAssembly()
+                .GetTypes()
+                .Where(p => p.IsSubclassOf(typeof(ModSystem)) && !p.IsAbstract);
+
+            foreach (var type in modSystems)
+            {
+                var system = ApiEx.Current.ModLoader.GetModSystem(type.FullName);
+                services.Register(new ServiceDescriptor(type, system, ServiceLifetime.Singleton));
+            }
+        }
+
+        /// <summary>
+        ///     Registers a client side features into the service collection.
+        /// </summary>
+        /// <param name="services">The service collection to add the features to.</param>
+        public static void RegisterModSystem<T>(this IServiceCollection services) where T : ModSystem
+        {
+            services.RegisterSingleton(_ => ApiEx.Current.ModLoader.GetModSystem<T>());
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
+using ApacheTech.VintageMods.Core.Common.InternalSystems;
+using ApacheTech.VintageMods.Core.Extensions.Game;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
@@ -56,6 +59,29 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// </summary>
         /// <value>The <see cref="Vintagestory.Server.ServerMain"/> instance that controls access to features within  the gameworld.</value>
         public static ServerMain ServerMain { get; internal set; }
+
+
+        private static ClientSystemAsyncActions ClientAsync => Client.GetVanillaClientSystem<ClientSystemAsyncActions>();
+
+        private static ServerSystemAsyncActions ServerAsync => Server.GetVanillaServerSystem<ServerSystemAsyncActions>();
+
+        public static IAsyncActions Async => OneOf<IAsyncActions>(ClientAsync, ServerAsync);
+
+        public static T OneOf<T>(T clientInstance, T serverInstance)
+        {
+            return ModInfo.Side switch
+            {
+                EnumAppSide.Server => serverInstance,
+                EnumAppSide.Client => clientInstance,
+                EnumAppSide.Universal => Side.IsClient() ? clientInstance : serverInstance,
+                _ => throw new ArgumentOutOfRangeException(nameof(ModInfo.Side), ModInfo.Side, "Corrupted ModInfo data.")
+            };
+        }
+
+        public static void Run(Action clientAction, Action serverAction)
+        {
+            OneOf(clientAction, serverAction).Invoke();
+        }
 
         /// <summary>
         ///     Gets the current app-side.

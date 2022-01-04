@@ -14,10 +14,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Item to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Item to add to the registry.</param>
-        public static void RegisterItem<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterItem<T>(this ICoreAPICommon api)
         {
-            api.RegisterItemClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterItemClass(type.Name, type);
         }
 
         /// <summary>
@@ -27,10 +27,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Block to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Block to add to the registry.</param>
-        public static void RegisterBlock<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterBlock<T>(this ICoreAPICommon api)
         {
-            api.RegisterBlockClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterBlockClass(type.Name, type);
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Block to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Block to add to the registry.</param>
-        public static void RegisterBlockEntity<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterBlockEntity<T>(this ICoreAPICommon api)
         {
-            api.RegisterBlockEntityClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterBlockEntityClass(type.Name, type);
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Block Behaviour to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Block Behaviour to add to the registry.</param>
-        public static void RegisterBlockBehaviour<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterBlockBehaviour<T>(this ICoreAPICommon api)
         {
-            api.RegisterBlockBehaviorClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterBlockBehaviorClass(type.Name, type);
         }
 
         /// <summary>
@@ -66,10 +66,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the BlockEntity Behaviour to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the BlockEntity Behaviour to add to the registry.</param>
-        public static void RegisterBlockEntityBehaviour<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterBlockEntityBehaviour<T>(this ICoreAPICommon api)
         {
-            api.RegisterBlockEntityBehaviorClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterBlockEntityBehaviorClass(type.Name, type);
         }
 
         /// <summary>
@@ -79,10 +79,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Block Behaviour to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Block Behaviour to add to the registry.</param>
-        public static void RegisterEntity<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterEntity<T>(this ICoreAPICommon api)
         {
-            api.RegisterEntity(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterEntity(type.Name, type);
         }
 
         /// <summary>
@@ -91,10 +91,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Entity Behaviour to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Entity Behaviour to add to the registry.</param>
-        public static void RegisterEntityBehaviour<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterEntityBehaviour<T>(this ICoreAPICommon api)
         {
-            api.RegisterEntityBehaviorClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterEntityBehaviorClass(type.Name, type);
         }
 
         /// <summary>
@@ -103,10 +103,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Crop Behaviour to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Crop Behaviour to add to the registry.</param>
-        public static void RegisterCropBehaviour<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterCropBehaviour<T>(this ICoreAPICommon api)
         {
-            api.RegisterCropBehavior(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterCropBehavior(type.Name, type);
         }
 
         /// <summary>
@@ -115,10 +115,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// </summary>
         /// <typeparam name="T">The type of the Collectible Behaviour to register.</typeparam>
         /// <param name="api">The game's internal API.</param>
-        /// <param name="name">The name of the Collectible Behaviour to add to the registry.</param>
-        public static void RegisterCollectibleBehaviour<T>(this ICoreAPICommon api, string name = nameof(T))
+        public static void RegisterCollectibleBehaviour<T>(this ICoreAPICommon api)
         {
-            api.RegisterCollectibleBehaviorClass(name, typeof(T));
+            var type = typeof(T);
+            api.RegisterCollectibleBehaviorClass(type.Name, type);
         }
     }
 }

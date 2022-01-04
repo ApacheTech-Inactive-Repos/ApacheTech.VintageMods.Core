@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+// ReSharper disable NonReadonlyMemberInGetHashCode
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
@@ -26,7 +27,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Enum
         /// <summary>
         ///     The value given to this StringEnum member.
         /// </summary>
-        protected string Value { get; init; }
+        protected string Value { get; set; }
 
         bool IEquatable<T>.Equals(T other)
         {

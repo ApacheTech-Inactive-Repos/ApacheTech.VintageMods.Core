@@ -162,6 +162,17 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         /// <summary>
         ///     Serialises the specified collection of objects, and saves the resulting data to file.
         /// </summary>
+        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+        /// <param name="collection">The collection of the objects to save to a single file.</param>
+        public override void SaveFrom<TModel>(IEnumerable<TModel> collection)
+        {
+            var json = JsonConvert.SerializeObject(collection);
+            SaveFrom(json, Formatting.Indented);
+        }
+
+        /// <summary>
+        ///     Serialises the specified collection of objects, and saves the resulting data to file.
+        /// </summary>
         /// <param name="json">The serialised JSON string to save to a single file.</param>
         public void SaveFrom(string json)
         {
@@ -176,17 +187,6 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         public Task SaveFromAsync(string json)
         {
             return ModFileInfo.WriteAllTextAsync(json);
-        }
-
-        /// <summary>
-        ///     Serialises the specified collection of objects, and saves the resulting data to file.
-        /// </summary>
-        /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
-        /// <param name="collection">The collection of the objects to save to a single file.</param>
-        public override void SaveFrom<TModel>(IEnumerable<TModel> collection)
-        {
-            var json = JsonConvert.SerializeObject(collection, Formatting.Indented);
-            SaveFrom(json, Formatting.Indented);
         }
 
         /// <summary>

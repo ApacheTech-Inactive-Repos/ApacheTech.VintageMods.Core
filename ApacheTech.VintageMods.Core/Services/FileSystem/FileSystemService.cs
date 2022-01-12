@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
@@ -129,10 +130,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
                 return;
             }
 
-            file.Create();
-            if (file.ParseFileType() != FileType.Json) return;
-            using var writer = file.AppendText();
-            writer.WriteLine("{\n\n}");
+            Task.Factory.StartNew(async () =>
+            {
+                using var writer = File.CreateText(file.FullName);
+                if (file.ParseFileType() != FileType.Json) return;
+                await writer.WriteLineAsync("[]");
+            });
         }
     }
 }

@@ -61,6 +61,21 @@ namespace ApacheTech.VintageMods.Core.Extensions.System
         }
 
         /// <summary>
+        ///     Adds a range of entries into a sorted dictionary.
+        ///     Includes a work around the fact that keys within Sorted Dictionaries cannot normally be overwritten.
+        /// </summary>
+        /// <param name="dict">The dictionary to save the syntax list to.</param>
+        /// <param name="list">The list of syntax options to add.</param>
+        /// <param name="predicate">The data member to search by.</param>
+        public static void AddOrUpdateRange<TKey, TValue>(this SortedDictionary<TKey, TValue> dict, IEnumerable<TValue> list, Func<TValue, TKey> predicate)
+        {
+            foreach (var record in list)
+            {
+                dict.AddOrUpdate(predicate(record), record);
+            }
+        }
+
+        /// <summary>
         ///     Adds an entry into a sorted dictionary.
         ///     Includes a work around the fact that keys within Sorted Dictionaries cannot normally be overwritten.
         /// </summary>

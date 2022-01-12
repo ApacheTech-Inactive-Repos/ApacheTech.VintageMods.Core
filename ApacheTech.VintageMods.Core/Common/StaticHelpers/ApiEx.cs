@@ -60,52 +60,78 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <value>The <see cref="Vintagestory.Server.ServerMain"/> instance that controls access to features within  the gameworld.</value>
         public static ServerMain ServerMain { get; internal set; }
 
-
-        private static ClientSystemAsyncActions ClientAsync => Client.GetVanillaClientSystem<ClientSystemAsyncActions>();
-
-        private static ServerSystemAsyncActions ServerAsync => Server.GetVanillaServerSystem<ServerSystemAsyncActions>();
-
-        public static IAsyncActions Async => OneOf<IAsyncActions>(ClientAsync, ServerAsync);
-
-        public static T OneOf<T>(T clientInstance, T serverInstance)
+        /// <summary>
+        ///     Chooses between one of two objects, based on whether it's being called by the client, or the server.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="clientObject">The client object.</param>
+        /// <param name="serverObject">The server object.</param>
+        /// <returns>Returns <paramref name="clientObject"/> if called from the client, or <paramref name="serverObject"/> if called from the server.</returns>
+        public static T OneOf<T>(T clientObject, T serverObject)
         {
             return ModInfo.Side switch
             {
-                EnumAppSide.Server => serverInstance,
-                EnumAppSide.Client => clientInstance,
-                EnumAppSide.Universal => Side.IsClient() ? clientInstance : serverInstance,
+                EnumAppSide.Client => clientObject,
+                EnumAppSide.Server => serverObject,
+                EnumAppSide.Universal => Side.IsClient() ? clientObject : serverObject,
                 _ => throw new ArgumentOutOfRangeException(nameof(ModInfo.Side), ModInfo.Side, "Corrupted ModInfo data.")
             };
         }
 
+        /// <summary>
+        ///     Invokes an action, based on whether it's being called by the client, or the server.
+        /// </summary>
+        /// <param name="clientAction">The client action.</param>
+        /// <param name="serverAction">The server action.</param>
         public static void Run(Action clientAction, Action serverAction)
         {
             OneOf(clientAction, serverAction).Invoke();
         }
 
         /// <summary>
+        ///     Invokes an action, based on whether it's being called by the client, or the server.
+        /// </summary>
+        /// <remarks>
+        ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
+        /// </remarks>
+        /// <param name="clientAction">The client action.</param>
+        /// <param name="serverAction">The server action.</param>
+        /// <param name="parameter">The parameter to pass to the invoked action.</param>
+        public static void Run<T>(Action<T> clientAction, Action<T> serverAction, T parameter)
+        {
+            OneOf(clientAction, serverAction).Invoke(parameter);
+        }
+
+        /// <summary>
         ///     Gets the current app-side.
         /// </summary>
         /// <value>The current app-side.</value>
-        public static EnumAppSide Side => GetAppSide();
+        public static EnumAppSide Side =>
+            FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out var side)
+            ? side
+            : CacheCurrentThread();
 
         private static readonly Dictionary<int, EnumAppSide> FastSideLookup = new();
 
-        private static void CacheCurrentThread()
+        private static EnumAppSide CacheCurrentThread()
         {
-            FastSideLookup[Thread.CurrentThread.ManagedThreadId] =
+            // Will this work in tasks?
+            return FastSideLookup[Thread.CurrentThread.ManagedThreadId] =
                 Thread.CurrentThread.Name == "SingleplayerServer"
-                    ? EnumAppSide.Server
-                    : EnumAppSide.Client;
+                ? EnumAppSide.Server
+                : EnumAppSide.Client;
         }
 
-        private static EnumAppSide GetAppSide()
-        {
-            if (FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out var side)) return side;
-            CacheCurrentThread();
-            side = FastSideLookup[Thread.CurrentThread.ManagedThreadId];
-            return side;
-        }
+        //
+        // Async
+        //
+
+        public static IAsyncActions Async => OneOf<IAsyncActions>(ClientAsync, ServerAsync);
+
+        private static ClientSystemAsyncActions ClientAsync => Client.GetVanillaClientSystem<ClientSystemAsyncActions>();
+
+        private static ServerSystemAsyncActions ServerAsync => Server.GetVanillaServerSystem<ServerSystemAsyncActions>();
+
 
         public static void Dispose()
         {

@@ -1,8 +1,11 @@
 ﻿using System;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
+using ApacheTech.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Extensions.Game;
+using ApacheTech.VintageMods.Core.Services.Network.Extensions;
+using ApacheTech.VintageMods.Core.Services.Network.Packets;
 using SmartAssembly.Attributes;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -44,9 +47,19 @@ namespace ApacheTech.VintageMods.Core.Services.Network
             {
                 case EnumAppSide.Server:
                     _sapi = api.ForServer();
+                    ServerChannel("VintageMods").RegisterPropertyPacketTypes();
+                    ServerChannel(_modId)
+                        .RegisterPropertyPacketTypes()
+                        .RegisterMessageType<WorldNamePacket>()
+                        .SetMessageHandler<WorldNamePacket>((forPlayer, packet) =>
+                        {
+                            DefaultServerChannel.SendPacket(packet.With(p => p.Name = _sapi.WorldManager.SaveGame.WorldName), forPlayer);
+                        });
                     break;
                 case EnumAppSide.Client:
                     _capi = api.ForClient();
+                    ClientChannel("VintageMods").RegisterPropertyPacketTypes();
+                    ClientChannel(_modId).RegisterPropertyPacketTypes();
                     break;
                 case EnumAppSide.Universal:
                     break;
@@ -54,8 +67,7 @@ namespace ApacheTech.VintageMods.Core.Services.Network
                     throw new ArgumentOutOfRangeException();
             }
 
-            RegisterChannel("VintageMods");
-            RegisterChannel(_modId);
+
         }
 
         /// <summary>
@@ -65,7 +77,33 @@ namespace ApacheTech.VintageMods.Core.Services.Network
         /// <returns>An instance of <see cref="IClientNetworkChannel" />, used to send and receive network messages on the client.</returns>
         public IClientNetworkChannel ClientChannel(string channelName)
         {
-            return _capi?.Network.GetChannel(channelName);
+            var channel = _capi?.Network.GetChannel(channelName);
+            try
+            {
+                return channel ?? _capi?.Network.RegisterChannel(channelName);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///     Retrieves a server-side network channel.
+        /// </summary>
+        /// <param name="channelName">The name of the channel to register.</param>
+        /// <returns>An instance of <see cref="IServerNetworkChannel" />, used to send and receive network messages on the server.</returns>
+        public IServerNetworkChannel ServerChannel(string channelName)
+        {
+            var channel = _sapi?.Network.GetChannel(channelName);
+            try
+            {
+                return channel ?? _sapi?.Network.RegisterChannel(channelName);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -91,16 +129,6 @@ namespace ApacheTech.VintageMods.Core.Services.Network
         /// </summary>
         /// <value>The common client channel.</value>
         public IClientNetworkChannel CommonClientChannel => ClientChannel("VintageMods");
-
-        /// <summary>
-        ///     Retrieves a server-side network channel.
-        /// </summary>
-        /// <param name="channelName">The name of the channel to register.</param>
-        /// <returns>An instance of <see cref="IServerNetworkChannel" />, used to send and receive network messages on the server.</returns>
-        public IServerNetworkChannel ServerChannel(string channelName)
-        {
-            return _sapi?.Network.GetChannel(channelName);
-        }
 
         /// <summary>
         ///     Registers a network channel on the app side this method is called from.

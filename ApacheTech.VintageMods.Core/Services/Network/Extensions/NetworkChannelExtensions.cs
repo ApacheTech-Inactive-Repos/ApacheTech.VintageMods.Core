@@ -32,7 +32,7 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Extensions
                 .RegisterMessageType<SetPropertyPacket<string>>();
         }
 
-        public static IClientNetworkChannel UnsetMessageHandler<T>(this IClientNetworkChannel channel)
+        public static IClientNetworkChannel UnregisterMessageHandler<T>(this IClientNetworkChannel channel)
         {
             var concrete = (Vintagestory.Client.NoObf.NetworkChannel)channel;
             var messageTypes = concrete.GetField<Dictionary<Type, int>>("messageTypes");
@@ -50,7 +50,7 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Extensions
             return channel;
         }
 
-        public static IServerNetworkChannel UnsetMessageHandler<T>(this IServerNetworkChannel channel)
+        public static IServerNetworkChannel UnregisterMessageHandler<T>(this IServerNetworkChannel channel)
         {
             var concrete = (Vintagestory.Server.NetworkChannel)channel;
             var messageTypes = concrete.GetField<Dictionary<Type, int>>("messageTypes");
@@ -66,6 +66,16 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Extensions
             var handlers = concrete.GetField<Action<object>[]>("handlers");
             handlers.RemoveEntry(index);
             return channel;
+        }
+
+        public static void SendPacket<T>(this IServerNetworkChannel channel, params IServerPlayer[] players) where T : new()
+        {
+            channel.SendPacket(new T(), players);
+        }
+
+        public static void SendPacket<T>(this IClientNetworkChannel channel) where T : new()
+        {
+            channel.SendPacket(new T());
         }
     }
 }

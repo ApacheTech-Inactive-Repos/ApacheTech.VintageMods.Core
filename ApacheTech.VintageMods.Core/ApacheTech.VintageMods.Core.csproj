@@ -21,6 +21,7 @@
 	<ItemGroup>
 		<!-- CompileTime Packages -->
 		<PackageReference Include="RedGate.SmartAssembly.Attributes" Version="8.1.0.4892" />
+		<PackageReference Include="System.CodeDom" Version="6.0.0" />
 		<!-- Runtime Packages -->
 		<PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
 		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.1.0" />
@@ -94,9 +95,6 @@
 
 	<ItemGroup>
 	  <None Update="_Includes\assets\vmods\lang\en.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_Includes\assets\vmods\lang\exceptions\en.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

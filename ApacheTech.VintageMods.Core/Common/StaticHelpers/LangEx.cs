@@ -83,5 +83,58 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             return $"{ApiEx.ModInfo.ModId}:Features.{featureName}.{path}";
         }
 
+        /// <summary>
+        ///     Returns a localised string.
+        /// </summary>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <returns>A localised string from the current mod's language files.</returns>
+        public static string Get(string path)
+        {
+            return Lang.Get($"{ApiEx.ModInfo.ModId}:{path}");
+        }
+
+        /// <summary>
+        ///     Returns a localised string.
+        /// </summary>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <returns>A localised string from the Core Framework's language files.</returns>
+        public static string GetCore(string path)
+        {
+            return Lang.Get($"vmods:{path}");
+        }
+
+        /// <summary>
+        ///     Returns a localised string.
+        /// </summary>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <param name="args">The arguments to pass to the lang file.</param>
+        /// <returns>A localised string from the current mod's language files.</returns>
+        public static string Get(string path, params object[] args)
+        {
+            return Lang.Get($"{ApiEx.ModInfo.ModId}:{path}", args);
+        }
+
+        /// <summary>
+        ///     Returns a localised string.
+        /// </summary>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <param name="args">The arguments to pass to the lang file.</param>
+        /// <returns>A localised string from the Core Framework's language files.</returns>
+        public static string GetCore(string path, params object[] args)
+        {
+            return Lang.Get($"vmods:{path}", args);
+        }
+
+        /// <summary>
+        ///     Returns a string, based on whether the specified value if greater than one (1).
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="path">The path to the feature based string to translate.</param>
+        /// <returns>A localised string from the mod's language files.</returns>
+        public static string Pluralise(string path, int value)
+        {
+            var suffix = Math.Abs(value) == 1 ? "singular" : "plural";
+            return Lang.Get($"{path}-{suffix}");
+        }
     }
 }

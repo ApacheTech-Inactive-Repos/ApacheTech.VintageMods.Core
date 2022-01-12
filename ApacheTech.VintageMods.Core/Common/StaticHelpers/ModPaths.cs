@@ -64,7 +64,12 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <value>A path on the filesystem, used to store mod files.</value>
         public static string ModAssetsPath { get; }
 
-        internal static string CreateDirectory(string path)
+        /// <summary>
+        ///     Creates a directory on the file-system.
+        /// </summary>
+        /// <param name="path">A path on the filesystem, used to store mod files.</param>
+        /// <returns>Returns the absolute path to the directory that has been created.</returns>
+        public static string CreateDirectory(string path)
         {
             var dir = new DirectoryInfo(path);
             if (dir.Exists) return dir.FullName;

@@ -3,7 +3,7 @@
   "vmods:boolean-value-True": "True",
   "vmods:boolean-value-False": "False",
 
-  // Ordinal Numbers.
+  // Ordinal Numbers. (1st, 2nd, 3rd, etc.)
   "vmods:ordinal-numbers-st:": "st",
   "vmods:ordinal-numbers-nd:": "nd",
   "vmods:ordinal-numbers-rd:": "rd",
@@ -47,5 +47,27 @@
   "vmods:datetime-days-abbr-5": "Sat",
   "vmods:datetime-days-full-5": "Saturday",
   "vmods:datetime-days-abbr-6": "Sun",
-  "vmods:datetime-days-full-6": "Sunday"
+  "vmods:datetime-days-full-6": "Sunday",
+
+  // Exceptions
+  "vmods:exceptions.file-not-registered-or-missing": "File `{0}` either does not exist, or has not yet been registered with the FileSystem Service.",
+  "vmods:exceptions.local-file-does-not-exist": "Local file, `{0}`, does not exist within the mod folder.",
+  "vmods:exceptions.local-file-duplicated": "Local file, `{0}`, is duplicated within the mod folder.",
+
+  // Confirmation Messages
+  "vmods:confirmation-confirm-title": "Confirmation",
+  "vmods:confirmation-information-title": "Information",
+
+  "vmods:confirmation-default-message": "Are you sure you want to perform this action?",
+
+  "vmods:confirmation-yes": "Yes",
+  "vmods:confirmation-no": "No",
+  "vmods:confirmation-ok": "OK",
+  "vmods:confirmation-cancel": "Cancel",
+  "vmods:confirmation-delete": "Delete",
+  "vmods:confirmation-add": "Add",
+  "vmods:confirmation-export": "Export",
+  "vmods:confirmation-import": "Import",
+  "vmods:confirmation-abort": "Abort",
+  "vmods:confirmation-retry": "Retry"
 }

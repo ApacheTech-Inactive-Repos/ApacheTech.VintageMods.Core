@@ -1,5 +1,0 @@
-{
-  "vmods:exceptions.file-not-registered-or-missing": "File `{0}` either does not exist, or has not yet been registered with the FileSystem Service.",
-  "vmods:exceptions.local-file-does-not-exist": "Local file, `{0}`, does not exist within the mod folder.",
-  "vmods:exceptions.local-file-duplicated": "Local file, `{0}`, is duplicated within the mod folder."
-}

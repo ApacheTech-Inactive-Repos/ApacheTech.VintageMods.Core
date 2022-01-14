@@ -1,0 +1,85 @@
+{
+  // ReSharper disable CommentTypo
+  // ==================================================================================
+  //  Campaign Cartographer - Language File
+  // ==================================================================================
+  //
+  //    Language: Français
+  //    Language Code: fr
+  //    Translated By: Aledark
+  //    Mod Version: 2.0.0
+  //    
+  // ==================================================================================
+
+  // Boolean Values.
+  "vmods:boolean-value-True": "Vrai",
+  "vmods:boolean-value-False": "Faux",
+
+  // Ordinal Numbers. (1st, 2nd, 3rd, etc.)
+  "vmods:ordinal-numbers-st:": "",
+  "vmods:ordinal-numbers-nd:": "",
+  "vmods:ordinal-numbers-rd:": "",
+
+  // Dates and Times.
+  "vmods:datetime-months-abbr-0": "Janv",
+  "vmods:datetime-months-full-0": "Janvier",
+  "vmods:datetime-months-abbr-1": "Fév",
+  "vmods:datetime-months-full-1": "Février",
+  "vmods:datetime-months-abbr-2": "Mars",
+  "vmods:datetime-months-full-2": "Mars",
+  "vmods:datetime-months-abbr-3": "Avr",
+  "vmods:datetime-months-full-3": "Avril",
+  "vmods:datetime-months-abbr-4": "Mai",
+  "vmods:datetime-months-full-4": "Mai",
+  "vmods:datetime-months-abbr-5": "Juin",
+  "vmods:datetime-months-full-5": "Juin",
+  "vmods:datetime-months-abbr-6": "Juil",
+  "vmods:datetime-months-full-6": "Juillet",
+  "vmods:datetime-months-abbr-7": "Août",
+  "vmods:datetime-months-full-7": "Août",
+  "vmods:datetime-months-abbr-8": "Sept",
+  "vmods:datetime-months-full-8": "Septembre",
+  "vmods:datetime-months-abbr-9": "Oct",
+  "vmods:datetime-months-full-9": "Octobre",
+  "vmods:datetime-months-abbr-10": "Nov",
+  "vmods:datetime-months-full-10": "Novembre",
+  "vmods:datetime-months-abbr-11": "Déc",
+  "vmods:datetime-months-full-11": "Décembre",
+
+  "vmods:datetime-days-abbr-0": "Lun",
+  "vmods:datetime-days-full-0": "Lundi",
+  "vmods:datetime-days-abbr-1": "Mar",
+  "vmods:datetime-days-full-1": "Mardi",
+  "vmods:datetime-days-abbr-2": "Mer",
+  "vmods:datetime-days-full-2": "Mercredi",
+  "vmods:datetime-days-abbr-3": "Jeu",
+  "vmods:datetime-days-full-3": "Jeudi",
+  "vmods:datetime-days-abbr-4": "Ven",
+  "vmods:datetime-days-full-4": "Vendredi",
+  "vmods:datetime-days-abbr-5": "Sam",
+  "vmods:datetime-days-full-5": "Samedi",
+  "vmods:datetime-days-abbr-6": "Dim",
+  "vmods:datetime-days-full-6": "Dimanche",
+
+  // Exceptions
+  "vmods:exceptions.file-not-registered-or-missing": "Le fichier `{0}` n'existe pas ou n'a pas été inscrit dans le registre du service des fichiers de votre système.",
+  "vmods:exceptions.local-file-does-not-exist": "Le fichier local, `{0}`ne se retrouve pas dans le fichier de vos mod",
+  "vmods:exceptions.local-file-duplicated": "Le fichier local, `{0}`, a un doublon dans le dossier de vos mod.",
+
+  // Confirmation Messages
+  "vmods:confirmation-confirm-title": "Confirmation",
+  "vmods:confirmation-information-title": "Information",
+
+  "vmods:confirmation-default-message": "Êtes-vous certain d'éxécuter cette action?",
+
+  "vmods:confirmation-yes": "Oui",
+  "vmods:confirmation-no": "Non",
+  "vmods:confirmation-ok": "D'accord",
+  "vmods:confirmation-cancel": "Annuler",
+  "vmods:confirmation-delete": "Supprimer",
+  "vmods:confirmation-add": "Ajouter",
+  "vmods:confirmation-export": "Exporter",
+  "vmods:confirmation-import": "Importer",
+  "vmods:confirmation-abort": "Abandonner",
+  "vmods:confirmation-retry": "Réessayer"
+}

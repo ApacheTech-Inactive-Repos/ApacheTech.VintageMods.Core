@@ -1,4 +1,16 @@
 {
+  // ReSharper disable CommentTypo
+  // ==================================================================================
+  //  Campaign Cartographer - Language File
+  // ==================================================================================
+  //
+  //    Language: English
+  //    Language Code: en
+  //    Translated By: Apache
+  //    Mod Version: 2.0.0
+  //    
+  // ==================================================================================
+
   // Boolean Values.
   "vmods:boolean-value-True": "True",
   "vmods:boolean-value-False": "False",

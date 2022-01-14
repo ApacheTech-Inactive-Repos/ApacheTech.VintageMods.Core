@@ -1,0 +1,85 @@
+{
+  // ReSharper disable CommentTypo
+  // ==================================================================================
+  //  Campaign Cartographer - Language File
+  // ==================================================================================
+  //
+  //    Language: Russian
+  //    Language Code: ru
+  //    Translated By: Craluminum2413
+  //    Mod Version: 2.0.0
+  //    
+  // ==================================================================================
+
+  // Boolean Values.
+  "vmods:boolean-value-True": "Истина",
+  "vmods:boolean-value-False": "Ложь",
+
+  // Ordinal Numbers. (1st, 2nd, 3rd, etc.)
+  "vmods:ordinal-numbers-st:": "",
+  "vmods:ordinal-numbers-nd:": "",
+  "vmods:ordinal-numbers-rd:": "",
+
+  // Dates and Times.
+  "vmods:datetime-months-abbr-0": "Янв",
+  "vmods:datetime-months-full-0": "Январь",
+  "vmods:datetime-months-abbr-1": "Фев",
+  "vmods:datetime-months-full-1": "Февраль",
+  "vmods:datetime-months-abbr-2": "Мар",
+  "vmods:datetime-months-full-2": "Март",
+  "vmods:datetime-months-abbr-3": "Апр",
+  "vmods:datetime-months-full-3": "Апрель",
+  "vmods:datetime-months-abbr-4": "Май",
+  "vmods:datetime-months-full-4": "Май",
+  "vmods:datetime-months-abbr-5": "Июн",
+  "vmods:datetime-months-full-5": "Июнь",
+  "vmods:datetime-months-abbr-6": "Июл",
+  "vmods:datetime-months-full-6": "Июль",
+  "vmods:datetime-months-abbr-7": "Авг",
+  "vmods:datetime-months-full-7": "Авгут",
+  "vmods:datetime-months-abbr-8": "Сен",
+  "vmods:datetime-months-full-8": "Сентябрь",
+  "vmods:datetime-months-abbr-9": "Окт",
+  "vmods:datetime-months-full-9": "Октябрь",
+  "vmods:datetime-months-abbr-10": "Ноя",
+  "vmods:datetime-months-full-10": "Ноябрь",
+  "vmods:datetime-months-abbr-11": "Дек",
+  "vmods:datetime-months-full-11": "Декабрь",
+
+  "vmods:datetime-days-abbr-0": "Пн",
+  "vmods:datetime-days-full-0": "Понедельник",
+  "vmods:datetime-days-abbr-1": "Вт",
+  "vmods:datetime-days-full-1": "Вторник",
+  "vmods:datetime-days-abbr-2": "Ср",
+  "vmods:datetime-days-full-2": "Среда",
+  "vmods:datetime-days-abbr-3": "Чт",
+  "vmods:datetime-days-full-3": "Четверг",
+  "vmods:datetime-days-abbr-4": "Пт",
+  "vmods:datetime-days-full-4": "Пятница",
+  "vmods:datetime-days-abbr-5": "Сб",
+  "vmods:datetime-days-full-5": "Суббота",
+  "vmods:datetime-days-abbr-6": "Вс",
+  "vmods:datetime-days-full-6": "Воскресенье",
+
+  // Exceptions
+  "vmods:exceptions.file-not-registered-or-missing": "Файл `{0}` либо не существует, либо еще не зарегистрирован в службе FileSystem Service.",
+  "vmods:exceptions.local-file-does-not-exist": "Локальный файл, `{0}`, не существует в папке мода.",
+  "vmods:exceptions.local-file-duplicated": "Локальный файл, `{0}`, дублируется в папке мода.",
+
+  // Confirmation Messages
+  "vmods:confirmation-confirm-title": "Подтверждение",
+  "vmods:confirmation-information-title": "Информация",
+
+  "vmods:confirmation-default-message": "Вы уверены, что хотите выполнить это действие?",
+
+  "vmods:confirmation-yes": "Да",
+  "vmods:confirmation-no": "Нет",
+  "vmods:confirmation-ok": "OK",
+  "vmods:confirmation-cancel": "Отмена",
+  "vmods:confirmation-delete": "Удалить",
+  "vmods:confirmation-add": "Добавить",
+  "vmods:confirmation-export": "Экспорт",
+  "vmods:confirmation-import": "Импорт",
+  "vmods:confirmation-abort": "Прервать",
+  "vmods:confirmation-retry": "Повторить"
+}

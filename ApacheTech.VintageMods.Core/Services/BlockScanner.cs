@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ApacheTech.Common.Extensions.Harmony;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
+using Vintagestory.Client.NoObf;
 
 namespace ApacheTech.VintageMods.Core.Services
 {
@@ -18,8 +21,9 @@ namespace ApacheTech.VintageMods.Core.Services
 
         public Dictionary<BlockPos, Block> ScanForBlocks(string code, BlockPos origin, int horizontalRadius, int verticalRadius)
         {
+            var worldHeight = ApiEx.ClientMain.GetField<ClientWorldMap>("WorldMap").MapSizeY;
             var minPos = new BlockPos(origin.X - horizontalRadius, Math.Max(origin.Y - verticalRadius, 1), origin.Z - horizontalRadius);
-            var maxPos = new BlockPos(origin.X + horizontalRadius, origin.Y + verticalRadius, origin.Z + horizontalRadius);
+            var maxPos = new BlockPos(origin.X + horizontalRadius, Math.Min(origin.Y + verticalRadius, worldHeight), origin.Z + horizontalRadius);
 
             var blocks = new Dictionary<BlockPos, Block>();
             _walker.WalkBlocks(minPos, maxPos, (block, blockPos) =>

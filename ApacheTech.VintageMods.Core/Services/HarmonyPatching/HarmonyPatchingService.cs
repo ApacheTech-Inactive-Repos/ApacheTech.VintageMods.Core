@@ -30,13 +30,7 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
     [RegisteredService(ServiceLifetime.Singleton, typeof(IHarmonyPatchingService))]
     internal class HarmonyPatchingService : IHarmonyPatchingService, IDisposable
     {
-        private readonly ICoreAPI _api;
         private readonly Dictionary<string, Harmony> _instances = new();
-
-        public HarmonyPatchingService(ICoreAPI api)
-        {
-            _api = api;
-        }
 
         /// <summary>
         ///     Creates a new patch host, if one with the specified ID doesn't already exist.
@@ -60,12 +54,12 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         /// </summary>
         /// <param name="instance">The harmony instance for which to run the patches for.</param>
         /// <param name="assembly">The assembly that hold the annotated patch classes to process.</param>
-        private void PatchAll(Harmony instance, Assembly assembly)
+        private static void PatchAll(Harmony instance, Assembly assembly)
         {
             var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
             foreach (var (type, attribute) in sidedPatches)
             {
-                if (attribute.Side is EnumAppSide.Universal || attribute.Side == _api.Side)
+                if (attribute.Side is EnumAppSide.Universal || attribute.Side == ApiEx.Side)
                 {
                     instance.CreateClassProcessor(type).Patch();        
                 }
@@ -104,15 +98,15 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
                 PatchAll(harmony, assembly);
                 var patches = harmony.GetPatchedMethods().ToList();
                 if (!patches.Any()) return;
-                _api.Logger.Notification($"\t{assembly.GetName()} - Patched Methods:");
+                ApiEx.Current.Logger.Notification($"\t{assembly.GetName()} - Patched Methods:");
                 foreach (var method in patches)
                 {
-                    _api.Logger.Notification($"\t\t{method.FullDescription()}");
+                    ApiEx.Current.Logger.Notification($"\t\t{method.FullDescription()}");
                 }
             }
             catch (Exception ex)
             {
-                _api.Logger.Error($"[VintageMods] {ex}");
+                ApiEx.Current.Logger.Error($"[VintageMods] {ex}");
             }
         }
 

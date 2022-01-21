@@ -191,7 +191,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         {
             return world.GetNearestBlock<TBlock>(pos, horRange, vertRange, _ => true, out blockPosOut);
         }
-
+        
         public static bool InRangeCubic(this BlockPos pos, BlockPos relativeToBlock, int horizontalRadius = 10,
             int verticalRadius = 10)
         {

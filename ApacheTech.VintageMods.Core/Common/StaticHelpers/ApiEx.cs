@@ -10,12 +10,13 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
-// AppSide Anywhere - Code by: Novocain1
+// AppSide Anywhere - Code by: Novocain1: https://github.com/Novocain1/MiscMods/blob/1.15/VSHUD/Utility/CheckAppSideAnywhere.cs
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedType.Global
+// ReSharper disable StringLiteralTypo
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
@@ -106,10 +107,16 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         ///     Gets the current app-side.
         /// </summary>
         /// <value>The current app-side.</value>
-        public static EnumAppSide Side =>
-            FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out var side)
-            ? side
-            : CacheCurrentThread();
+        public static EnumAppSide Side
+        {
+            get
+            {
+                var appSide = FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out var side)
+                    ? side
+                    : CacheCurrentThread();
+                return appSide;
+            }
+        }
 
         private static readonly Dictionary<int, EnumAppSide> FastSideLookup = new();
 
@@ -117,11 +124,10 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             // Will this work in tasks?
             return FastSideLookup[Thread.CurrentThread.ManagedThreadId] =
-                Thread.CurrentThread.Name == "SingleplayerServer"
-                ? EnumAppSide.Server
-                : EnumAppSide.Client;
+                string.Equals(Thread.CurrentThread.Name, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)
+                    ? EnumAppSide.Server
+                    : EnumAppSide.Client;
         }
-
         //
         // Async
         //
@@ -133,9 +139,14 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         private static ServerSystemAsyncActions ServerAsync => Server.GetVanillaServerSystem<ServerSystemAsyncActions>();
 
 
+        /// <summary>
+        ///     Disposes this instance.
+        /// </summary>
         public static void Dispose()
         {
             FastSideLookup.Clear();
+            Run(() => ClientAsync?.Dispose(),
+                () => ServerAsync?.Dispose());
         }
     }
 }

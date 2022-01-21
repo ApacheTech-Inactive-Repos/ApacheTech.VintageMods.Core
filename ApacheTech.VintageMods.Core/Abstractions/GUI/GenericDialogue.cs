@@ -82,7 +82,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         }
 
         /// <summary>
-        ///     Composes the 
+        ///     Composes the header for the GUI.
         /// </summary>
         /// <param name="composer">The composer.</param>
         protected abstract void ComposeBody(GuiComposer composer);

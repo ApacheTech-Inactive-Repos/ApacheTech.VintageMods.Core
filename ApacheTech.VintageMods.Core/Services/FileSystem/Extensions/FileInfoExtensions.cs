@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
+// ReSharper disable UnusedMember.Global
+
 namespace ApacheTech.VintageMods.Core.Services.FileSystem.Extensions
 {
     /// <summary>
@@ -62,12 +64,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Extensions
         {
             using var sourceStream = File.Open(fileInfo.FullName, FileMode.Open);
             var result = new byte[sourceStream.Length];
-            await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length);
+            var _ = await sourceStream.ReadAsync(result, 0, (int)sourceStream.Length);
             return result;
         }
 
         /// <summary>
-        ///     Read all text from a file, as an asynchronous operation.
+        ///     Read all text from a file, as an asynchronous operation.    
         /// </summary>
         /// <param name="fileInfo">The <see cref="FileInfo"/> wrapper for the file to write to.</param>
         /// <returns>A string, containing the contents of the file.</returns>

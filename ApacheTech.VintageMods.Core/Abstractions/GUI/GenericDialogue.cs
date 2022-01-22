@@ -52,9 +52,14 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         /// </summary>
         protected virtual void Compose()
         {
-            var composer = ComposeHeader();
+            var composer = ComposeHeader()
+                    .BeginChildElements(DialogueBounds);
+
             ComposeBody(composer);
-            SingleComposer = composer.EndChildElements().Compose();
+
+            SingleComposer = composer
+                .EndChildElements()
+                .Compose();
         }
 
         /// <summary>
@@ -103,9 +108,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
             {
                 composer.AddDialogTitleBar(Title, () => TryClose());
             }
-
-            composer.BeginChildElements(DialogueBounds);
-            
 
             return composer;
         }

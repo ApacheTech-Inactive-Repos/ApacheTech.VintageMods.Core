@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if COMPILER_INIT
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
@@ -139,3 +140,4 @@ namespace ApacheTech.VintageMods.Core.Services
         }
     }
 }
+#endif

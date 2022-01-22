@@ -7,11 +7,11 @@ namespace ApacheTech.VintageMods.Core.GameContent.GUI
 {
     public static class GuiElementHelpers
     {
-        public static GuiComposer WIP_AddImage(this GuiComposer composer, ElementBounds bounds, AssetLocation imageAsset)
+        public static GuiComposer AddStaticImage(this GuiComposer composer, ElementBounds bounds, AssetLocation imageAsset)
         {
             if (!composer.Composed)
             {
-                composer.AddStaticElement(new WIP_GuiElementImage(composer.Api, bounds, imageAsset));
+                composer.AddStaticElement(new GuiElementImage(composer.Api, bounds, imageAsset));
             }
             return composer;
         }

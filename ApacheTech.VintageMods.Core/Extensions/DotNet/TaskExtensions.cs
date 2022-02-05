@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace ApacheTech.VintageMods.Core.Extensions.System
+namespace ApacheTech.VintageMods.Core.Extensions.DotNet
 {
     public static class TaskExtensions
     {

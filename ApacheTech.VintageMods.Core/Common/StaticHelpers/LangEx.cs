@@ -136,5 +136,14 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             var suffix = Math.Abs(value) == 1 ? "singular" : "plural";
             return Lang.Get($"{path}-{suffix}");
         }
+
+        /// <summary>
+        ///     Returns the title of the mod.
+        /// </summary>
+        /// <returns>A localised string from the mod's language files.</returns>
+        public static string ModTitle()
+        {
+            return Get("ModTitle");
+        }
     }
 }

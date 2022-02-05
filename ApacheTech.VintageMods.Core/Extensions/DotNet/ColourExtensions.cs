@@ -4,10 +4,11 @@ using System.Globalization;
 using ApacheTech.VintageMods.Core.Common.Enum;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using Vintagestory.API.Config;
+
 // ReSharper disable StringLiteralTypo
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace ApacheTech.VintageMods.Core.Extensions.System
+namespace ApacheTech.VintageMods.Core.Extensions.DotNet
 {
     /// <summary>
     ///     Extension Methods for when working with Colours.

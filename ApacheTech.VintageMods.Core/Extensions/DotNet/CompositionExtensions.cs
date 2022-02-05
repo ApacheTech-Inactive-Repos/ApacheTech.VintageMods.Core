@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 
-namespace ApacheTech.VintageMods.Core.Extensions.System
+namespace ApacheTech.VintageMods.Core.Extensions.DotNet
 {
     public static class CompositionExtensions
     {

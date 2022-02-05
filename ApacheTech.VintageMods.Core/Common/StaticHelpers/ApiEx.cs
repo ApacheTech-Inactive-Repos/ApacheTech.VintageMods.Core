@@ -1,22 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.InternalSystems;
 using ApacheTech.VintageMods.Core.Extensions.Game;
+using ApacheTech.VintageMods.Core.Extensions.Game.Threading;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
-// AppSide Anywhere - Code by: Novocain1: https://github.com/Novocain1/MiscMods/blob/1.15/VSHUD/Utility/CheckAppSideAnywhere.cs
+// AppSide Anywhere - Code inspired by: Novocain1 (https://github.com/Novocain1/MiscMods/blob/1.15/VSHUD/Utility/CheckAppSideAnywhere.cs)
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedType.Global
 // ReSharper disable StringLiteralTypo
+// ReSharper disable CommentTypo
 
 namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
@@ -47,7 +50,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         ///     Common API Components that are available on the server and the client. Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
         /// </summary>
         /// <value>The universal API.</value>
-        public static ICoreAPI Current => Side.IsClient() ? Client : Server;
+        public static ICoreAPI Current => OneOf<ICoreAPI>(Client, Server);  
 
         /// <summary>
         ///     The concrete implementation of the <see cref="IClientWorldAccessor"/> interface. Contains access to lots of world manipulation and management features.
@@ -106,32 +109,56 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <summary>
         ///     Gets the current app-side.
         /// </summary>
-        /// <value>The current app-side.</value>
+        /// <value>An <see cref="EnumAppSide"/> value, representing current app-side; Client, or Server.</value>
         public static EnumAppSide Side
         {
             get
             {
-                var appSide = FastSideLookup.TryGetValue(Thread.CurrentThread.ManagedThreadId, out var side)
-                    ? side
-                    : CacheCurrentThread();
-                return appSide;
+                // Obtaining the app-side, without having direct access to a specific CoreAPI.
+                // NB: This is not a fool-proof. This is a drawback of using a Threaded Server, over Dedicated Server for Single-Player games.
+
+                // 1. If modinfo.json states the mod is only for a single side, return that side.
+                if (ModInfo.Side is not EnumAppSide.Universal) return ModInfo.Side;
+
+                // 2. If the process name is "VintagestoryServer", we are on the server.
+                if (Process.GetCurrentProcess().ProcessName == "VintagestoryServer") return EnumAppSide.Server;
+
+                // 3. If the current thread name is "SingleplayerServer", we are on the server. 
+                // NB: A thread's name filters down through child threads, and thread-pool threads, unless manually changed.
+                var threadName = Thread.CurrentThread.Name;
+                if (string.Equals(threadName, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)) return EnumAppSide.Server;
+
+                // By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
+                // 4. If ServerMain is populated, and the thread's name matches on within the server's thread list, we are on the server.
+                // 5. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
+                return ServerMain?.GetServerThreads().Any(p =>
+                    string.Equals(threadName, p.Name, StringComparison.InvariantCultureIgnoreCase)) ?? false
+                    ? EnumAppSide.Server
+                    : EnumAppSide.Client;
             }
         }
 
-        private static readonly Dictionary<int, EnumAppSide> FastSideLookup = new();
-
-        private static EnumAppSide CacheCurrentThread()
+        /// <summary>
+        ///     Determines whether the current code block is running on the main thread. See remarks.
+        /// </summary>
+        /// <remarks>
+        ///     Within a Single-Player game, the server will never run on the main application thread.
+        ///     Single-Player servers are run as a background thread, within the client application.
+        /// </remarks>
+        /// <returns><c>true</c> if the code is currently running on the main application thread; otherwise <c>false</c>.</returns>
+        public static bool IsOnMainThread()
         {
-            // Will this work in tasks?
-            return FastSideLookup[Thread.CurrentThread.ManagedThreadId] =
-                string.Equals(Thread.CurrentThread.Name, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)
-                    ? EnumAppSide.Server
-                    : EnumAppSide.Client;
+            var thread = Thread.CurrentThread;
+            return thread.GetApartmentState() == ApartmentState.STA 
+                   && !thread.IsBackground
+                   && !thread.IsThreadPoolThread 
+                   && thread.IsAlive;
         }
+
         //
         // Async
         //
-
+            
         public static IAsyncActions Async => OneOf<IAsyncActions>(ClientAsync, ServerAsync);
 
         private static ClientSystemAsyncActions ClientAsync => Client.GetVanillaClientSystem<ClientSystemAsyncActions>();
@@ -144,7 +171,6 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// </summary>
         public static void Dispose()
         {
-            FastSideLookup.Clear();
             Run(() => ClientAsync?.Dispose(),
                 () => ServerAsync?.Dispose());
         }

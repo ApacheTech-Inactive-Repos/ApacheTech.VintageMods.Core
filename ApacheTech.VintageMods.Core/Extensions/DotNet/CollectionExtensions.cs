@@ -6,7 +6,7 @@ using System.Linq;
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
 
-namespace ApacheTech.VintageMods.Core.Extensions.System
+namespace ApacheTech.VintageMods.Core.Extensions.DotNet
 {
     // TODO: ROADMAP - Migrate extensions to `ApacheTech.Common.Extensions` Nuget Package v1.2.0.
     public static class CollectionExtensions
@@ -104,6 +104,22 @@ namespace ApacheTech.VintageMods.Core.Extensions.System
                 dict.Remove(key);
                 dict.Add(key, value);
             }
+        }
+
+        /// <summary>
+        ///     Adds an item to the <see cref="IDictionary{TKey,TValue}" />, if it not already present in the collection.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the elements of <paramref name="key" />.</typeparam>
+        /// <typeparam name="TValue">The type of the elements of <paramref name="value" />.</typeparam>
+        /// <param name="collection">The collection to add the item to.</param>
+        /// <param name="key">The key to add.</param>
+        /// <param name="value">The value to add.</param>
+        /// <returns><c>true</c> if the item was added to collection, <c>false</c> otherwise.</returns>
+        public static bool AddIfNotPresent<TKey, TValue>(this IDictionary<TKey, TValue> collection, TKey key, TValue value)
+        {
+            var contains = collection.ContainsKey(key);
+            if (!contains) collection.Add(key,value);
+            return !contains;
         }
 
         /// <summary>

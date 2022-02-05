@@ -145,7 +145,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         }
 
         public static TBlockEntity GetNearestBlockEntity<TBlockEntity>(this IWorldAccessor world, BlockPos pos,
-            float horRange, float vertRange, Vintagestory.API.Common.Func<TBlockEntity, bool> predicate) where TBlockEntity : BlockEntity
+            float horRange, float vertRange, System.Func<TBlockEntity, bool> predicate) where TBlockEntity : BlockEntity
         {
             TBlockEntity blockEntity = null;
             var minPos = pos.AddCopy(-horRange, -vertRange, -horRange);
@@ -167,7 +167,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         }
 
         public static TBlock GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos pos,
-            float horRange, float vertRange, Vintagestory.API.Common.Func<TBlock, bool> predicate, out BlockPos blockPosOut) where TBlock : Block
+            float horRange, float vertRange, System.Func<TBlock, bool> predicate, out BlockPos blockPosOut) where TBlock : Block
         {
             TBlock blockEntity = null;
             BlockPos blockPosTemp = null;
@@ -191,23 +191,23 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         {
             return world.GetNearestBlock<TBlock>(pos, horRange, vertRange, _ => true, out blockPosOut);
         }
-        
-        public static bool InRangeCubic(this BlockPos pos, BlockPos relativeToBlock, int horizontalRadius = 10,
-            int verticalRadius = 10)
-        {
-            if (!pos.InRangeHorizontally(relativeToBlock.X, relativeToBlock.Z, horizontalRadius)) return false;
-            return pos.Y <= relativeToBlock.Y + verticalRadius && pos.Y >= relativeToBlock.Y - verticalRadius;
-        }
 
         /// <summary>
-        ///     Gets the position relative to spawn, given an absolute position within the game world.
+        ///     Determines whether one <see cref="BlockPos"/> is within three-dimensional range of another <see cref="BlockPos"/>.
         /// </summary>
-        /// <param name="pos">The absolute position of the block being queried.</param>
-        /// <param name="world">The API to use for game world information.</param>
-        public static BlockPos RelativeToSpawn(this BlockPos pos, IWorldAccessor world)
+        /// <param name="sourceBlockPos">The position under test.</param>
+        /// <param name="originBlockPos">The position used as the origin of the search.</param>
+        /// <param name="horizontalRadius">The horizontal radius for the search.</param>
+        /// <param name="verticalRadius">The vertical radius for the search.</param>
+        /// <returns><c>true</c> if the source block position is within the specified range of the origin position, <c>false</c> otherwise.</returns>
+        public static bool InRangeCubic(
+            this BlockPos sourceBlockPos, 
+            BlockPos originBlockPos, 
+            int horizontalRadius = 10,
+            int verticalRadius = 10)
         {
-            var blockPos = pos.SubCopy(world.DefaultSpawnPosition.XYZ.AsBlockPos);
-            return new BlockPos(blockPos.X, pos.Y, blockPos.Z);
+            if (!sourceBlockPos.InRangeHorizontally(originBlockPos.X, originBlockPos.Z, horizontalRadius)) return false;
+            return sourceBlockPos.Y <= originBlockPos.Y + verticalRadius && sourceBlockPos.Y >= originBlockPos.Y - verticalRadius;
         }
     }
 }

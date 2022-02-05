@@ -27,7 +27,7 @@ namespace ApacheTech.VintageMods.Core.GameContent.GUI
         /// <param name="buttons">A <see cref="ButtonLayout"/> value that specifies which button or buttons to display.</param>
         /// <param name="onOkButtonPressed">The <see cref="Action"/> to be invoked if the user selects the confirm option.</param>
         /// <param name="onCancelButtonPressed">The <see cref="Action"/> to be invoked if the user selects the cancel option.</param>
-        public static void Show(string title, string message, ButtonLayout buttons = ButtonLayout.OkCancel, Action onOkButtonPressed = null, Action onCancelButtonPressed = null)
+        public static void Show(string title, string message, ButtonLayout buttons = ButtonLayout.Ok, Action onOkButtonPressed = null, Action onCancelButtonPressed = null)
         {
             var messageBox = new MessageBox(title, message, buttons)
             {

@@ -21,8 +21,8 @@ namespace ApacheTech.VintageMods.Core.GameContent.GUI
             context.Save();
 
             using var imageSurface = getImageSurfaceFromAsset(api, _imageAsset);
+            using var pattern = getPattern(api, _imageAsset);
 
-            var pattern = getPattern(api, _imageAsset);
             pattern.Filter = Filter.Best;
 
             context.Scale(1, 1);

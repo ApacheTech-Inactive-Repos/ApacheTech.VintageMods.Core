@@ -61,6 +61,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             }
         }
 
+
         private static void UpdateMapGui(GuiComposer composer, Vec3d pos)
         {
             var map = (GuiElementMap)composer.GetElement("mapElem");

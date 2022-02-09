@@ -123,6 +123,21 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
         }
 
         /// <summary>
+        ///     Adds an item to the <see cref="IEnumerable{TValue}" />, if it should exist within the collection, and doesn't already.
+        ///     If the value shouldn't exist, and it does, it will be removed from the collection.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the elements of <paramref name="value" />.</typeparam>
+        /// <param name="collection">The collection to add the item to.</param>
+        /// <param name="value">The value to add.</param>
+        /// <param name="shouldExist">Whether or not the value should exist within the collection.</param>
+        /// <returns><c>true</c> if the item was added to collection, <c>false</c> otherwise.</returns>
+        public static void EnsureExistence<TValue>(this List<TValue> collection, TValue value, bool shouldExist) where TValue : IEquatable<TValue>
+        {
+            collection.RemoveAll(p => p.Equals(value));
+            if (shouldExist) collection.Add(value);
+        }
+
+        /// <summary>
         ///     Returns the first element of the sequence that satisfies a condition or null if no such element is found.
         /// </summary>
         /// <typeparam name="TValue">The type of the elements of <paramref name="source" />.</typeparam>

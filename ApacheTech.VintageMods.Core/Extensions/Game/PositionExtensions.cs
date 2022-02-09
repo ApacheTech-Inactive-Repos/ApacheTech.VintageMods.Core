@@ -34,6 +34,28 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             return origin.AddCopy(x, y, z);
         }
 
+
+        /// <summary>
+        ///     Gets the surface level at the specified block position. This is the highest point on the Y axis, where the block is solid, from above.
+        /// </summary>
+        /// <param name="pos">The position.</param>
+        /// <returns>An <see cref="int"/> value, representing the highest Y value with a solid block underneath it.</returns>
+        public static int GetSurfaceLevel(this BlockPos pos)
+        {
+            var blockAccessor = ApiEx.Current.World.BlockAccessor;
+            var y = blockAccessor.GetTerrainMapheightAt(pos);
+            var minPos = new BlockPos(pos.X, 1, pos.Z);
+            var maxPos = new BlockPos(pos.X, blockAccessor.MapSizeY, pos.Z);
+            blockAccessor.WalkBlocks(minPos, maxPos, (block, blockPos) =>
+            {
+                if (block.SideSolid[BlockFacing.indexUP])
+                {
+                    y = blockPos.Y;
+                }
+            });
+            return y;
+        }
+
         /// <summary>
         ///     Checks to see whether the entity will collide with anything at a given position in the world.
         /// </summary>

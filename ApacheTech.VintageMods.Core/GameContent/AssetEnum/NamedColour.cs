@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -291,6 +290,12 @@ namespace ApacheTech.VintageMods.Core.GameContent.AssetEnum
             return !Validate(colour) 
                 ? string.Empty 
                 : ColoursByName()[colour];
+        }
+
+        public static string FromArgb(int argb)
+        {
+            return ValuesList()
+                .FirstOrDefault(p => Color.FromName(p).ToArgb() == argb) ?? Black;
         }
 
         static NamedColour()

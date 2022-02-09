@@ -10,8 +10,8 @@ namespace ApacheTech.VintageMods.Core.Libraries.Maths.Interpolation
 {
     public abstract class InterpolationBase : IInterpolator
     {
-        protected readonly Dictionary<double, double> Points = new();
-        protected readonly List<double> PointVectors;
+        protected Dictionary<double, double> Points { get; } = new();
+        protected List<double> PointVectors { get; }
 
         protected InterpolationBase(double[] times, double[] points)
         {

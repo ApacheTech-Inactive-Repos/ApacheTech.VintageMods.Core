@@ -50,6 +50,47 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
             };
         }
 
+        /// <summary>
+        ///     Normalises the specified colour. That being, it converts each channel value into a <see cref="double"/>, between 0.0 and 1.0, by dividing each value by 255.0.
+        /// </summary>
+        /// <param name="colour">The colour to normalise.</param>
+        /// <returns>A double array, with normalised values set in RGBA order.</returns>
+        public static double[] Normalise(this double[] colour)
+        {
+            return new[]
+            {
+                colour[0] / 255d,
+                colour[1] / 255d,
+                colour[2] / 255d,
+                colour[3] / 255d
+            };
+        }
+
+        public static int ToArgb(this string colourString)
+        {
+            var num = Color.Transparent.ToArgb();
+            var num2 = Color.Black.ToArgb();
+
+            if (colourString.StartsWith("#"))
+            {
+                if (colourString.Length != 7)
+                {
+                    return num;
+                }
+                var s = colourString.Substring(1);
+                try
+                {
+                    return int.Parse(s, NumberStyles.HexNumber) | num2;
+                }
+                catch (Exception)
+                {
+                    return num;
+                }
+            }
+            var color = Color.FromName(colourString);
+            return color.A == 255 ? color.ToArgb() : num;
+        }
+
         public static Color ToColour(this string colour)
         {
             try

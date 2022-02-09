@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services;
 using Vintagestory.API.Client;
@@ -24,6 +26,21 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <returns>The default bounds for a menu button.</returns>
 
         public static ElementBounds DefaultButtonBounds(this GuiCompositeSettings _) => DefaultButtonBounds();
+
+        public static List<T> GetElements<T>(this GuiComposer composer) where T : GuiElement
+        {
+            return composer.GetElements().OfType<T>().ToList();
+        }
+
+        public static List<GuiElement> GetElements(this GuiComposer composer)
+        {
+            var list = new List<GuiElement>();
+            var interactiveElements = composer.GetField<Dictionary<string, GuiElement>>("interactiveElements");
+            var staticElements = composer.GetField<Dictionary<string, GuiElement>>("staticElements");
+            list.AddRange(interactiveElements.Values);
+            list.AddRange(staticElements.Values);
+            return list;
+        }
 
         public static void RegisterGuiDialogueHotKey<TDialogue>(
             this IInputAPI api, 

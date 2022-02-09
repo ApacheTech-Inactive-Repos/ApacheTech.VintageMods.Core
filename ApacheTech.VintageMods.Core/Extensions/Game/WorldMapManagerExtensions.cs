@@ -24,7 +24,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
         public static WaypointMapLayer WaypointMapLayer(this WorldMapManager mapManager)
         {
-            return mapManager.MapLayers.OfType<WaypointMapLayer>().First();
+            return mapManager.MapLayers.OfType<WaypointMapLayer>().FirstOrDefault();
         }
 
         /// <summary>
@@ -34,9 +34,8 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
         public static void ForceSendWaypoints(this WorldMapManager mapManager)
         {
-            var capi = mapManager.GetField<ICoreClientAPI>("capi");
-            capi.Event.EnqueueMainThreadTask(() =>
-                capi.Event.RegisterCallback(_ =>
+            ApiEx.Client.Event.EnqueueMainThreadTask(() =>
+                ApiEx.Client.Event.RegisterCallback(_ =>
                     mapManager.GetField<IClientNetworkChannel>("clientChannel")
                         .SendPacket(new OnViewChangedPacket()), 500), "");
         }
@@ -65,11 +64,11 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         private static void UpdateMapGui(GuiComposer composer, Vec3d pos)
         {
             var map = (GuiElementMap)composer.GetElement("mapElem");
-            //map.CenterMapTo(pos.AsBlockPos);
-            map.CurrentBlockViewBounds.X1 = pos.X - map.Bounds.InnerWidth / 2.0 / map.ZoomLevel;
-            map.CurrentBlockViewBounds.Z1 = pos.Z - map.Bounds.InnerHeight / 2.0 / map.ZoomLevel;
-            map.CurrentBlockViewBounds.X2 = pos.X + map.Bounds.InnerWidth / 2.0 / map.ZoomLevel;
-            map.CurrentBlockViewBounds.Z2 = pos.Z + map.Bounds.InnerHeight / 2.0 / map.ZoomLevel;
+            map.CenterMapTo(pos.AsBlockPos);
+            //map.CurrentBlockViewBounds.X1 = pos.X - map.Bounds.InnerWidth / 2.0 / map.ZoomLevel;
+            //map.CurrentBlockViewBounds.Z1 = pos.Z - map.Bounds.InnerHeight / 2.0 / map.ZoomLevel;
+            //map.CurrentBlockViewBounds.X2 = pos.X + map.Bounds.InnerWidth / 2.0 / map.ZoomLevel;
+            //map.CurrentBlockViewBounds.Z2 = pos.Z + map.Bounds.InnerHeight / 2.0 / map.ZoomLevel;
             //map.EnsureMapFullyLoaded();
         }
     }

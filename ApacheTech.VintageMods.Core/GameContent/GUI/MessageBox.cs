@@ -33,6 +33,7 @@ namespace ApacheTech.VintageMods.Core.GameContent.GUI
             {
                 OnCancelAction = onCancelButtonPressed,
                 OnOkAction = onOkButtonPressed,
+                ModalTransparency = 0.6f
             };
             messageBox.TryOpen();
         }
@@ -68,9 +69,9 @@ namespace ApacheTech.VintageMods.Core.GameContent.GUI
             var controlRowBoundsLeftFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.LeftBottom);
             var controlRowBoundsRightFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.RightBottom);
             composer
-                .AddSmallButton(confirmButtonText, OnOkButtonPressed, controlRowBoundsRightFixed)
+                .AddSmallButton(confirmButtonText, OnOkButtonPressed, controlRowBoundsRightFixed, EnumButtonStyle.Normal, EnumTextOrientation.Center, "btnOk")
                 .AddIf(_buttons == ButtonLayout.OkCancel)
-                .AddSmallButton(cancelButtonText, OnCancelButtonPressed, controlRowBoundsLeftFixed)
+                .AddSmallButton(cancelButtonText, OnCancelButtonPressed, controlRowBoundsLeftFixed, EnumButtonStyle.Normal, EnumTextOrientation.Center, "btnCancel")
                 .EndIf();
         }
 

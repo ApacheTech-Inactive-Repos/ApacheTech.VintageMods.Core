@@ -1,5 +1,9 @@
-﻿using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+﻿using ApacheTech.Common.Extensions.Harmony;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Extensions.Game;
+using ApacheTech.VintageMods.Core.GameContent.GUI.Helpers;
 using Vintagestory.API.Client;
+using Vintagestory.Client.NoObf;
 
 namespace ApacheTech.VintageMods.Core.Abstractions.GUI
 {
@@ -52,11 +56,21 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         /// </summary>
         protected virtual void Compose()
         {
-            var composer = ComposeHeader()
-                    .BeginChildElements(DialogueBounds);
+            var composer =
+                ComposeHeader()
+                .BeginChildElements(DialogueBounds);
+
+            if (Modal)
+            {
+                ComposeModalOverlay();
+            }
 
             ComposeBody(composer);
 
+            composer
+                .GetElements<GuiElementHoverText>()
+                .ForEach(p => p.ZPosition = 50f);
+            
             SingleComposer = composer
                 .EndChildElements()
                 .Compose();
@@ -75,6 +89,11 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         protected EnumDialogArea Alignment { private get; set; } = EnumDialogArea.RightBottom;
 
         protected ElementBounds DialogueBounds { get; private set; }
+        protected bool Movable { get; set; } = false;
+
+        protected bool Modal { get; set; } = true;
+
+        protected float ModalTransparency { get; set; }
 
         protected bool ShowTitleBar { get; set; } = true;
 
@@ -92,6 +111,29 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         /// <param name="composer">The composer.</param>
         protected abstract void ComposeBody(GuiComposer composer);
 
+
+        private void ComposeModalOverlay()
+        {
+            var platform = capi.World.GetField<ClientPlatformAbstract>("Platform");
+            var fullScreenWidth = platform.WindowSize.Width;
+            var fullScreenHeight = platform.WindowSize.Height;
+
+            var composer = capi.Gui.CreateCompo(ToggleKeyCombinationCode,
+                    ElementBounds.Fixed(0, 0, fullScreenWidth, fullScreenHeight))
+                .BeginChildElements(ElementBounds.Fixed(0, 0, fullScreenWidth, fullScreenHeight))
+                .AddStaticCustomDraw(ElementBounds.Fixed(0, 0, fullScreenWidth, fullScreenHeight), (ctx, _, bounds) =>
+                {
+                    ctx.Rectangle(0, 0, bounds.OuterWidth, bounds.OuterHeight);
+                    ctx.SetSourceRGB(0, 0, 0);
+                    ctx.PaintWithAlpha(ModalTransparency);
+                })
+                .EndChildElements();
+
+            composer.zDepth -= 1;
+            Composers["ModalOverlay"] = composer.Compose();
+        }
+
+
         private GuiComposer ComposeHeader()
         {
             var dialogueBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(Alignment)
@@ -104,12 +146,13 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
                 .CreateCompo(ToggleKeyCombinationCode, dialogueBounds)
                 .AddShadedDialogBG(DialogueBounds);
 
-            if (ShowTitleBar)
-            {
-                composer.AddDialogTitleBar(Title, () => TryClose());
-            }
+            if (!ShowTitleBar) return composer;
 
-            return composer;
+            return Movable ? 
+                composer.AddDialogTitleBar(Title, () => TryClose()) : 
+                composer.AddTitleBarWithNoMenu(Title, () => TryClose());
         }
+
+        public override bool DisableMouseGrab => true;
     }
 }

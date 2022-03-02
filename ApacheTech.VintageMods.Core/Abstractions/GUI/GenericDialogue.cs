@@ -102,7 +102,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         /// </summary>
         protected virtual void RefreshValues()
         {
-            // HACK: Until .NET enables optional abstract methods, this anti-pattern of empty virtuals is as good as it gets.
         }
 
         /// <summary>

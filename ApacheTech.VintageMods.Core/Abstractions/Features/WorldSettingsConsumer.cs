@@ -1,4 +1,5 @@
-﻿using ApacheTech.VintageMods.Core.Hosting.Configuration;
+﻿using System;
+using ApacheTech.VintageMods.Core.Hosting.Configuration;
 using ApacheTech.VintageMods.Core.Services;
 
 // ReSharper disable UnusedMember.Global
@@ -12,7 +13,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
     ///     Represents a class that affects, or is affected by specific feature settings.
     /// </summary>
     /// <typeparam name="T">The settings file to use within the patches in this class.</typeparam>
-    public abstract class WorldSettingsConsumer<T> where T : class, new()
+    public abstract class WorldSettingsConsumer<T> : IDisposable where T : class, new()
     {
         protected static T Settings { get; set; }
 
@@ -25,7 +26,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
         {
             FeatureName = (typeof(T).Name).Replace("Settings", "");
             Settings = ModServices.IOC.Resolve<T>();
-            Settings ??= ModSettings.World.Feature<T>(FeatureName);
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
         /// </summary>
         protected WorldSettingsConsumer()
         {
-            FeatureName ??= (typeof(T).Name).Replace("Settings", "");
-            Settings ??= ModSettings.World.Feature<T>(FeatureName);
+            FeatureName = (typeof(T).Name).Replace("Settings", "");
+            Settings = ModServices.IOC.Resolve<T>();
         }
 
         /// <summary>
@@ -42,7 +42,16 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
         /// </summary>
         protected void SaveChanges()
         {
-            ModSettings.World.Save(FeatureName, Settings);
+            ModSettings.World.Save(Settings);
+        }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            FeatureName = null;
+            Settings = null;
         }
     }
 }

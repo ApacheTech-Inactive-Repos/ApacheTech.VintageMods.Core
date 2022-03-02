@@ -12,12 +12,24 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
     public static class CollectionExtensions
     {
         /// <summary>
+        ///     
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <returns>T.</returns>
+        public static T Random<T>(this IList<T> collection)
+        {
+            var index = new Random().Next(0, collection.Count);
+            return collection[index];
+        }
+
+        /// <summary>
         ///     Gets the closest value to a given number, within a given set of numbers.
         /// </summary>
         /// <param name="list">The set of numbers to clamp to.</param>
         /// <param name="number">The number to find.</param>
         /// <returns>System.Int32.</returns>
-        public static int GetClosest(this IEnumerable<int> list, int number)
+        public static int ClosestTo(this IEnumerable<int> list, int number)
         {
             return list.Aggregate((x, y) => Math.Abs(x - number) < Math.Abs(y - number) ? x : y);
         }
@@ -28,7 +40,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
         /// <param name="list">The set of numbers to clamp to.</param>
         /// <param name="number">The number to find.</param>
         /// <returns>System.Double.</returns>
-        public static double GetClosest(this IEnumerable<double> list, double number)
+        public static double ClosestTo(this IEnumerable<double> list, double number)
         {
             return list.Aggregate((x, y) => Math.Abs(x - number) < Math.Abs(y - number) ? x : y);
         }
@@ -39,7 +51,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
         /// <param name="list">The set of numbers to clamp to.</param>
         /// <param name="number">The number to find.</param>
         /// <returns>System.Single.</returns>
-        public static float GetClosest(this IEnumerable<float> list, float number)
+        public static float ClosestTo(this IEnumerable<float> list, float number)
         {
             return list.Aggregate((x, y) => Math.Abs(x - number) < Math.Abs(y - number) ? x : y);
         }
@@ -154,7 +166,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
             {
                 return source.First(predicate).Value;
             }
-            catch
+            catch(Exception)
             {
                 return null;
             }

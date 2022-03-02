@@ -69,9 +69,7 @@
   // Confirmation Messages
   "vmods:confirmation-confirm-title": "Confirmation",
   "vmods:confirmation-information-title": "Information",
-
   "vmods:confirmation-default-message": "Are you sure you want to perform this action?",
-
   "vmods:confirmation-yes": "Yes",
   "vmods:confirmation-no": "No",
   "vmods:confirmation-ok": "OK",
@@ -81,5 +79,8 @@
   "vmods:confirmation-export": "Export",
   "vmods:confirmation-import": "Import",
   "vmods:confirmation-abort": "Abort",
-  "vmods:confirmation-retry": "Retry"
+  "vmods:confirmation-retry": "Retry",
+
+  // Common Phrases
+  "vmods:common-phrases.donate": "Donate to Mod Author"
 }

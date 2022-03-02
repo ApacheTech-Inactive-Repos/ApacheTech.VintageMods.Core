@@ -12,6 +12,11 @@ using ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropertyCha
 
 namespace ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures
 {
+    public interface IObservableFeature
+    {
+
+    }
+
     /// <summary>
     ///     Notifies observers that a property value has changed within a wrapped POCO class.
     /// </summary>
@@ -64,6 +69,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures
         public void Dispose()
         {
             _observedInstance.Dispose();
+            _instance = null;
         }
     }
 }

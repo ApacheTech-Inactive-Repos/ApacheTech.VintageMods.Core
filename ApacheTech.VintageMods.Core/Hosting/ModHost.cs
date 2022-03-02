@@ -8,6 +8,7 @@ using ApacheTech.Common.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Abstractions.ModSystems;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Extensions.DotNet;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration;
 using ApacheTech.VintageMods.Core.Services;
@@ -71,6 +72,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
             //  1. Set ApiEx endpoints.
             ApiEx.Server = sapi;
             ApiEx.ServerMain = (ServerMain)sapi.World;
+            ModPaths.Initalise();
 
             ServerFeatures = (AssemblyEx.GetModAssembly()
                 .GetTypes()
@@ -127,6 +129,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
             //  1. Set ApiEx endpoints.
             ApiEx.Client = capi;
             ApiEx.ClientMain = (ClientMain)capi.World;
+            ModPaths.Initalise();
 
             ClientFeatures = AssemblyEx
                 .GetModAssembly()
@@ -255,6 +258,9 @@ namespace ApacheTech.VintageMods.Core.Hosting
         {
             ModServices.IOC?.Dispose();
             ApiEx.Dispose();
+            AssemblyEx.GetModAssembly().NullifyOrphanedStaticMembers();
+            AssemblyEx.GetCoreAssembly().NullifyOrphanedStaticMembers();
+            AssemblyEx.ModAssembly = null;
             base.Dispose();
         }
 

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
+using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.Common.Extensions.Reflection;
+using ApacheTech.VintageMods.Core.Abstractions.Features;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Abstractions;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
@@ -77,14 +79,29 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
             }
         }
 
+        private void DisposeAllPatchClasses(Assembly assembly)
+        {
+            var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
+            foreach (var (type, attribute) in sidedPatches)
+            {
+                if (attribute.Side is not EnumAppSide.Universal && attribute.Side != ApiEx.Side) continue;
+                if (type.IsSubclassOf(typeof(WorldSettingsConsumer<>)) || type.IsSubclassOf(typeof(GlobalSettingsConsumer<>)))
+                {
+                    type.CallMethod("Dispose");
+                }
+            }
+        }
+
         /// <summary>
-        ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
-        ///     be processed at launch. Manual patches can be processed later on at runtime.
+        /// By default, all annotated [HarmonyPatch] classes in the executing assembly will
+        /// be processed at launch. Manual patches can be processed later on at runtime.
         /// </summary>
         public void UseHarmony()
         {
             ApplyHarmonyPatches(AssemblyEx.GetModAssembly());
         }
+                
+        public Harmony Default => _instances[AssemblyEx.GetModAssembly().FullName];
 
         /// <summary>
         ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
@@ -116,6 +133,8 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         public void Dispose()
         {
             UnpatchAll();
+            DisposeAllPatchClasses(AssemblyEx.GetModAssembly());
+            DisposeAllPatchClasses(AssemblyEx.GetCoreAssembly());
         }
     }
 }

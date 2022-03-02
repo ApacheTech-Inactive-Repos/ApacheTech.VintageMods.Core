@@ -129,7 +129,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
                 if (string.Equals(threadName, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)) return EnumAppSide.Server;
 
                 // By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
-                // 4. If ServerMain is populated, and the thread's name matches on within the server's thread list, we are on the server.
+                // 4. If ServerMain is populated, and the thread's name matches one within the server's thread list, we are on the server.
                 // 5. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
                 return ServerMain?.GetServerThreads().Any(p =>
                     string.Equals(threadName, p.Name, StringComparison.InvariantCultureIgnoreCase)) ?? false

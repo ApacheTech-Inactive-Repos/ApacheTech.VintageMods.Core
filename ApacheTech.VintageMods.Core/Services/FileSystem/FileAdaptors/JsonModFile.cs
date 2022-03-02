@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
@@ -51,7 +53,14 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
         public override TModel ParseAs<TModel>()
         {
-            return JsonConvert.DeserializeObject<TModel>(File.ReadAllText(ModFileInfo.FullName));
+            try
+            {
+                return JsonConvert.DeserializeObject<TModel>(File.ReadAllText(ModFileInfo.FullName));
+            }
+            catch (Exception )
+            {
+                return default;
+            }
         }
 
         /// <summary>
@@ -73,7 +82,14 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         /// <returns>An instance of type <see cref="IEnumerable{TModel}" />, populated with data from this file.</returns>
         public override IEnumerable<TModel> ParseAsMany<TModel>()
         {
-            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName));
+            try
+            {
+                return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName));
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
 
         /// <summary>
@@ -176,7 +192,15 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.FileAdaptors
         /// <param name="json">The serialised JSON string to save to a single file.</param>
         public void SaveFrom(string json)
         {
-            File.WriteAllText(ModFileInfo.FullName, json);
+            try
+            {
+                File.WriteAllText(ModFileInfo.FullName, json);
+            }
+            catch (IOException e)
+            {
+                ApiEx.Current.Logger.Warning($"Failed to save JSON file: {ModFileInfo.FullName}");
+                ApiEx.Current.Logger.Warning(e.Message);
+            }
         }
 
         /// <summary>

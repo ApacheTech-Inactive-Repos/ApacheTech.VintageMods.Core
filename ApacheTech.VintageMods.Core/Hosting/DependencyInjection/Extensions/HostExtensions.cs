@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Hosting.Configuration;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Annotation;
 using Vintagestory.API.Common;
 
@@ -83,6 +84,28 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
         public static void RegisterModSystem<T>(this IServiceCollection services) where T : ModSystem
         {
             services.RegisterSingleton(_ => ApiEx.Current.ModLoader.GetModSystem<T>());
+        }
+
+        public static void RegisterFeatureWorldSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+        {
+            if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
+            services.RegisterSingleton(_ =>
+            {
+                var instance = ModSettings.World.Feature<TSettings>(featureName);
+                return instance;
+            });
+        }
+
+        public static void RegisterFeatureGlobalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+        {
+            if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
+            services.RegisterSingleton(_ => ModSettings.Global.Feature<TSettings>(featureName));
+        }
+
+        public static void RegisterFeatureLocalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+        {
+            if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
+            services.RegisterSingleton(_ => ModSettings.Local.Feature<TSettings>(featureName));
         }
     }
 }

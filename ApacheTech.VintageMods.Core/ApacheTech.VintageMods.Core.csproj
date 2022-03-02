@@ -12,7 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="_Includes\LICENCE.md" />
+	  <None Remove="_Includes\LICENCE.md" />	
 	</ItemGroup>
 
 	<ItemGroup>
@@ -103,6 +103,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="_Includes\assets\vmods\lang\de.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="_Includes\assets\vmods\lang\es.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="_Includes\assets\vmods\lang\en.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

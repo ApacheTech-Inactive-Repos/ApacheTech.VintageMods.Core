@@ -9,6 +9,12 @@ namespace ApacheTech.VintageMods.Core.Extensions
 {
     public static class UnsortedGameExtensions
     {
+
+        public static void ReloadShadersThreadSafe(this IShaderAPI api)
+        {
+            ApiEx.ClientMain.EnqueueMainThreadTask(() => api.ReloadShaders(), "");
+        }
+
         public static void Delete(this LoadedTexture texture)
         {
             ApiEx.Client.Gui.DeleteTexture(texture.TextureId);

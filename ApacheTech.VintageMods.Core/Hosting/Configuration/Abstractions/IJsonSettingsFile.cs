@@ -1,12 +1,19 @@
 ﻿using System;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 
 namespace ApacheTech.VintageMods.Core.Hosting.Configuration.Abstractions
 {
     /// <summary>
     ///     Represents a settings file for the mod, in JSON format.
     /// </summary>
-    public interface IJsonSettingsFile
+    public interface IJsonSettingsFile : IDisposable
     {
+        /// <summary>
+        ///     Gets the underlying <see cref="IJsonModFile"/> that this instance wraps.
+        /// </summary>
+        /// <value>The file underlying JSON file from the file system.</value>
+        public IJsonModFile File { get; }
+
         /// <summary>
         ///     Retrieves the settings for a specific feature, parsed as a strongly-typed POCO class instance.
         ///     Changes made to the settings will automatically be written to the file, as they are set.
@@ -23,5 +30,12 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.Abstractions
         /// <param name="featureName">The name of the feature.</param>
         /// <param name="settings">The settings.</param>
         public void Save<T>(string featureName, T settings);
+
+        /// <summary>
+        ///     Saves the specified settings to file.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
+        /// <param name="settings">The settings.</param>
+        public void Save<T>(T settings);
     }
 }

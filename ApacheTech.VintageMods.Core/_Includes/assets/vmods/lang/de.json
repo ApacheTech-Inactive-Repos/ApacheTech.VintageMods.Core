@@ -1,0 +1,89 @@
+{
+  // ReSharper disable CommentTypo
+  // ReSharper disable StringLiteralTypo
+  // ==================================================================================
+  //  VintageMods Core Framework - Language File
+  // ==================================================================================
+  //
+  //    Language: German
+  //    Language Code: en
+  //    Translated By: Apache
+  //    Mod Version: 2.0.0
+  //    
+  // ==================================================================================
+
+  // Boolean Values.
+  "vmods:boolean-value-True": "Wahr",
+  "vmods:boolean-value-False": "Falsch",
+
+  // Ordinal Numbers. (1st, 2nd, 3rd, etc.)
+  "vmods:ordinal-numbers-st:": "st",
+  "vmods:ordinal-numbers-nd:": "nd",
+  "vmods:ordinal-numbers-rd:": "rd",
+
+  // Dates and Times.
+  "vmods:datetime-months-abbr-0": "Jan",
+  "vmods:datetime-months-full-0": "Januar",
+  "vmods:datetime-months-abbr-1": "Feb",
+  "vmods:datetime-months-full-1": "Februar",
+  "vmods:datetime-months-abbr-2": "Mar",
+  "vmods:datetime-months-full-2": "März",
+  "vmods:datetime-months-abbr-3": "Apr",
+  "vmods:datetime-months-full-3": "April",
+  "vmods:datetime-months-abbr-4": "Mai",
+  "vmods:datetime-months-full-4": "Mai",
+  "vmods:datetime-months-abbr-5": "Jun",
+  "vmods:datetime-months-full-5": "Juni",
+  "vmods:datetime-months-abbr-6": "Jul",
+  "vmods:datetime-months-full-6": "Juli",
+  "vmods:datetime-months-abbr-7": "Aug",
+  "vmods:datetime-months-full-7": "August",
+  "vmods:datetime-months-abbr-8": "Sep",
+  "vmods:datetime-months-full-8": "September",
+  "vmods:datetime-months-abbr-9": "Okt",
+  "vmods:datetime-months-full-9": "Oktober",
+  "vmods:datetime-months-abbr-10": "Nov",
+  "vmods:datetime-months-full-10": "November",
+  "vmods:datetime-months-abbr-11": "Dez",
+  "vmods:datetime-months-full-11": "Dezember",
+
+  "vmods:datetime-days-abbr-0": "Mo",
+  "vmods:datetime-days-full-0": "Montag",
+  "vmods:datetime-days-abbr-1": "Di",
+  "vmods:datetime-days-full-1": "Dienstag",
+  "vmods:datetime-days-abbr-2": "Mi",
+  "vmods:datetime-days-full-2": "Mittwoch",
+  "vmods:datetime-days-abbr-3": "Do",
+  "vmods:datetime-days-full-3": "Donnerstag",
+  "vmods:datetime-days-abbr-4": "Fr",
+  "vmods:datetime-days-full-4": "Freitag",
+  "vmods:datetime-days-abbr-5": "Sa",
+  "vmods:datetime-days-full-5": "Samstag",
+  "vmods:datetime-days-abbr-6": "So",
+  "vmods:datetime-days-full-6": "Sonntag",
+
+  // Exceptions
+  "vmods:exceptions.file-not-registered-or-missing": "Die Datei `{0}` existiert entweder nicht oder wurde noch nicht beim FileSystem Service registriert.",
+  "vmods:exceptions.local-file-does-not-exist": "Die lokale Datei `{0}` existiert nicht im Mod-Ordner.",
+  "vmods:exceptions.local-file-duplicated": "Die lokale Datei `{0}` ist im Mod-Ordner dupliziert",
+
+  // Confirmation Messages
+  "vmods:confirmation-confirm-title": "Bestätigung",
+  "vmods:confirmation-information-title": "Informationen",
+
+  "vmods:confirmation-default-message": "Sind Sie sicher, dass Sie diese Aktion durchführen wollen?",
+
+  "vmods:confirmation-yes": "Ja",
+  "vmods:confirmation-no": "Nein",
+  "vmods:confirmation-ok": "OK",
+  "vmods:confirmation-cancel": "Abbrechen",
+  "vmods:confirmation-delete": "Löschen",
+  "vmods:confirmation-add": "Hinzufügen",
+  "vmods:confirmation-export": "Exportieren",
+  "vmods:confirmation-import": "Importieren",
+  "vmods:confirmation-abort": "Abbruch",
+  "vmods:confirmation-retry": "Wiederholen",
+
+  // Common Phrases
+  "vmods:common-phrases.donate": "An Mod-Autor spenden"
+}

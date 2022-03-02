@@ -13,12 +13,12 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 {
     public static class ModPaths
     {
-        private static Assembly ModAssembly { get; }
+        private static Assembly ModAssembly { get; set; }
 
         /// <summary>
         /// 	Initialises static members of the <see cref="ModPaths" /> class.
         /// </summary>
-        static ModPaths()
+        internal static void Initalise()
         {
             ModAssembly = AssemblyEx.GetModAssembly();
             ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, ApiEx.ModInfo.RootDirectoryName));
@@ -38,13 +38,13 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         ///     Gets the path used for storing data files for a particular mod.
         /// </summary>
         /// <value>A path on the filesystem, used to store mod files.</value>
-        public static string ModDataRootPath { get; }
+        public static string ModDataRootPath { get; private set; }
 
         /// <summary>
         ///     Gets the path used for storing global data files.
         /// </summary>
         /// <value>A path on the filesystem, used to store mod files.</value>
-        public static string ModDataGlobalPath { get; }
+        public static string ModDataGlobalPath { get; private set; }
 
         /// <summary>
         ///     Gets the path used for storing per-world data files.
@@ -56,13 +56,13 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         ///     Gets the path that the mod library is stored in.
         /// </summary>
         /// <value>A path on the filesystem, used to store mod files.</value>
-        public static string ModRootPath { get; }
+        public static string ModRootPath { get; private set; }
 
         /// <summary>
         ///     Gets the main asset origin directory for the mod.
         /// </summary>
         /// <value>A path on the filesystem, used to store mod files.</value>
-        public static string ModAssetsPath { get; }
+        public static string ModAssetsPath { get; private set; }
 
         /// <summary>
         ///     Creates a directory on the file-system.
@@ -100,6 +100,19 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
                 > 1 => throw new FileLoadException(
                     Lang.Get("vmods:exceptions.local-file-duplicated", fileName))
             };
+        }
+
+        /// <summary>
+        ///     DEV NOTE: Stops world settings files from being transferred between worlds.
+        /// </summary>
+        internal static void Dispose()
+        {
+            ModAssembly = null;
+            ModDataRootPath = null;
+            ModDataGlobalPath = null;
+            ModDataWorldPath = null;
+            ModRootPath = null;
+            ModAssetsPath = null;
         }
     }
 }

@@ -64,6 +64,8 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.DynamicNotifyPropert
         public void Dispose()
         {
             _harmony.UnpatchAll();
+            _instance = null;
+            _observedInstance = null;
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

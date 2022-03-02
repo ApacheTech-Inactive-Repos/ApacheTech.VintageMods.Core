@@ -1,4 +1,5 @@
 ﻿using System;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 using SmartAssembly.Attributes;
@@ -30,17 +31,17 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration.Extensions
             FileScope scope)
         {
             fileSystem.RegisterFile(fileName, scope);
-            var file = new JsonSettingsFile(fileSystem.GetJsonFile(fileName));
+            var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName));
             switch (scope)
             {
                 case FileScope.Global:
-                    ModSettings.Global = file;
+                    ApiEx.Run(() => ModSettings.ClientGlobal = file, () => ModSettings.ServerGlobal = file);
                     break;
                 case FileScope.World:
-                    ModSettings.World = file;
+                    ApiEx.Run(() => ModSettings.ClientWorld = file, () => ModSettings.ServerWorld = file);
                     break;
                 case FileScope.Local:
-                    ModSettings.Local = file;
+                    ApiEx.Run(() => ModSettings.ClientLocal = file, () => ModSettings.ServerLocal = file);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(scope), scope, null);

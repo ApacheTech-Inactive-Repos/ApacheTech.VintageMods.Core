@@ -1,4 +1,5 @@
-﻿using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
+﻿using System;
+using ApacheTech.VintageMods.Core.Services.FileSystem.Enums;
 
 // ReSharper disable UnusedMethodReturnValue.Global
 // ReSharper disable UnusedMemberInSuper.Global
@@ -12,7 +13,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
     /// <summary>
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
-    public interface IFileSystemService
+    public interface IFileSystemService : IDisposable
     {
         /// <summary>
         ///     Retrieves a file that has previously been registered with the FileSystem Service.

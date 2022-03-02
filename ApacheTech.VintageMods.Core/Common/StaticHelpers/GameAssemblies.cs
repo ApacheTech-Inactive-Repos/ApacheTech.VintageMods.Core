@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ApacheTech.Common.Extensions.System;
+using ApacheTech.VintageMods.Core.Extensions.DotNet;
 using HarmonyLib;
 
 // ReSharper disable UnusedType.Global
@@ -19,27 +20,27 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <summary>
         ///     VSEssentials.dll
         /// </summary>
-        public static Assembly VSEssentials => GetAssembly("VSEssentials.dll");
+        public static Assembly VSEssentials => GetAssembly("VSEssentials");
 
         /// <summary>
         ///     VSSurvivalMod.dll
         /// </summary>
-        public static Assembly VSSurvivalMod => GetAssembly("VSSurvivalMod.dll");
+        public static Assembly VSSurvivalMod => GetAssembly("VSSurvivalMod");
 
         /// <summary>
         ///     VSCreativeMod.dll
         /// </summary>
-        public static Assembly VSCreativeMod => GetAssembly("VSCreativeMod.dll");
+        public static Assembly VSCreativeMod => GetAssembly("VSCreativeMod");
 
         /// <summary>
         ///     VintagestoryAPI.dll
         /// </summary>
-        public static Assembly VintagestoryAPI => GetAssembly("VintagestoryAPI.dll");
+        public static Assembly VintagestoryAPI => GetAssembly("VintagestoryAPI");
 
         /// <summary>
         ///     VintagestoryLib.dll
         /// </summary>
-        public static Assembly VintagestoryLib => GetAssembly("VintagestoryLib.dll");
+        public static Assembly VintagestoryLib => GetAssembly("VintagestoryLib");
 
         /// <summary>
         ///     Vintagestory.exe
@@ -90,9 +91,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
 
         private static Assembly GetAssembly(string name)
         {
-            return Assembly.GetEntryAssembly()?
-                .Modules?.FirstOrDefault(p => p.Name == name)?
-                .Assembly;
+            return AppDomain.CurrentDomain.GetAssemblyByName(name);
         }
     }
 }

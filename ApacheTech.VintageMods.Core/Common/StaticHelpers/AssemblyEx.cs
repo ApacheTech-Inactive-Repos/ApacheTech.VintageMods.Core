@@ -21,7 +21,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// <returns>The <see cref="Assembly"/> that contains the core's entry point.</returns>
         public static Assembly GetCoreAssembly()
         {
-            return typeof(ApiEx).Assembly;
+            return typeof(AssemblyEx).Assembly;
         }
     }
 }

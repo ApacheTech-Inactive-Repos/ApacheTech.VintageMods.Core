@@ -82,5 +82,8 @@
   "vmods:confirmation-export": "Экспорт",
   "vmods:confirmation-import": "Импорт",
   "vmods:confirmation-abort": "Прервать",
-  "vmods:confirmation-retry": "Повторить"
+  "vmods:confirmation-retry": "Повторить",
+
+  // Common Phrases
+  "vmods:common-phrases.donate": "Пожертвовать автору мода"
 }

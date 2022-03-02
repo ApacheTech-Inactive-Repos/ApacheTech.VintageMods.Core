@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
+using ApacheTech.VintageMods.Core.Hosting.Configuration;
 using ApacheTech.VintageMods.Core.Services.EmbeddedResources;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;
@@ -29,11 +30,12 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
     {
         private readonly IEmbeddedResourcesService _embeddedResources;
 
-        private readonly Dictionary<string, ModFileBase> _registeredFiles = new();
+        private readonly IDictionary<string, ModFileBase> _registeredFiles;
 
         public FileSystemService(IEmbeddedResourcesService embeddedResources)
         {
             _embeddedResources = embeddedResources;
+            _registeredFiles = new Dictionary<string, ModFileBase>();
         }
 
         /// <summary>
@@ -136,6 +138,29 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
                 if (file.ParseFileType() != FileType.Json) return;
                 await writer.WriteLineAsync("[]");
             });
+        }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            ApiEx.Run(ClientDispose, ServerDispose);
+            _registeredFiles.Clear();
+        }
+
+        private static void ClientDispose()
+        {
+            ModSettings.ClientGlobal?.Dispose();
+            ModSettings.ClientWorld?.Dispose();
+            ModSettings.ClientLocal?.Dispose();
+        }
+
+        private static void ServerDispose()
+        {
+            ModSettings.ServerGlobal?.Dispose();
+            ModSettings.ServerWorld?.Dispose();
+            ModSettings.ServerLocal?.Dispose();
         }
     }
 }

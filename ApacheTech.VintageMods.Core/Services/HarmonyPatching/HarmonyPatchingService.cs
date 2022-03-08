@@ -6,7 +6,6 @@ using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Annotation;
 using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.Common.Extensions.Reflection;
-using ApacheTech.VintageMods.Core.Abstractions.Features;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Abstractions;
 using ApacheTech.VintageMods.Core.Services.HarmonyPatching.Annotations;
@@ -56,15 +55,14 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         /// </summary>
         /// <param name="instance">The harmony instance for which to run the patches for.</param>
         /// <param name="assembly">The assembly that hold the annotated patch classes to process.</param>
-        private static void PatchAll(Harmony instance, Assembly assembly)
+        private void PatchAll(Harmony instance, Assembly assembly)
         {
             var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
             foreach (var (type, attribute) in sidedPatches)
             {
-                if (attribute.Side is EnumAppSide.Universal || attribute.Side == ApiEx.Side)
-                {
-                    instance.CreateClassProcessor(type).Patch();        
-                }
+                if (attribute.Side is not EnumAppSide.Universal && attribute.Side != ApiEx.Side) continue;
+                var processor = instance.CreateClassProcessor(type);
+                processor.Patch();
             }
         }
 
@@ -79,16 +77,13 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
             }
         }
 
-        private void DisposeAllPatchClasses(Assembly assembly)
+        private static void DisposeAllPatchClasses(Assembly assembly)
         {
             var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
             foreach (var (type, attribute) in sidedPatches)
             {
                 if (attribute.Side is not EnumAppSide.Universal && attribute.Side != ApiEx.Side) continue;
-                if (type.IsSubclassOf(typeof(WorldSettingsConsumer<>)) || type.IsSubclassOf(typeof(GlobalSettingsConsumer<>)))
-                {
-                    type.CallMethod("Dispose");
-                }
+                type.CallMethod("Dispose");
             }
         }
 
@@ -133,6 +128,7 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
         public void Dispose()
         {
             UnpatchAll();
+            _instances.Clear();
             DisposeAllPatchClasses(AssemblyEx.GetModAssembly());
             DisposeAllPatchClasses(AssemblyEx.GetCoreAssembly());
         }

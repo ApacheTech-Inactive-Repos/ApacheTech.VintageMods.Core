@@ -62,5 +62,37 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
         /// </summary>
         /// <value>The local settings.</value>
         public static IJsonSettingsFile Local => ApiEx.OneOf(ClientLocal, ServerLocal);
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public static void Dispose()
+        {
+            ApiEx.Run(ClientDispose, ServerDispose);
+        }
+
+        private static void ClientDispose()
+        {
+            ClientGlobal?.Dispose();
+            ClientGlobal = null;
+
+            ClientWorld?.Dispose();
+            ClientWorld = null;
+
+            ClientLocal?.Dispose();
+            ClientLocal = null;
+        }
+
+        private static void ServerDispose()
+        {
+            ServerGlobal?.Dispose();
+            ServerGlobal = null;
+
+            ServerWorld?.Dispose();
+            ServerWorld = null;
+
+            ServerLocal?.Dispose();
+            ServerLocal = null;
+        }
     }
 }

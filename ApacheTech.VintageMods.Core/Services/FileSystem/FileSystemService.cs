@@ -145,22 +145,8 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
         /// </summary>
         public void Dispose()
         {
-            ApiEx.Run(ClientDispose, ServerDispose);
+           ModSettings.Dispose();
             _registeredFiles.Clear();
-        }
-
-        private static void ClientDispose()
-        {
-            ModSettings.ClientGlobal?.Dispose();
-            ModSettings.ClientWorld?.Dispose();
-            ModSettings.ClientLocal?.Dispose();
-        }
-
-        private static void ServerDispose()
-        {
-            ModSettings.ServerGlobal?.Dispose();
-            ModSettings.ServerWorld?.Dispose();
-            ModSettings.ServerLocal?.Dispose();
         }
     }
 }

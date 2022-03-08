@@ -236,13 +236,13 @@ namespace ApacheTech.VintageMods.Core.GameContent.AssetEnum
         
         public static string[] ValuesList()
         {
-            var list = AllFields.Select(p => p.GetValue(null).ToString()).ToArray();
+            var list = AllColours.Select(p => p.GetValue(null).ToString()).ToArray();
             return list;
         }
 
         public static string[] NamesList()
         {
-            var list = AllFields.Select(p => p.Name.SplitPascalCase()).ToArray();
+            var list = AllColours.Select(p => p.Name.SplitPascalCase()).ToArray();
             return list;
         }
 
@@ -278,10 +278,11 @@ namespace ApacheTech.VintageMods.Core.GameContent.AssetEnum
 
         static NamedColour()
         {
-            var type = typeof(NamedColour);
-            AllFields = type.GetFields(BindingFlags.Static | BindingFlags.Public).ToList();
+            AllColours = typeof(NamedColour)
+                .GetProperties(BindingFlags.Static | BindingFlags.Public)
+                .Where(p => p.PropertyType == typeof(string));
         }
 
-        private static List<FieldInfo> AllFields { get; }
+        private static IEnumerable<PropertyInfo> AllColours { get; }
     }
 }

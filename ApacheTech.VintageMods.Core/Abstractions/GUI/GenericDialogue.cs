@@ -89,7 +89,8 @@ namespace ApacheTech.VintageMods.Core.Abstractions.GUI
         protected EnumDialogArea Alignment { private get; set; } = EnumDialogArea.RightBottom;
 
         protected ElementBounds DialogueBounds { get; private set; }
-        protected bool Movable { get; set; } = false;
+
+        protected bool Movable { get; set; }
 
         protected bool Modal { get; set; } = true;
 

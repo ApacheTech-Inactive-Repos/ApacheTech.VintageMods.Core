@@ -9,6 +9,7 @@ using ApacheTech.VintageMods.Core.Abstractions.ModSystems;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using ApacheTech.VintageMods.Core.Extensions.DotNet;
+using ApacheTech.VintageMods.Core.Hosting.Configuration;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration;
 using ApacheTech.VintageMods.Core.Services;
@@ -18,6 +19,7 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
+// ReSharper disable VirtualMemberNeverOverridden.Global
 // ReSharper disable UnusedParameter.Global
 
 namespace ApacheTech.VintageMods.Core.Hosting
@@ -219,6 +221,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
                     break;
                 case EnumAppSide.Client:
                     ClientFeatures.ForEach(p => p.Start(api));
+                    ((ICoreClientAPI)api).Event.LeftWorld += Dispose;
                     break;
                 case EnumAppSide.Universal:
                     break;
@@ -256,12 +259,18 @@ namespace ApacheTech.VintageMods.Core.Hosting
         /// </summary>
         public override void Dispose()
         {
+            DisposeOnLeaveWorld();
+            base.Dispose();
+        }
+
+        private static void DisposeOnLeaveWorld()
+        {
+            ModSettings.Dispose();
             ModServices.IOC?.Dispose();
             ApiEx.Dispose();
             AssemblyEx.GetModAssembly().NullifyOrphanedStaticMembers();
             AssemblyEx.GetCoreAssembly().NullifyOrphanedStaticMembers();
             AssemblyEx.ModAssembly = null;
-            base.Dispose();
         }
 
         #endregion

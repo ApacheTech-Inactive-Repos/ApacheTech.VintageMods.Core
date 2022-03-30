@@ -64,13 +64,13 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             return new Vec2f(platform.window.Width, platform.window.Height);
         }
 
-        public static object GetVanillaClientSystem(this ICoreClientAPI api, string name)
+        public static object GetInternalClientSystem(this ICoreClientAPI api, string name)
         {
             var clientSystems = (api.World as ClientMain).GetField<ClientSystem[]>("clientSystems");
             return clientSystems.FirstOrDefault(p => p.Name == name);
         }
 
-        public static T GetVanillaClientSystem<T>(this ICoreClientAPI api) where T : ClientSystem
+        public static T GetInternalClientSystem<T>(this ICoreClientAPI api) where T : ClientSystem
         {
             var clientSystems = (api.World as ClientMain).GetField<ClientSystem[]>("clientSystems");
             return clientSystems.FirstOrDefault(p => p.GetType() == typeof(T)) as T;
@@ -78,7 +78,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
 
 
 
-        public static T GetVanillaServerSystem<T>(this ICoreServerAPI sapi) where T : ServerSystem
+        public static T GetInternalServerSystem<T>(this ICoreServerAPI sapi) where T : ServerSystem
         {
             var systems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
             return systems.FirstOrDefault(p => p.GetType() == typeof(T)) as T;
@@ -92,7 +92,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             eventManager.SetField("chatCommands", chatCommands);
         }
 
-        public static void UnregisterVanillaClientSystem<T>(this ICoreClientAPI capi) where T : ClientSystem
+        public static void UnregisterInternalClientSystem<T>(this ICoreClientAPI capi) where T : ClientSystem
         {
             var clientMain = capi.World as ClientMain;
             var clientSystems = clientMain.GetField<ClientSystem[]>("clientSystems").ToList();
@@ -107,7 +107,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             clientMain.SetField("clientSystems", clientSystems.ToArray());
         }
 
-        public static void UnregisterVanillaClientSystem(this ICoreClientAPI capi, string name)
+        public static void UnregisterInternalClientSystem(this ICoreClientAPI capi, string name)
         {
             var clientMain = capi.World as ClientMain;
             var clientSystems = clientMain.GetField<ClientSystem[]>("clientSystems").ToList();

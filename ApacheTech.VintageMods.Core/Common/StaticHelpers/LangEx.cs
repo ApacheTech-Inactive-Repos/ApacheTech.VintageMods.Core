@@ -145,5 +145,16 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             return Get("ModTitle");
         }
+
+        /// <summary>
+        ///     Returns a localised string, from the core library.
+        /// </summary>
+        /// <param name="phrase">The phrase.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>A localised string from the core library's language files.</returns>
+        public static string CommonPhrase(string phrase, params object[] args)
+        {
+            return GetCore($"common-phrases.{phrase}", args);
+        }
     }
 }

@@ -15,5 +15,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
                 sound.Stop();
             }
         }
+
+        public static ClientPlatformAbstract Platform(this ClientMain game)
+        {
+            return game.GetField<ClientPlatformAbstract>("Platform");
+        }
     }
 }

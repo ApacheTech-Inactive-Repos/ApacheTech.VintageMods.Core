@@ -107,6 +107,16 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         }
 
         /// <summary>
+        ///     Determines whether a given mod is installed, and enabled, on the current app-side.
+        /// </summary>
+        /// <param name="modId">The mod identifier.</param>
+        /// <returns><c>true</c> if the mod is enabled; otherwise, <c>false</c>.</returns>
+        public static bool IsModEnabled(string modId)
+        {
+            return Current.ModLoader.IsModEnabled(modId);
+        }
+
+        /// <summary>
         ///     Gets the current app-side.
         /// </summary>
         /// <value>An <see cref="EnumAppSide"/> value, representing current app-side; Client, or Server.</value>
@@ -161,9 +171,9 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             
         public static IAsyncActions Async => OneOf<IAsyncActions>(ClientAsync, ServerAsync);
 
-        private static ClientSystemAsyncActions ClientAsync => Client.GetVanillaClientSystem<ClientSystemAsyncActions>();
+        private static ClientSystemAsyncActions ClientAsync => Client.GetInternalClientSystem<ClientSystemAsyncActions>();
 
-        private static ServerSystemAsyncActions ServerAsync => Server.GetVanillaServerSystem<ServerSystemAsyncActions>();
+        private static ServerSystemAsyncActions ServerAsync => Server.GetInternalServerSystem<ServerSystemAsyncActions>();
 
 
         /// <summary>

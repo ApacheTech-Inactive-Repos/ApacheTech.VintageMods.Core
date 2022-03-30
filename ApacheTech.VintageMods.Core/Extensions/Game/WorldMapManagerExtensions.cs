@@ -50,6 +50,7 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             try
             {
                 var map = mapManager.worldMapDlg;
+                if (map is null) return;
                 UpdateMapGui(map.GetField<GuiComposer>("fullDialog"), pos);
                 UpdateMapGui(map.GetField<GuiComposer>("hudDialog"), pos);
             }
@@ -60,16 +61,10 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             }
         }
 
-
         private static void UpdateMapGui(GuiComposer composer, Vec3d pos)
         {
             var map = (GuiElementMap)composer.GetElement("mapElem");
             map.CenterMapTo(pos.AsBlockPos);
-            //map.CurrentBlockViewBounds.X1 = pos.X - map.Bounds.InnerWidth / 2.0 / map.ZoomLevel;
-            //map.CurrentBlockViewBounds.Z1 = pos.Z - map.Bounds.InnerHeight / 2.0 / map.ZoomLevel;
-            //map.CurrentBlockViewBounds.X2 = pos.X + map.Bounds.InnerWidth / 2.0 / map.ZoomLevel;
-            //map.CurrentBlockViewBounds.Z2 = pos.Z + map.Bounds.InnerHeight / 2.0 / map.ZoomLevel;
-            //map.EnsureMapFullyLoaded();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
         /// </summary>
         protected override void SaveChanges()
         {
-            ModSettings.Global.Save(FeatureName, Settings);
+            ModSettings.Global.Save(Settings, FeatureName);
         }
     }
 }

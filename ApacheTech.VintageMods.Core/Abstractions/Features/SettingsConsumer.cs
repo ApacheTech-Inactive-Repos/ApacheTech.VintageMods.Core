@@ -8,7 +8,7 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
 {
     public abstract class SettingsConsumer<T> where T : FeatureSettings
     {
-        public static T Settings { get; set; } = ModServices.IOC.Resolve<T>();
+        public static T Settings => ModServices.IOC.Resolve<T>();
 
         public static string FeatureName { get; set; } = (typeof(T).Name).Replace("Settings", "");
 
@@ -26,7 +26,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
         public static void Initialise()
         {
             FeatureName = (typeof(T).Name).Replace("Settings", "");
-            Settings = ModServices.IOC.Resolve<T>();
         }
 
         /// <summary>
@@ -39,7 +38,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.Features
         /// </summary>
         public static void Dispose()
         {
-            Settings = null;
             FeatureName = null;
         }
     }

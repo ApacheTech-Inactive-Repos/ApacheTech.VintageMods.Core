@@ -58,15 +58,16 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
         /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
         /// <param name="featureName">The name of the feature.</param>
         /// <returns>An object, that represents the settings for a given mod feature.</returns>
-        public T Feature<T>(string featureName) where T: class, new()
+        public T Feature<T>(string featureName = null) where T: class, new()
         {
+            featureName ??= typeof(T).Name.Replace("Settings", "");
             try
             {
                 var json = File.ParseAs<JObject>();
                 if (json is null)
                 {
                     var defaultData = new T();
-                    Save(featureName, json = JObject.FromObject(defaultData));
+                    Save(json = JObject.FromObject(defaultData), featureName);
                 }
                 T featureObj;
                 var obj = json.SelectToken($"$.Features.{featureName}");
@@ -100,6 +101,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
         /// <typeparam name="T">The <see cref="Type" /> of object to parse the settings for the feature into.</typeparam>
         /// <param name="featureName">The name of the feature.</param>
         /// <param name="settings">The settings.</param>
+        [Obsolete]
         public void Save<T>(string featureName, T settings)
         {
             OnPropertyChanged(new FeatureSettingsChangedEventArgs<T>(featureName, settings));
@@ -110,10 +112,11 @@ namespace ApacheTech.VintageMods.Core.Hosting.Configuration
         /// </summary>
         /// <typeparam name="T">The <see cref="Type" /> of object to parse the settings for the feature into.</typeparam>
         /// <param name="settings">The settings.</param>
-        public void Save<T>(T settings)
+        /// <param name="featureName">The name of the feature.</param>
+        public void Save<T>(T settings, string featureName = null)
         {
-            var featureName = typeof(T).Name.Replace("Settings", "");
-            Save(featureName, settings);
+            featureName ??= typeof(T).Name.Replace("Settings", "");
+            OnPropertyChanged(new FeatureSettingsChangedEventArgs<T>(featureName, settings));
         }
 
         private void OnPropertyChanged<T>(FeatureSettingsChangedEventArgs<T> args)

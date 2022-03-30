@@ -111,7 +111,7 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem
             return GetRegisteredFile<ITextModFile>(fileName);
         }
 
-        private void CopyFileToOutputDirectory(FileInfo file)
+        private void CopyFileToOutputDirectory(FileSystemInfo file)
         {
             var assembly = AssemblyEx.GetModAssembly();
             if (_embeddedResources.ResourceExists(assembly, file.Name))

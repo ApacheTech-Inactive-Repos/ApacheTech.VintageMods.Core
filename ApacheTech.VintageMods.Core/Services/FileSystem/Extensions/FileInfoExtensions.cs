@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 // ReSharper disable UnusedMember.Global
 
@@ -78,6 +80,34 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Extensions
             using var sourceStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions);
             using var reader = new StreamReader(sourceStream);
             return reader.ReadToEndAsync();
+        }
+
+        /// <summary>
+        ///     Read all text from a file, as an asynchronous operation.    
+        /// </summary>
+        /// <param name="fileInfo">The <see cref="FileInfo"/> wrapper for the file to write to.</param>
+        /// <returns>A string, containing the contents of the file.</returns>
+        public static string ReadAllText(this FileInfo fileInfo)
+        {
+            return File.ReadAllText(fileInfo.FullName);
+        }
+
+        /// <summary>
+        ///     Deserialises the specified file as a collection of a strongly-typed object.
+        ///     The consuming type must have a paramaterless constructor.
+        /// </summary>
+        /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+        /// <returns>An instance of type <see cref="IEnumerable{TModel}"/>, populated with data from this file.</returns>
+        public static IEnumerable<TModel> ParseAsMany<TModel>(this FileInfo fileInfo) where TModel : class, new()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(fileInfo.FullName));
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
     }
 }

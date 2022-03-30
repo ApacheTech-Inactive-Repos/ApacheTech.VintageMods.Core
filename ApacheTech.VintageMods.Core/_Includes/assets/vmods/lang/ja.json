@@ -1,0 +1,87 @@
+{
+  // ReSharper disable CommentTypo
+  // ==================================================================================
+  //  VintageMods Core Framework - Language File
+  // ==================================================================================
+  //
+  //    Language: Japanese
+  //    Language Code: ja
+  //    Translated By: Macoto Hino
+  //    Mod Version: 2.1.3
+  //    
+  // ==================================================================================
+
+  // Boolean Values.
+  "vmods:boolean-value-True": "True",
+  "vmods:boolean-value-False": "False",
+
+  // Ordinal Numbers. (1st, 2nd, 3rd, etc.)
+  "vmods:ordinal-numbers-st:": "st",
+  "vmods:ordinal-numbers-nd:": "nd",
+  "vmods:ordinal-numbers-rd:": "rd",
+
+  // Dates and Times.
+  "vmods:datetime-months-abbr-0": "Jan",
+  "vmods:datetime-months-full-0": "1月",
+  "vmods:datetime-months-abbr-1": "Feb",
+  "vmods:datetime-months-full-1": "2月",
+  "vmods:datetime-months-abbr-2": "Mar",
+  "vmods:datetime-months-full-2": "3月",
+  "vmods:datetime-months-abbr-3": "Apr",
+  "vmods:datetime-months-full-3": "4月",
+  "vmods:datetime-months-abbr-4": "May",
+  "vmods:datetime-months-full-4": "5月",
+  "vmods:datetime-months-abbr-5": "Jun",
+  "vmods:datetime-months-full-5": "6月",
+  "vmods:datetime-months-abbr-6": "Jul",
+  "vmods:datetime-months-full-6": "7月",
+  "vmods:datetime-months-abbr-7": "Aug",
+  "vmods:datetime-months-full-7": "8月",
+  "vmods:datetime-months-abbr-8": "Sep",
+  "vmods:datetime-months-full-8": "9月",
+  "vmods:datetime-months-abbr-9": "Oct",
+  "vmods:datetime-months-full-9": "10月",
+  "vmods:datetime-months-abbr-10": "Nov",
+  "vmods:datetime-months-full-10": "11月",
+  "vmods:datetime-months-abbr-11": "Dec",
+  "vmods:datetime-months-full-11": "12月",
+
+  "vmods:datetime-days-abbr-0": "月",
+  "vmods:datetime-days-full-0": "月曜日",
+  "vmods:datetime-days-abbr-1": "火",
+  "vmods:datetime-days-full-1": "火曜日",
+  "vmods:datetime-days-abbr-2": "水",
+  "vmods:datetime-days-full-2": "水曜日",
+  "vmods:datetime-days-abbr-3": "木",
+  "vmods:datetime-days-full-3": "木曜日",
+  "vmods:datetime-days-abbr-4": "金",
+  "vmods:datetime-days-full-4": "金曜日",
+  "vmods:datetime-days-abbr-5": "土",
+  "vmods:datetime-days-full-5": "土曜日",
+  "vmods:datetime-days-abbr-6": "日",
+  "vmods:datetime-days-full-6": "日曜日",
+
+  // Exceptions
+  "vmods:exceptions.file-not-registered-or-missing": "ファイル `{0}` が存在しないか、または FileSystem Service にまだ登録されていません。",
+  "vmods:exceptions.local-file-does-not-exist": "ローカルファイル `{0}` が mod フォルダ内に存在しません。",
+  "vmods:exceptions.local-file-duplicated": "ローカルファイル `{0}` が mod フォルダ内に重複しています。",
+
+  // Confirmation Messages
+  "vmods:confirmation-confirm-title": "確認事項",
+  "vmods:confirmation-information-title": "インフォメーション",
+  "vmods:confirmation-default-message": "このアクションを実行してもよろしいですか？",
+  "vmods:confirmation-yes": "Yes",
+  "vmods:confirmation-no": "No",
+  "vmods:confirmation-ok": "OK",
+  "vmods:confirmation-cancel": "キャンセル",
+  "vmods:confirmation-delete": "削除",
+  "vmods:confirmation-add": "追加",
+  "vmods:confirmation-export": "エクスポート",
+  "vmods:confirmation-import": "インポート",
+  "vmods:confirmation-abort": "中止",
+  "vmods:confirmation-retry": "再試行",
+
+  // Common Phrases
+  "vmods:common-phrases.donate": "Mod作者に寄付",
+  "vmods:common-phrases.search": "検索"
+}

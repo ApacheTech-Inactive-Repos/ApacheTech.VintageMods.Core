@@ -85,5 +85,6 @@
   "vmods:confirmation-retry": "Wiederholen",
 
   // Common Phrases
-  "vmods:common-phrases.donate": "An Mod-Autor spenden"
+  "vmods:common-phrases.donate": "An Mod-Autor spenden",
+  "vmods:common-phrases.search": "Suche"
 }

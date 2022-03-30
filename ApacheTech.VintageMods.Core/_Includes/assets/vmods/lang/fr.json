@@ -85,5 +85,6 @@
   "vmods:confirmation-retry": "Réessayer",
 
   // Common Phrases
-  "vmods:common-phrases.donate": "Aire un don à l'auteur du Mod"
+  "vmods:common-phrases.donate": "Aire un don à l'auteur du Mod",
+  "vmods:common-phrases.search": "Recherche"
 }

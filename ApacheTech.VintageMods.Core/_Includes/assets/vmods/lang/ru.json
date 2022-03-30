@@ -85,5 +85,6 @@
   "vmods:confirmation-retry": "Повторить",
 
   // Common Phrases
-  "vmods:common-phrases.donate": "Пожертвовать автору мода"
+  "vmods:common-phrases.donate": "Пожертвовать автору мода",
+  "vmods:common-phrases.search": "Поиск"
 }

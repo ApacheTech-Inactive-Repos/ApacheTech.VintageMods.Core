@@ -83,5 +83,6 @@
   "vmods:confirmation-retry": "Reintentar",
 
   // Common Phrases
-  "vmods:common-phrases.donate": "Donar al Autor del Mod"
+  "vmods:common-phrases.donate": "Donar al Autor del Mod",
+  "vmods:common-phrases.search": "Buscar"
 }

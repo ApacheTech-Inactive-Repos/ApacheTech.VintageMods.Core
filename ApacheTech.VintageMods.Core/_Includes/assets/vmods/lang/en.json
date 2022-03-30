@@ -82,5 +82,6 @@
   "vmods:confirmation-retry": "Retry",
 
   // Common Phrases
-  "vmods:common-phrases.donate": "Donate to Mod Author"
+  "vmods:common-phrases.donate": "Donate to Mod Author",
+  "vmods:common-phrases.search": "Search"
 }

@@ -40,6 +40,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
         /// </summary>
         protected ModHost()
         {
+            ApiEx.ThreadSideCache.Clear();
             var assembly = AssemblyEx.ModAssembly = Assembly.GetAssembly(GetType());
             ApiEx.ModInfo = assembly.GetCustomAttribute<VintageModInfoAttribute>();
 

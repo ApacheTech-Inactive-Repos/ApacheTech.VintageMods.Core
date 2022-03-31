@@ -135,6 +135,25 @@ namespace ApacheTech.VintageMods.Core.Extensions.DotNet
         }
 
         /// <summary>
+        ///     Adds an item to the <see cref="IDictionary{TKey,TValue}" />, if it not already present in the collection.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the elements of <paramref name="key" />.</typeparam>
+        /// <typeparam name="TValue">The type of the elements of <paramref name="value" />.</typeparam>
+        /// <param name="collection">The collection to add the item to.</param>
+        /// <param name="key">The key to add.</param>
+        /// <param name="value">The value to add.</param>
+        /// <returns><c>true</c> if the item was added to collection, <c>false</c> otherwise.</returns>
+        public static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> collection, TKey key, TValue value)
+        {
+            if (!collection.ContainsKey(key))
+            {
+                collection.Add(key, value);
+                return;
+            }
+            collection[key] = value;
+        }
+
+        /// <summary>
         ///     Adds an item to the <see cref="IEnumerable{TValue}" />, if it should exist within the collection, and doesn't already.
         ///     If the value shouldn't exist, and it does, it will be removed from the collection.
         /// </summary>

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.InternalSystems;
+using ApacheTech.VintageMods.Core.Extensions.DotNet;
 using ApacheTech.VintageMods.Core.Extensions.Game;
 using ApacheTech.VintageMods.Core.Extensions.Game.Threading;
 using Vintagestory.API.Client;
@@ -50,7 +52,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         ///     Common API Components that are available on the server and the client. Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
         /// </summary>
         /// <value>The universal API.</value>
-        public static ICoreAPI Current => OneOf<ICoreAPI>(Client, Server);  
+        public static ICoreAPI Current => OneOf<ICoreAPI>(Client, Server);
 
         /// <summary>
         ///     The concrete implementation of the <see cref="IClientWorldAccessor"/> interface. Contains access to lots of world manipulation and management features.
@@ -127,6 +129,8 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
                 // Obtaining the app-side, without having direct access to a specific CoreAPI.
                 // NB: This is not a fool-proof. This is a drawback of using a Threaded Server, over Dedicated Server for Single-Player games.
 
+                // TODO: This causes performance hits. Slowed CC down to a crawl, when used in the OnEntityCollide patch. Should probably be cached, with a timed unlock.
+
                 // 1. If modinfo.json states the mod is only for a single side, return that side.
                 if (ModInfo.Side is not EnumAppSide.Universal) return ModInfo.Side;
 
@@ -138,14 +142,33 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
                 var threadName = Thread.CurrentThread.Name;
                 if (string.Equals(threadName, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)) return EnumAppSide.Server;
 
+                // 4. If the current thread has already been cached, return the cached side.
+                var thread = Thread.CurrentThread;
+                if (ThreadSideCache.ContainsKey(thread.ManagedThreadId))
+                {
+                    return ThreadSideCache[thread.ManagedThreadId];
+                }
+
                 // By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
-                // 4. If ServerMain is populated, and the thread's name matches one within the server's thread list, we are on the server.
-                // 5. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
+                // 5. If ServerMain is populated, and the thread's name matches one within the server's thread list, we are on the server.
+                // 6. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
                 return ServerMain?.GetServerThreads().Any(p =>
                     string.Equals(threadName, p.Name, StringComparison.InvariantCultureIgnoreCase)) ?? false
-                    ? EnumAppSide.Server
-                    : EnumAppSide.Client;
+                    ? CacheAppSide(EnumAppSide.Server, thread)
+                    : CacheAppSide(EnumAppSide.Client, thread);
             }
+        }
+
+        internal static Dictionary<int, EnumAppSide> ThreadSideCache { get; } = new();
+
+        private static EnumAppSide CacheAppSide(EnumAppSide side, Thread thread)
+        {
+            // NB:  It's possible that this caching can lead to false positives; especially on Single-Player or LAN worlds.
+            //      To limit this, I've made it so that thread pool threads don't get cached.
+            //      It may be necessary to also disallow background threads... however, this may cause the whole caching system to be made redundant.
+            if (thread.IsThreadPoolThread) return side;
+            ThreadSideCache.AddOrUpdate(thread.ManagedThreadId, side);
+            return side;
         }
 
         /// <summary>
@@ -159,16 +182,16 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         public static bool IsOnMainThread()
         {
             var thread = Thread.CurrentThread;
-            return thread.GetApartmentState() == ApartmentState.STA 
+            return thread.GetApartmentState() == ApartmentState.STA
                    && !thread.IsBackground
-                   && !thread.IsThreadPoolThread 
+                   && !thread.IsThreadPoolThread
                    && thread.IsAlive;
         }
 
         //
         // Async
         //
-            
+
         public static IAsyncActions Async => OneOf<IAsyncActions>(ClientAsync, ServerAsync);
 
         private static ClientSystemAsyncActions ClientAsync => Client.GetInternalClientSystem<ClientSystemAsyncActions>();
@@ -181,6 +204,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// </summary>
         public static void Dispose()
         {
+            ThreadSideCache.Clear();
             Run(() => ClientAsync?.Dispose(),
                 () => ServerAsync?.Dispose());
         }

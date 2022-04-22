@@ -126,37 +126,44 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             get
             {
-                // Obtaining the app-side, without having direct access to a specific CoreAPI.
-                // NB: This is not a fool-proof. This is a drawback of using a Threaded Server, over Dedicated Server for Single-Player games.
-
-                // TODO: This causes performance hits. Slowed CC down to a crawl, when used in the OnEntityCollide patch. Should probably be cached, with a timed unlock.
-
-                // 1. If modinfo.json states the mod is only for a single side, return that side.
-                if (ModInfo.Side is not EnumAppSide.Universal) return ModInfo.Side;
-
-                // 2. If the process name is "VintagestoryServer", we are on the server.
-                if (Process.GetCurrentProcess().ProcessName == "VintagestoryServer") return EnumAppSide.Server;
-
-                // 3. If the current thread name is "SingleplayerServer", we are on the server. 
-                // NB: A thread's name filters down through child threads, and thread-pool threads, unless manually changed.
-                var threadName = Thread.CurrentThread.Name;
-                if (string.Equals(threadName, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)) return EnumAppSide.Server;
-
-                // 4. If the current thread has already been cached, return the cached side.
                 var thread = Thread.CurrentThread;
-                if (ThreadSideCache.ContainsKey(thread.ManagedThreadId))
+                if (thread.IsThreadPoolThread) return DetermineAppSide(thread);
+                try
                 {
                     return ThreadSideCache[thread.ManagedThreadId];
                 }
-
-                // By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
-                // 5. If ServerMain is populated, and the thread's name matches one within the server's thread list, we are on the server.
-                // 6. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
-                return ServerMain?.GetServerThreads().Any(p =>
-                    string.Equals(threadName, p.Name, StringComparison.InvariantCultureIgnoreCase)) ?? false
-                    ? CacheAppSide(EnumAppSide.Server, thread)
-                    : CacheAppSide(EnumAppSide.Client, thread);
+                catch (KeyNotFoundException)
+                {
+                    var side = DetermineAppSide(thread);
+                    return CacheAppSide(side, thread);
+                }
             }
+        }
+
+        private static EnumAppSide DetermineAppSide(Thread thread)
+        {                    
+            // Obtaining the app-side, without having direct access to a specific CoreAPI.
+            // NB: This is not a fool-proof. This is a drawback of using a Threaded Server, over Dedicated Server for Single-Player games.
+
+            // TODO: This causes performance hits. Slowed CC down to a crawl, when used in the OnEntityCollide patch.
+
+            // 1. If modinfo.json states the mod is only for a single side, return that side.
+            if (ModInfo.Side is not EnumAppSide.Universal) return ModInfo.Side;
+
+            // 2. If the process name is "VintagestoryServer", we are on the server.
+            if (Process.GetCurrentProcess().ProcessName == "VintagestoryServer") return EnumAppSide.Server;
+
+            // 3. If the current thread name is "SingleplayerServer", we are on the server. 
+            // NB: A thread's name filters down through child threads, and thread-pool threads, unless manually changed.
+            if (string.Equals(thread.Name, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase)) return EnumAppSide.Server;
+
+            // By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
+            // 4. If ServerMain is populated, and the thread's name matches one within the server's thread list, we are on the server.
+            // 5. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
+            return ServerMain?.GetServerThreads().Any(p =>
+                string.Equals(thread.Name, p.Name, StringComparison.InvariantCultureIgnoreCase)) ?? false
+                ? EnumAppSide.Server
+                : EnumAppSide.Client;
         }
 
         internal static Dictionary<int, EnumAppSide> ThreadSideCache { get; } = new();
@@ -165,7 +172,6 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {
             // NB:  It's possible that this caching can lead to false positives; especially on Single-Player or LAN worlds.
             //      To limit this, I've made it so that thread pool threads don't get cached.
-            //      It may be necessary to also disallow background threads... however, this may cause the whole caching system to be made redundant.
             if (thread.IsThreadPoolThread) return side;
             ThreadSideCache.AddOrUpdate(thread.ManagedThreadId, side);
             return side;

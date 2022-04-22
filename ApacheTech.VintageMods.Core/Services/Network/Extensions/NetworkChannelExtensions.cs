@@ -16,7 +16,7 @@ namespace ApacheTech.VintageMods.Core.Services.Network.Extensions
         public static TChannel RegisterPropertyPacketTypes<TChannel>(this TChannel channel)
             where TChannel : INetworkChannel
         {
-            return (TChannel)channel
+            return (TChannel)channel?
                 .RegisterMessageType<SetPropertyPacket<bool>>()
                 .RegisterMessageType<SetPropertyPacket<byte>>()
                 .RegisterMessageType<SetPropertyPacket<sbyte>>()

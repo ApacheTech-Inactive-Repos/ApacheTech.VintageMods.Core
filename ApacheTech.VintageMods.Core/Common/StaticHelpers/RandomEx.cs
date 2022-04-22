@@ -32,6 +32,26 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             return Random.NextDouble() * (maxValue - minValue) + minValue;
         }
 
+        /// <summary>
+        ///     Returns a random <see langword="double"/> that is within a specified range.
+        /// </summary>
+        /// <param name="value">The value to randomise.</param>
+        /// <param name="threshold">The threshold of the lower and upper bounds of randomisation.</param>
+        public static double RandomValueAround(double value, double threshold)
+        {
+            return RandomValueBetween(value - threshold, value + threshold);
+        }
+
+        /// <summary>
+        ///     Returns a random <see langword="double"/> that is within a specified range.
+        /// </summary>
+        /// <param name="value">The value to randomise.</param>
+        /// <param name="threshold">The threshold of the lower and upper bounds of randomisation.</param>
+        public static int RandomValueAround(int value, int threshold)
+        {
+            return (int)RandomValueBetween(value - threshold, value + threshold);
+        }
+
         public static bool RandomBool()
         {
             return Random.Next(2) == 0;

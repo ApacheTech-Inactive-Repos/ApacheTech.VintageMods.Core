@@ -134,5 +134,41 @@ namespace ApacheTech.VintageMods.Core.Extensions
         {
             return Math.Abs(value) == 1 ? singular : plural;
         }
+
+        /// <summary>
+        ///     Removes an item to the <see cref="ICollection{TItem}" />, if it is already present in the collection.
+        /// </summary>
+        /// <returns><c>true</c> if the item was removed from the collection, <c>false</c> otherwise.</returns>
+        public static bool AddIfNotPresent<TKey, TValue>(this IDictionary<TKey, TValue> collection, TKey key, TValue value)
+        {
+            var contains = collection.ContainsKey(key);
+            if (!contains) collection.Add(key, value);
+            return !contains;
+        }
+
+        /// <summary>
+        ///     Removes an item to the <see cref="ICollection{TItem}" />, if it is already present in the collection.
+        /// </summary>
+        /// <returns><c>true</c> if the item was removed from the collection, <c>false</c> otherwise.</returns>
+        public static bool RemoveIfPresent<TKey, TValue>(this IDictionary<TKey, TValue> collection, TKey key)
+        {
+            var contains = collection.ContainsKey(key);
+            if (contains) collection.Remove(key);
+            return contains;
+        }
+
+        /// <summary>
+        ///     Removes an item to the <see cref="ICollection{TItem}" />, if it is already present in the collection.
+        /// </summary>
+        /// <typeparam name="TItem">The type of the elements of <paramref name="item" />.</typeparam>
+        /// <param name="collection">The collection to remove the item from.</param>
+        /// <param name="item">The item to remove.</param>
+        /// <returns><c>true</c> if the item was removed from the collection, <c>false</c> otherwise.</returns>
+        public static bool RemoveIfPresent<TItem>(this ICollection<TItem> collection, TItem item)
+        {
+            var contains = collection.Contains(item);
+            if (contains) collection.Remove(item);
+            return contains;
+        }
     }
 }

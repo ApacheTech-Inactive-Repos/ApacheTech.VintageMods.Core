@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ApacheTech.Common.Extensions.Harmony;
+using ApacheTech.VintageMods.Core.Common.StaticHelpers;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -78,10 +79,11 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
 
 
 
-        public static T GetInternalServerSystem<T>(this ICoreServerAPI sapi) where T : ServerSystem
+
+        public static T GetInternalServerSystem<T>(this ICoreServerAPI sapi) where T : class
         {
             var systems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
-            return systems.FirstOrDefault(p => p.GetType() == typeof(T)) as T;
+            return systems.FirstOrDefault(p => p is T) as T;
         }
 
         public static void UnregisterCommand(this ICoreClientAPI capi, string cmd)
@@ -144,18 +146,29 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             game?.EnqueueMainThreadTask(() => game.ShowChatMessage(message), "");
         }
 
+        public static BlockPos ClampToWorldBounds(this BlockPos blockPos)
+        {
+            blockPos.X = GameMath.Clamp(blockPos.X, 0, ApiEx.Current.World.BlockAccessor.MapSizeX);
+            blockPos.Y = GameMath.Clamp(blockPos.Y, 0, ApiEx.Current.World.BlockAccessor.MapSizeY);
+            blockPos.Z = GameMath.Clamp(blockPos.Z, 0, ApiEx.Current.World.BlockAccessor.MapSizeZ);
+            return blockPos;
+        }
+
         public static TBlockEntity GetNearestBlockEntity<TBlockEntity>(this IWorldAccessor world, BlockPos pos,
             float horRange, float vertRange, System.Func<TBlockEntity, bool> predicate) where TBlockEntity : BlockEntity
         {
+            var walker = world.GetBlockAccessorPrefetch(false, false);
             TBlockEntity blockEntity = null;
-            var minPos = pos.AddCopy(-horRange, -vertRange, -horRange);
-            var maxPos = pos.AddCopy(horRange, vertRange, horRange);
+            var minPos = pos.AddCopy(-horRange, -vertRange, -horRange).ClampToWorldBounds();
+            var maxPos = pos.AddCopy(horRange, vertRange, horRange).ClampToWorldBounds();
+            walker.PrefetchBlocks(minPos, maxPos);
+
             world.BlockAccessor.WalkBlocks(minPos, maxPos, (_, blockPos) =>
             {
-                var entity = world.GetBlockAccessorPrefetch(false, false).GetBlockEntity(blockPos);
-                if (entity == null) return;
-                if (entity.GetType() == typeof(TBlockEntity) && predicate((TBlockEntity)entity))
-                    blockEntity = (TBlockEntity)entity;
+                var entity = walker.GetBlockEntity(blockPos);
+                if (entity is null) return;
+                if (!(entity.GetType() == typeof(TBlockEntity))) return;
+                if (predicate((TBlockEntity)entity)) blockEntity = (TBlockEntity)entity;
             }, true);
             return blockEntity;
         }

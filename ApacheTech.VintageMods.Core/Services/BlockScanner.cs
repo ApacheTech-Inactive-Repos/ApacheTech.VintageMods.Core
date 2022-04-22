@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ApacheTech.Common.Extensions.Harmony;
-using ApacheTech.VintageMods.Core.Extensions;
 using ApacheTech.VintageMods.Core.Extensions.Game;
 using System.Threading.Tasks;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
@@ -15,15 +14,14 @@ namespace ApacheTech.VintageMods.Core.Services
 {
     public class BlockScanner
     {
-        private readonly ICachingBlockAccessor _walker;
+        private readonly IBlockAccessor _walker;
         private Dictionary<BlockPos, Block> _blocks;
         private string _code;
         private readonly ICoreClientAPI _capi;
 
         public BlockScanner(ICoreClientAPI api)
         {
-            _walker = (_capi = api).World.GetCachingBlockAccessor(false, false);
-            _walker.Begin();
+            _walker = (_capi = api).World.GetBlockAccessor(false, false, false);
         }
 
         public Dictionary<BlockPos, Block> ScanForBlocks(string code, BlockPos origin, int horizontalRadius, int verticalRadius)
@@ -34,7 +32,14 @@ namespace ApacheTech.VintageMods.Core.Services
             var maxPos = new BlockPos(origin.X + horizontalRadius, Math.Min(origin.Y + verticalRadius, worldHeight), origin.Z + horizontalRadius);
 
             _blocks = new Dictionary<BlockPos, Block>();
-            _walker.WalkBlocks(minPos, maxPos, OnBlock, true);
+            try
+            {
+                _walker.WalkBlocks(minPos, maxPos, OnBlock, true);
+            }
+            catch(NullReferenceException)
+            {
+                _capi.EnqueueShowChatMessage("Ran into unloaded chunks. Try a smaller radius, or generate all chunks within range.");
+            }
             return _blocks;
         }
 
@@ -43,6 +48,7 @@ namespace ApacheTech.VintageMods.Core.Services
             if (_blocks.ContainsKey(blockPos)) return;
             if (block.BlockMaterial is EnumBlockMaterial.Air or EnumBlockMaterial.Liquid) return;
             if (!block.Code.ToString().ToLowerInvariant().Contains(_code)) return;
+            _capi.EnqueueShowChatMessage($"Found At: {blockPos}");
             _blocks.Add(blockPos.Copy(), block);
         }
 
@@ -63,18 +69,23 @@ namespace ApacheTech.VintageMods.Core.Services
         /// </example>
         public async Task BlockProbeAsync(CmdArgs args, bool all)
         {
-            var code = args.PopWord("iron");
+            var code = args.PopWord("broken");
             var origin = _capi.World.Player.Entity.Pos.AsBlockPos;
             var horizontalRadius = args.PopInt().GetValueOrDefault(128);
             var verticalRadius = args.PopInt().GetValueOrDefault(128);
-            var colour = args.PopWord("white");
-            var icon = args.PopWord("star2");
+            var colour = args.PopWord("red");
+            var icon = args.PopWord("spiral");
 
-            var results = await ScanForBlocksAsync(code, origin, horizontalRadius, verticalRadius);
+            _capi.EnqueueShowChatMessage($"Probe: {code}, {horizontalRadius}x{verticalRadius}, {colour} {icon}");
+
+            var results = (await ScanForBlocksAsync(code, origin, horizontalRadius, verticalRadius)).ToList();
+
             var found = results.Any();
-            _capi.EnqueueShowChatMessage(!results.Any()
-                ? "No ore node nearby."
-                : $"{results.Count.FormatLargeNumber()} Ore nodes found nearby.");
+
+            _capi.EnqueueShowChatMessage($"Found: {found}");
+            //_capi.EnqueueShowChatMessage(!found
+            //    ? "No ore node nearby."
+            //    : $"{results.Count.FormatLargeNumber()} Ore nodes found nearby.");
 
             if (all)
             {

@@ -79,7 +79,8 @@ namespace ApacheTech.VintageMods.Core.Services.HarmonyPatching
 
         private static void DisposeAllPatchClasses(Assembly assembly)
         {
-            var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
+            var sidedPatches = assembly?.GetTypesWithAttribute<HarmonySidedPatchAttribute>() 
+                               ?? new List<(Type Type, HarmonySidedPatchAttribute Attribute)>();
             foreach (var (type, attribute) in sidedPatches)
             {
                 if (attribute.Side is not EnumAppSide.Universal && attribute.Side != ApiEx.Side) continue;

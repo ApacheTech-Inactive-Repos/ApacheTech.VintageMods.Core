@@ -1,7 +1,7 @@
 ﻿using System;
 using Vintagestory.API.Common;
 
-namespace ApacheTech.VintageMods.Core.Abstractions.Behaviours
+namespace ApacheTech.VintageMods.Core.Abstractions.GameContent
 {
     public abstract class BlockBehaviour<TBlock> : BlockBehavior where TBlock : Block
     {

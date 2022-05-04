@@ -17,6 +17,7 @@ namespace ApacheTech.VintageMods.Core.Services
         private readonly IBlockAccessor _walker;
         private Dictionary<BlockPos, Block> _blocks;
         private string _code;
+        private bool _matchDisplayedName;
         private readonly ICoreClientAPI _capi;
 
         public BlockScanner(ICoreClientAPI api)
@@ -24,8 +25,9 @@ namespace ApacheTech.VintageMods.Core.Services
             _walker = (_capi = api).World.GetBlockAccessor(false, false, false);
         }
 
-        public Dictionary<BlockPos, Block> ScanForBlocks(string code, BlockPos origin, int horizontalRadius, int verticalRadius)
+        public Dictionary<BlockPos, Block> ScanForBlocks(string code, BlockPos origin, int horizontalRadius, int verticalRadius, bool matchDisplayedName)
         {
+            _matchDisplayedName = matchDisplayedName;
             _code = code.ToLowerInvariant();
             var worldHeight = ApiEx.ClientMain.GetField<ClientWorldMap>("WorldMap").MapSizeY;
             var minPos = new BlockPos(origin.X - horizontalRadius, Math.Max(origin.Y - verticalRadius, 1), origin.Z - horizontalRadius);
@@ -47,27 +49,34 @@ namespace ApacheTech.VintageMods.Core.Services
         {
             if (_blocks.ContainsKey(blockPos)) return;
             if (block.BlockMaterial is EnumBlockMaterial.Air or EnumBlockMaterial.Liquid) return;
-            if (!block.Code.ToString().ToLowerInvariant().Contains(_code)) return;
-            _capi.EnqueueShowChatMessage($"Found At: {blockPos}");
-            _blocks.Add(blockPos.Copy(), block);
+            switch (_matchDisplayedName)
+            {
+                case false when !block.Code.ToString().ToLowerInvariant().Contains(_code):
+                case true when !block.GetPlacedBlockName(ApiEx.ClientMain, blockPos).ToLowerInvariant().Contains(_code):
+                    return;
+                default:
+                    _capi.EnqueueShowChatMessage($"Found At: {blockPos}");
+                    _blocks.Add(blockPos.Copy(), block);
+                    break;
+            }
         }
 
-        public Task<Dictionary<BlockPos, Block>> ScanForBlocksAsync(string code, BlockPos origin, int horizontalRadius,
-            int verticalRadius)
+        public Task<Dictionary<BlockPos, Block>> ScanForBlocksAsync(string code, BlockPos origin, int horizontalRadius, int verticalRadius, bool matchDisplayedName)
         {
-            return Task.FromResult(ScanForBlocks(code, origin, horizontalRadius, verticalRadius));
+            return Task.FromResult(ScanForBlocks(code, origin, horizontalRadius, verticalRadius, matchDisplayedName));
         }
 
         /// <summary>
         ///     Retrieves a list of all blocks of a certain type, in range of a player.
         /// </summary>
         /// <param name="args">The arguments, passed from a chat command.</param>
+        /// <param name="matchDisplayedName"> Whether to match based on code, or display name.</param>
         /// <param name="all">Whether to mark all results, or just the first.</param>
         /// <example>
         ///     .probeAll broken 1000 128 red spiral
         ///     .probe magnetite 1000 128 white pick
         /// </example>
-        public async Task BlockProbeAsync(CmdArgs args, bool all)
+        public async Task BlockProbeAsync(CmdArgs args, bool matchDisplayedName, bool all)
         {
             var code = args.PopWord("broken");
             var origin = _capi.World.Player.Entity.Pos.AsBlockPos;
@@ -78,14 +87,11 @@ namespace ApacheTech.VintageMods.Core.Services
 
             _capi.EnqueueShowChatMessage($"Probe: {code}, {horizontalRadius}x{verticalRadius}, {colour} {icon}");
 
-            var results = (await ScanForBlocksAsync(code, origin, horizontalRadius, verticalRadius)).ToList();
+            var results = (await ScanForBlocksAsync(code, origin, horizontalRadius, verticalRadius, matchDisplayedName)).ToList();
 
             var found = results.Any();
 
             _capi.EnqueueShowChatMessage($"Found: {found}");
-            //_capi.EnqueueShowChatMessage(!found
-            //    ? "No ore node nearby."
-            //    : $"{results.Count.FormatLargeNumber()} Ore nodes found nearby.");
 
             if (all)
             {

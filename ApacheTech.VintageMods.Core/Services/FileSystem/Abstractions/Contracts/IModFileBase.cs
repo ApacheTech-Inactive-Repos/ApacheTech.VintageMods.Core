@@ -22,9 +22,9 @@ namespace ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts
         public FileInfo AsFileInfo();
 
         /// <summary>
-        ///     Retrieves the underlying <see cref="FileInfo"/> object for the given file.
+        ///     Retrieves the absolute, fully qualified path to the file.
         /// </summary>
-        /// <returns>A <see cref="FileInfo"/> object, instantiated with the given file's fully qualified path, as registered with the service.</returns>
+        /// <returns>A <see cref="string"/> that represents the given file's fully qualified path, as registered with the service.</returns>
         public string Path { get; }
     }
 }

@@ -22,11 +22,11 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration
         /// <param name="services">The IOC container.</param>
         public static void RegisterClientApiEndpoints(IServiceCollection services)
         {
-            services.RegisterSingleton(ApiEx.Client);
-            services.RegisterSingleton(ApiEx.Client.World);
-            services.RegisterSingleton(ApiEx.ClientMain);
-            services.RegisterSingleton((ICoreAPICommon)ApiEx.Current);
-            services.RegisterSingleton(ApiEx.Current);
+            services.AddSingleton(ApiEx.Client);
+            services.AddSingleton(ApiEx.Client.World);
+            services.AddSingleton(ApiEx.ClientMain);
+            services.AddSingleton((ICoreAPICommon)ApiEx.Current);
+            services.AddSingleton(ApiEx.Current);
         }
     }
 }

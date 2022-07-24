@@ -25,9 +25,9 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="world">The world to start the storm in.</param>
         public static void StopTemporalStorm(this IServerWorldAccessor world)
         {
-            var stormData = world.Api.ModLoader.GetModSystem<SystemTemporalStability>().StormData;
-            if (!stormData.nowStormActive) return;
-            stormData.stormActiveTotalDays = 0;
+            var system = world.Api.ModLoader.GetModSystem<SystemTemporalStability>();
+            if (!system.StormData.nowStormActive) return;
+            system.StormData.stormActiveTotalDays = 0;
         }
     }
 }

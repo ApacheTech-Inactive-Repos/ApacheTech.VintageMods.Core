@@ -9,16 +9,31 @@
 		<Version>2.3.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<Configurations>Debug;Release;Package</Configurations>
+		<EnvironmentVariable>$(VINTAGE_STORY)</EnvironmentVariable>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Package|AnyCPU'">
+	  <Optimize>True</Optimize>
+	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="_Includes\LICENCE.md" />	
+		<None Remove="_Includes\LICENCE.md" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="_Includes\LICENCE.md">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+		<Content Include="_Includes\LICENCE.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -30,98 +45,101 @@
 
 	<ItemGroup>
 		<!-- CompileTime Packages -->
-		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.2.0" />
-		<PackageReference Include="RedGate.SmartAssembly.Attributes" Version="8.1.0.4892" />
+		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="1.3.1" />
+		<PackageReference Include="IsExternalInit" Version="1.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="RedGate.SmartAssembly.Attributes" Version="8.1.1.4963" />
 		<!-- Runtime Packages -->
 		<PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
-		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.1.1" />
-		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.1.0" />
+		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.2.0" />
+		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<!-- Vintage Story Game Libraries -->
 		<Reference Include="Microsoft.CSharp">
-		  <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll</HintPath>
+			<HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll</HintPath>
 		</Reference>
 		<Reference Include="Vintagestory">
-			<HintPath>$(VINTAGE_STORY)\Vintagestory.exe</HintPath>
+			<HintPath>$(EnvironmentVariable)\Vintagestory.exe</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VintagestoryAPI">
-			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\VintagestoryAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VintagestoryLib">
-			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\VintagestoryLib.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSCreativeMod">
-			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\Mods\VSCreativeMod.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSSurvivalMod">
-			<HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\Mods\VSSurvivalMod.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSEssentials">
-			<HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\Mods\VSEssentials.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<!-- Vintage Story Included Libraries -->
 		<Reference Include="0Harmony">
-			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\Lib\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="AnimatedGif">
-		  <HintPath>$(VINTAGE_STORY)\Lib\AnimatedGif.dll</HintPath>
-		  <Private>false</Private>
+			<HintPath>$(EnvironmentVariable)\Lib\AnimatedGif.dll</HintPath>
+			<Private>false</Private>
 		</Reference>
 		<Reference Include="cairo-sharp">
-		  <HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
-		  <Private>false</Private>
+			<HintPath>$(EnvironmentVariable)\Lib\cairo-sharp.dll</HintPath>
+			<Private>false</Private>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\Lib\Newtonsoft.Json.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="OpenTK">
-		  <HintPath>$(VINTAGE_STORY)\Lib\OpenTK.dll</HintPath>
-		  <Private>false</Private>
+			<HintPath>$(EnvironmentVariable)\Lib\OpenTK.dll</HintPath>
 		</Reference>
 		<Reference Include="protobuf-net">
-			<HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
+			<HintPath>$(EnvironmentVariable)\Lib\protobuf-net.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="System.Data.SQLite">
-		  <HintPath>$(VINTAGE_STORY)\Lib\System.Data.SQLite.dll</HintPath>
-		  <Private>false</Private>
+			<HintPath>$(EnvironmentVariable)\Lib\System.Data.SQLite.dll</HintPath>
+			<Private>false</Private>
 		</Reference>
 		<Reference Include="Tavis.JsonPatch">
-		  <HintPath>$(VINTAGE_STORY)\Lib\Tavis.JsonPatch.dll</HintPath>
-		  <Private>false</Private>
+			<HintPath>$(EnvironmentVariable)\Lib\Tavis.JsonPatch.dll</HintPath>
+			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="_Includes\assets\vmods\lang\de.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_Includes\assets\vmods\lang\es.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_Includes\assets\vmods\lang\en.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_Includes\assets\vmods\lang\fr.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_Includes\assets\vmods\lang\ru.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="_Includes\assets\vmods\lang\de.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="_Includes\assets\vmods\lang\es.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="_Includes\assets\vmods\lang\en.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="_Includes\assets\vmods\lang\fr.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="_Includes\assets\vmods\lang\ru.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Libraries\Cryptography\" />
+		<Folder Include="Libraries\Cryptography\" />
 	</ItemGroup>
 
 </Project>

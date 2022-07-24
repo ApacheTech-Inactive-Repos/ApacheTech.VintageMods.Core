@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using ApacheTech.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Extensions;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.Abstractions;
 using ApacheTech.VintageMods.Core.Hosting.Configuration.ObservableFeatures;
 using ApacheTech.VintageMods.Core.Services.FileSystem.Abstractions.Contracts;

@@ -58,7 +58,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.HarmonyPatches
             return false;
         }
 
-        private static bool TryCreateModSystemInstance(ModContainer __instance, Type type, out ModSystem modSystem)
+        private static bool TryCreateModSystemInstance(Mod __instance, Type type, out ModSystem modSystem)
         {
             try
             {

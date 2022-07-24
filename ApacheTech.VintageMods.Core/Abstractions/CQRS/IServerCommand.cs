@@ -13,6 +13,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.CQRS
         ///     Executes the specified command. Run on the server.
         /// </summary>
         /// <param name="sapi">The server-side API.</param>
-        void Execute(IServerAPI sapi);
+        void Execute(ICoreServerAPI sapi);
     }
 }

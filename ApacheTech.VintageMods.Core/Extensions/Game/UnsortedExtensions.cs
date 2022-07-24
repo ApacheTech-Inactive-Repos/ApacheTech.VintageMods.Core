@@ -61,8 +61,8 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
 
         public static Vec2f ClientWindowSize(this ICoreClientAPI capi)
         {
-            var platform = capi.AsClientMain().GetField<ClientPlatformWindows>("Platform");
-            return new Vec2f(platform.window.Width, platform.window.Height);
+            var platform = capi.AsClientMain().GetField<ClientPlatformAbstract>("Platform");
+            return new Vec2f(platform.WindowSize.Width, platform.WindowSize.Height);
         }
 
         public static object GetInternalClientSystem(this ICoreClientAPI api, string name)
@@ -80,6 +80,12 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
 
 
 
+        /// <summary>
+        /// Gets the internal server system.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sapi">The sapi.</param>
+        /// <returns></returns>
         public static T GetInternalServerSystem<T>(this ICoreServerAPI sapi) where T : class
         {
             var systems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
@@ -163,9 +169,11 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             var maxPos = pos.AddCopy(horRange, vertRange, horRange).ClampToWorldBounds();
             walker.PrefetchBlocks(minPos, maxPos);
 
-            world.BlockAccessor.WalkBlocks(minPos, maxPos, (_, blockPos) =>
+            //world.BlockAccessor.WalkBlocks(minPos, maxPos, (_, x, y, z) =>
+            world.BlockAccessor.WalkBlocks(minPos, maxPos, (_, position) =>
             {
-                var entity = walker.GetBlockEntity(blockPos);
+                //var pos = new BlockPos(x, y, z);
+                var entity = walker.GetBlockEntity(position);
                 if (entity is null) return;
                 if (!(entity.GetType() == typeof(TBlockEntity))) return;
                 if (predicate((TBlockEntity)entity)) blockEntity = (TBlockEntity)entity;
@@ -187,12 +195,13 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
             var found = false;
             var minPos = pos.AddCopy(-horRange, -vertRange, -horRange);
             var maxPos = pos.AddCopy(horRange, vertRange, horRange);
-            world.BlockAccessor.WalkBlocks(minPos, maxPos, (block, blockPos) =>
+            //world.BlockAccessor.WalkBlocks(minPos, maxPos, (block, x, y, z) =>
+            world.BlockAccessor.WalkBlocks(minPos, maxPos, (block, position) =>
             {
                 if (found) return;
                 if (block.GetType() != typeof(TBlock) || !predicate((TBlock)block)) return;
                 blockEntity = (TBlock)block;
-                blockPosTemp = blockPos.DeepClone();
+                blockPosTemp = position; // new BlockPos(x, y, z);
                 found = true;
             }, true);
             blockPosOut = blockPosTemp;

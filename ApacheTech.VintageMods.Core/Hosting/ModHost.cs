@@ -5,10 +5,10 @@ using System.Reflection;
 using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Extensions;
+using ApacheTech.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Abstractions.ModSystems;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.StaticHelpers;
-using ApacheTech.VintageMods.Core.Extensions.DotNet;
 using ApacheTech.VintageMods.Core.Hosting.Configuration;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions;
 using ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Registration;
@@ -57,7 +57,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
 
         private static void ConfigureCoreModServices(IServiceCollection services)
         {
-            services.RegisterSingleton(ApiEx.ModInfo);
+            services.AddSingleton(ApiEx.ModInfo);
             services.RegisterAnnotatedServicesFromAssembly(AssemblyEx.GetCoreAssembly());
         }
 
@@ -86,7 +86,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
             _services.Configure(ServerApiRegistrar.RegisterServerApiEndpoints);
 
             //  3. Register all ModSystems within the mod. Will also self-reference this ModHost. 
-            _services.RegisterModSystems();
+            _services.AddModSystems();
 
             //  4. Delegate mod service configuration to derived class.
             _services.Configure(ConfigureServerModServices);
@@ -132,7 +132,6 @@ namespace ApacheTech.VintageMods.Core.Hosting
             //  1. Set ApiEx endpoints.
             ApiEx.Client = capi;
             ApiEx.ClientMain = (ClientMain)capi.World;
-            ModPaths.Initalise();
 
             ClientFeatures = AssemblyEx
                 .GetModAssembly()
@@ -145,7 +144,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
             _services.Configure(ClientApiRegistrar.RegisterClientApiEndpoints);
 
             //  3. Register all ModSystems within the mod. Will also self-reference this ModHost. 
-            _services.RegisterModSystems();
+            _services.AddModSystems();
 
             //  4. Delegate mod service configuration to derived class.
             _services.Configure(ConfigureClientModServices);
@@ -159,6 +158,7 @@ namespace ApacheTech.VintageMods.Core.Hosting
             // ONLY NOW ARE SERVICES AVAILABLE
 
             //  7. Delegate mod PreStart to derived class.
+            ModPaths.Initalise();
             StartPreClientSide(capi);
 
             //  8. Delegate PreStart to features.

@@ -24,7 +24,16 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
         public static WaypointMapLayer WaypointMapLayer(this WorldMapManager mapManager)
         {
-            return mapManager.MapLayers.OfType<WaypointMapLayer>().FirstOrDefault();
+            return mapManager.MapLayers.OfType<WaypointMapLayer>().First();
+        }
+
+        /// <summary>
+        ///     Returns the map layer used for rendering player pins.
+        /// </summary>
+        /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
+        public static PlayerMapLayer PlayerMapLayer(this WorldMapManager mapManager)
+        {
+            return mapManager.MapLayers.OfType<PlayerMapLayer>().First();
         }
 
         /// <summary>

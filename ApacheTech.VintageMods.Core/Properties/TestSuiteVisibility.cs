@@ -2,11 +2,11 @@
 #else
 
 [assembly: Vintagestory.API.Common.ModInfo(
-    "[VintageMods] - Core",
+    "VintageMods Core Framework",
     "vmods",
     Description = "Contains core functionality for mods within the VintageMods suite.",
     Side = "Universal",
-    Version = "2.0.0",
+    Version = "2.3.0",
     RequiredOnClient = false,
     RequiredOnServer = false,
     NetworkVersion = "1.0.0",

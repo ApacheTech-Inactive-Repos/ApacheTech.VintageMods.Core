@@ -23,7 +23,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
             ModAssembly = AssemblyEx.GetModAssembly();
             ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, ApiEx.ModInfo.RootDirectoryName));
             ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
-            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, "World", ApiEx.Current.World.SavegameIdentifier));
+            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, "World", ApiEx.Current.World.SavegameIdentifier)); 
             ModRootPath = Path.GetDirectoryName(ModAssembly.Location)!;
             ModAssetsPath = Path.Combine(Path.GetDirectoryName(ModAssembly.Location)!, "assets");
         }

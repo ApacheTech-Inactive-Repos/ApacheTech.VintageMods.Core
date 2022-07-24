@@ -63,7 +63,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
         ///     Registers all <see cref="ModSystem"/>s in the current mod, into the service collection.
         /// </summary>
         /// <param name="services">The service collection to add the <see cref="ModSystem"/>s to.</param>
-        public static void RegisterModSystems(this IServiceCollection services)
+        public static void AddModSystems(this IServiceCollection services)
         {
             var modSystems = AssemblyEx
                 .GetModAssembly()
@@ -73,7 +73,7 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
             foreach (var type in modSystems)
             {
                 var system = ApiEx.Current.ModLoader.GetModSystem(type.FullName);
-                services.Register(new ServiceDescriptor(type, system, ServiceLifetime.Singleton));
+                services.Add(new ServiceDescriptor(type, system, ServiceLifetime.Singleton));
             }
         }
 
@@ -81,31 +81,31 @@ namespace ApacheTech.VintageMods.Core.Hosting.DependencyInjection.Extensions
         ///     Registers a client side features into the service collection.
         /// </summary>
         /// <param name="services">The service collection to add the features to.</param>
-        public static void RegisterModSystem<T>(this IServiceCollection services) where T : ModSystem
+        public static void AddModSystem<T>(this IServiceCollection services) where T : ModSystem
         {
-            services.RegisterSingleton(_ => ApiEx.Current.ModLoader.GetModSystem<T>());
+            services.AddSingleton(_ => ApiEx.Current.ModLoader.GetModSystem<T>());
         }
 
-        public static void RegisterFeatureWorldSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+        public static void AddFeatureWorldSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
         {
             if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
-            services.RegisterSingleton(_ =>
+            services.AddSingleton(_ =>
             {
                 var instance = ModSettings.World.Feature<TSettings>(featureName);
                 return instance;
             });
         }
 
-        public static void RegisterFeatureGlobalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+        public static void AddFeatureGlobalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
         {
             if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
-            services.RegisterSingleton(_ => ModSettings.Global.Feature<TSettings>(featureName));
+            services.AddSingleton(_ => ModSettings.Global.Feature<TSettings>(featureName));
         }
 
-        public static void RegisterFeatureLocalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+        public static void AddFeatureLocalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
         {
             if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
-            services.RegisterSingleton(_ => ModSettings.Local.Feature<TSettings>(featureName));
+            services.AddSingleton(_ => ModSettings.Local.Feature<TSettings>(featureName));
         }
     }
 }

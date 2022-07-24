@@ -43,17 +43,16 @@ namespace ApacheTech.VintageMods.Core.Extensions.Game
         public static int GetSurfaceLevel(this BlockPos pos)
         {
             var blockAccessor = ApiEx.Current.World.BlockAccessor;
-            var y = blockAccessor.GetTerrainMapheightAt(pos);
+            var maxY = blockAccessor.GetTerrainMapheightAt(pos);
             var minPos = new BlockPos(pos.X, 1, pos.Z);
             var maxPos = new BlockPos(pos.X, blockAccessor.MapSizeY, pos.Z);
-            blockAccessor.WalkBlocks(minPos, maxPos, (block, blockPos) =>
+            //blockAccessor.WalkBlocks(minPos, maxPos, (block, _, y, _) => 
+            blockAccessor.WalkBlocks(minPos, maxPos, (block, position) =>
             {
-                if (block.SideSolid[BlockFacing.indexUP])
-                {
-                    y = blockPos.Y;
-                }
+                if (!block.SideSolid[BlockFacing.indexUP]) return;
+                maxY = position.Y;
             });
-            return y;
+            return maxY;
         }
 
         /// <summary>

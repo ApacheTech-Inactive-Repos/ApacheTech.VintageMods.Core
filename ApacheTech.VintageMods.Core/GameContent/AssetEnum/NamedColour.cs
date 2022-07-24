@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using ApacheTech.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Abstractions.Enum;
-using ApacheTech.VintageMods.Core.Extensions;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global

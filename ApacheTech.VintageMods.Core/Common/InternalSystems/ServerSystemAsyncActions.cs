@@ -33,8 +33,8 @@ namespace ApacheTech.VintageMods.Core.Common.InternalSystems
         /// <summary>
         ///     Called every tick, on the thread that this system resides on.
         /// </summary>
-        /// <param name="dt">The time between this tick, and the previous tick.</param>
-        public override void OnSeperateThreadTick(float dt)
+        //public override void OnSeparateThreadTick()
+        public override void OnSeperateThreadTick(float dts)
         {
             ProcessActions(AsyncActions);
             ProcessMainThreadActions();

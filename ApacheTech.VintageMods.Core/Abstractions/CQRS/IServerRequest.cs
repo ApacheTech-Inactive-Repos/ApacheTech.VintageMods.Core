@@ -6,6 +6,6 @@ namespace ApacheTech.VintageMods.Core.Abstractions.CQRS
 {
     public interface IServerRequest<out T>
     {
-        IServerResponse<T> Execute(IServerAPI sapi);
+        IServerResponse<T> Execute(ICoreServerAPI sapi);
     }
 }

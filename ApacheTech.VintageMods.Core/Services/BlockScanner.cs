@@ -45,8 +45,14 @@ namespace ApacheTech.VintageMods.Core.Services
             return _blocks;
         }
 
-        private void OnBlock(Block block, BlockPos blockPos)
+        private void OnBlock(Block block, BlockPos pos)
         {
+            OnBlock(block, pos.X, pos.Y, pos.Z);
+        }
+
+        private void OnBlock(Block block, int x, int y, int z)
+        {
+            var blockPos = new BlockPos(x, y, z);
             if (_blocks.ContainsKey(blockPos)) return;
             if (block.BlockMaterial is EnumBlockMaterial.Air or EnumBlockMaterial.Liquid) return;
             switch (_matchDisplayedName)

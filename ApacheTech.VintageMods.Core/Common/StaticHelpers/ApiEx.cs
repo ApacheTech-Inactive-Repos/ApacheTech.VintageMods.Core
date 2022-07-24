@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using ApacheTech.Common.Extensions.System;
 using ApacheTech.VintageMods.Core.Annotation.Attributes;
 using ApacheTech.VintageMods.Core.Common.InternalSystems;
-using ApacheTech.VintageMods.Core.Extensions.DotNet;
 using ApacheTech.VintageMods.Core.Extensions.Game;
 using ApacheTech.VintageMods.Core.Extensions.Game.Threading;
 using Vintagestory.API.Client;
@@ -102,6 +102,33 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         /// </remarks>
         /// <param name="clientAction">The client action.</param>
         /// <param name="serverAction">The server action.</param>
+        public static T Return<T>(System.Func<T> clientAction, System.Func<T> serverAction)
+        {
+            return (T)OneOf(clientAction, serverAction).DynamicInvoke();
+        }
+
+        /// <summary>
+        ///     Invokes an action, based on whether it's being called by the client, or the server.
+        /// </summary>
+        /// <remarks>
+        ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
+        /// </remarks>
+        /// <param name="clientAction">The client action.</param>
+        /// <param name="serverAction">The server action.</param>
+        /// <param name="parameter">The parameter to pass to the invoked action.</param>
+        public static T Return<T>(System.Func<T> clientAction, System.Func<T> serverAction, T parameter)
+        {
+            return (T)OneOf(clientAction, serverAction).DynamicInvoke(parameter);
+        }
+
+        /// <summary>
+        ///     Invokes an action, based on whether it's being called by the client, or the server.
+        /// </summary>
+        /// <remarks>
+        ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
+        /// </remarks>
+        /// <param name="clientAction">The client action.</param>
+        /// <param name="serverAction">The server action.</param>
         /// <param name="parameter">The parameter to pass to the invoked action.</param>
         public static void Run<T>(Action<T> clientAction, Action<T> serverAction, T parameter)
         {
@@ -144,9 +171,7 @@ namespace ApacheTech.VintageMods.Core.Common.StaticHelpers
         {                    
             // Obtaining the app-side, without having direct access to a specific CoreAPI.
             // NB: This is not a fool-proof. This is a drawback of using a Threaded Server, over Dedicated Server for Single-Player games.
-
-            // TODO: This causes performance hits. Slowed CC down to a crawl, when used in the OnEntityCollide patch.
-
+            
             // 1. If modinfo.json states the mod is only for a single side, return that side.
             if (ModInfo.Side is not EnumAppSide.Universal) return ModInfo.Side;
 
